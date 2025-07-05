@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 import 'package:get/get.dart';import 'package:towservice/themes/theme.dart';
+import 'package:towservice/views/screen/screens.dart';
 
 import 'routes/app_routes.dart';
 
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Service App',
-          // home: SplashScreen(),
+          home: SplashScreen(),
           getPages: AppRoutes.routes,
           theme: light(),
           themeMode: ThemeMode.light,

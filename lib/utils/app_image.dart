@@ -7,7 +7,9 @@ class AppImages {
 
 
 
-  static const String signUpImg = "$path/signUpIcon.png";
+  static const String splashImg = "$path/splashImg.png";
+
+
   static const String signInImg = "$path/signInIcon.png";
   static const String forgotImg = "$path/forgotIcons.png";
   static const String verifyImg = "$path/verifyIcon.png";
