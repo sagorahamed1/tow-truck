@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:towservice/views/widget/widgets.dart';
 
-import '../utils/utils.dart';
+import '../../utils/utils.dart';
+
 
 
 class ColoredHeader extends StatelessWidget {

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import '../utils/utils.dart';
+import '../../utils/utils.dart';
+
 
 class CustomLoader extends StatelessWidget {
   const CustomLoader({super.key});
