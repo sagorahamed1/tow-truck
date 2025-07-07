@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:towservice/global/custom_assets/assets.gen.dart';
 import 'package:towservice/utils/app_icons.dart';
 import 'package:towservice/utils/app_image.dart';
 
@@ -13,7 +14,7 @@ class SplashScreen extends StatelessWidget {
         physics: NeverScrollableScrollPhysics(),
         child: Column(
           children: [
-            Image.asset(AppImages.splashImg),
+            Assets.images.splashImage.image(),
           ],
         ),
       ),

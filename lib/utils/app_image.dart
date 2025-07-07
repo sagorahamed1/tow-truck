@@ -7,7 +7,7 @@ class AppImages {
 
 
 
-  static const String splashImg = "$path/splashImg.png";
+  static const String splashImg = "$path/splash_image.svg";
 
 
   static const String signInImg = "$path/signInIcon.png";

@@ -50,13 +50,26 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  build_runner:
+  flutter_gen_runner:
+
+
+
+flutter_gen:
+  output: lib/global/custom_assets/ # Optional (default: lib/gen/)
+  line_length: 80 # Optional (default: 80)
+    # Optional
+  integrations:
+    flutter_svg: true
+      # flare_flutter: true
+      # rive: true
+    lottie: true
+      #===========>>>>>>>>>> Flutter Gen Code ==============>>>>>>>>>>>
+      # dart pub global activate flutter_gen
+      # flutter pub run build_runner build --delete-conflicting-outputs
+      # flutter pub run build_runner build
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
