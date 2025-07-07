@@ -8,12 +8,13 @@ class CustomScaffold extends StatelessWidget {
       this.body,
       this.floatingActionButton,
       this.bottomNavigationBar,
-      this.paddingSide, this.resizeToAvoidBottomInset});
+      this.paddingSide, this.resizeToAvoidBottomInset, this.bottomSheet});
 
   final PreferredSizeWidget? appBar;
   final Widget? body;
   final Widget? floatingActionButton;
   final Widget? bottomNavigationBar;
+  final Widget? bottomSheet;
   final double? paddingSide;
   final bool? resizeToAvoidBottomInset;
 
@@ -28,6 +29,7 @@ class CustomScaffold extends StatelessWidget {
         child: body,
       )),
       floatingActionButton: floatingActionButton,
+      bottomSheet: bottomSheet,
       bottomNavigationBar: bottomNavigationBar,
         resizeToAvoidBottomInset: resizeToAvoidBottomInset
     );

@@ -15,23 +15,50 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/app_logo.svg
+  SvgGenImage get appLogo => const SvgGenImage('assets/icons/app_logo.svg');
+
   /// File path: assets/icons/splashIcon.svg
   SvgGenImage get splashIcon =>
       const SvgGenImage('assets/icons/splashIcon.svg');
 
+  /// File path: assets/icons/tow_driver.svg
+  SvgGenImage get towDriver => const SvgGenImage('assets/icons/tow_driver.svg');
+
+  /// File path: assets/icons/tow_service.svg
+  SvgGenImage get towService =>
+      const SvgGenImage('assets/icons/tow_service.svg');
+
   /// List of all assets
-  List<SvgGenImage> get values => [splashIcon];
+  List<SvgGenImage> get values => [appLogo, splashIcon, towDriver, towService];
 }
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
+
+  /// File path: assets/images/onboarding_first_icon.png
+  AssetGenImage get onboardingFirstIcon =>
+      const AssetGenImage('assets/images/onboarding_first_icon.png');
+
+  /// File path: assets/images/onboarding_image.png
+  AssetGenImage get onboardingImage =>
+      const AssetGenImage('assets/images/onboarding_image.png');
+
+  /// File path: assets/images/onboarding_second_icon.png
+  AssetGenImage get onboardingSecondIcon =>
+      const AssetGenImage('assets/images/onboarding_second_icon.png');
 
   /// File path: assets/images/splash_image.png
   AssetGenImage get splashImage =>
       const AssetGenImage('assets/images/splash_image.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [splashImage];
+  List<AssetGenImage> get values => [
+    onboardingFirstIcon,
+    onboardingImage,
+    onboardingSecondIcon,
+    splashImage,
+  ];
 }
 
 class Assets {

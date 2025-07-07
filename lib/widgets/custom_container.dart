@@ -38,7 +38,9 @@ class CustomContainer extends StatelessWidget {
     this.paddingTop,
     this.paddingBottom,
     this.marginTop,
-    this.marginBottom, this.borderStyle, this.elevationColor,
+    this.marginBottom,
+    this.borderStyle,
+    this.elevationColor,
   });
 
   final Widget? child;
@@ -92,43 +94,45 @@ class CustomContainer extends StatelessWidget {
                 vertical: paddingVertical ?? 0,
               )
             : paddingLeft != null ||
-                    paddingRight != null ||
-                    paddingTop != null ||
-                    paddingBottom != null
-                ? EdgeInsets.only(
-                    left: paddingLeft ?? 0,
-                    right: paddingRight ?? 0,
-                    top: paddingTop ?? 0,
-                    bottom: paddingBottom ?? 0,
-                  )
-                : paddingAll != null
-                    ? EdgeInsets.all(paddingAll ?? 0)
-                    : null,
+                  paddingRight != null ||
+                  paddingTop != null ||
+                  paddingBottom != null
+            ? EdgeInsets.only(
+                left: paddingLeft ?? 0,
+                right: paddingRight ?? 0,
+                top: paddingTop ?? 0,
+                bottom: paddingBottom ?? 0,
+              )
+            : paddingAll != null
+            ? EdgeInsets.all(paddingAll ?? 0)
+            : null,
         margin: horizontalMargin != null || verticalMargin != null
             ? EdgeInsets.symmetric(
                 horizontal: horizontalMargin ?? 0,
                 vertical: verticalMargin ?? 0,
               )
             : marginLeft != null ||
-                    marginRight != null ||
-                    marginTop != null ||
-                    marginBottom != null
-                ? EdgeInsets.only(
-                    left: marginLeft ?? 0,
-                    right: marginRight ?? 0,
-                    bottom: marginBottom ?? 0,
-                    top: marginTop ?? 0,
-                  )
-                : marginAll != null
-                    ? EdgeInsets.all(marginAll ?? 0)
-                    : null,
+                  marginRight != null ||
+                  marginTop != null ||
+                  marginBottom != null
+            ? EdgeInsets.only(
+                left: marginLeft ?? 0,
+                right: marginRight ?? 0,
+                bottom: marginBottom ?? 0,
+                top: marginTop ?? 0,
+              )
+            : marginAll != null
+            ? EdgeInsets.all(marginAll ?? 0)
+            : null,
         alignment: alignment,
         decoration: BoxDecoration(
           image: image,
-          boxShadow: boxShadow ??
+          boxShadow:
+              boxShadow ??
               (elevation
                   ? [
                       BoxShadow(
+                        offset: Offset(0, -4),
                         color: elevationColor ?? Colors.black.withOpacity(0.06),
                         blurRadius: 20,
                         spreadRadius: 6,
@@ -136,31 +140,32 @@ class CustomContainer extends StatelessWidget {
                     ]
                   : null),
           shape: shape,
-          border: border ??
+          border:
+              border ??
               (bordersColor != null
-                  ? Border.all(color: bordersColor!, width: borderWidth,style: borderStyle ?? BorderStyle.solid)
+                  ? Border.all(
+                      color: bordersColor!,
+                      width: borderWidth,
+                      style: borderStyle ?? BorderStyle.solid,
+                    )
                   : null),
           color: color,
           gradient: linearColors != null
-              ? LinearGradient(
-                  colors: linearColors!,
-                  begin: begin,
-                  end: end,
-                )
+              ? LinearGradient(colors: linearColors!, begin: begin, end: end)
               : null,
           borderRadius: (shape == BoxShape.rectangle && radiusAll != null)
               ? BorderRadius.circular(radiusAll!.r)
               : (topLeftRadius != null ||
-                      topRightRadius != null ||
-                      bottomLeft != null ||
-                      bottomRight != null)
-                  ? BorderRadius.only(
-                      topLeft: Radius.circular(topLeftRadius ?? 0),
-                      topRight: Radius.circular(topRightRadius ?? 0),
-                      bottomLeft: Radius.circular(bottomLeft ?? 0),
-                      bottomRight: Radius.circular(bottomRight ?? 0),
-                    )
-                  : null,
+                    topRightRadius != null ||
+                    bottomLeft != null ||
+                    bottomRight != null)
+              ? BorderRadius.only(
+                  topLeft: Radius.circular(topLeftRadius ?? 0),
+                  topRight: Radius.circular(topRightRadius ?? 0),
+                  bottomLeft: Radius.circular(bottomLeft ?? 0),
+                  bottomRight: Radius.circular(bottomRight ?? 0),
+                )
+              : null,
         ),
         child: child,
       ),
