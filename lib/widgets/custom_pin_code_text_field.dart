@@ -5,9 +5,9 @@ import 'package:towservice/utils/app_colors.dart';
 
 class CustomPinCodeTextField extends StatelessWidget {
   const CustomPinCodeTextField(
-      {super.key, this.textEditingController, this.validator, this.focusNode,this.autoFocus=false});
+      {super.key, this.controller, this.validator, this.focusNode,this.autoFocus=false});
 
-  final TextEditingController? textEditingController;
+  final TextEditingController? controller;
   final FormFieldValidator? validator;
   final FocusNode? focusNode;
   final bool autoFocus;
@@ -27,32 +27,32 @@ class CustomPinCodeTextField extends StatelessWidget {
             },
         focusNode: focusNode,
 
-        controller: textEditingController,
+        controller: controller,
         length: 6,
         defaultPinTheme: PinTheme(
           width: 46.w,
-          height: 46.h,
+          height: 66.h,
           textStyle: TextStyle(
               //color: AppColors.darkColor,
               fontSize: 16.sp),
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
+            //shape: BoxShape.circle,
            // color: AppColors.bgColor,
-            //borderRadius: BorderRadius.circular(0),
-            border: Border.all(color: AppColors.primaryColor),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Color(0xffD6BDD4)),
           ),
         ),
         focusedPinTheme: PinTheme(
           width: 46.w,
-          height: 46.h,
+          height: 66.h,
           textStyle: const TextStyle(
               //color: AppColors.darkColor,
               fontSize: 20),
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
+           // shape: BoxShape.circle,
            // color: AppColors.bgColor,
-           // borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.primaryColor),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Color(0xffD6BDD4)),
           ),
         ),
         cursor: Column(
@@ -61,7 +61,7 @@ class CustomPinCodeTextField extends StatelessWidget {
             Container(
               width: 2.w,
               height: 20.h,
-             // color: AppColors.darkColor,
+              color: AppColors.darkColor,
             ),
           ],
         ),

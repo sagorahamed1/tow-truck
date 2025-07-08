@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:towservice/global/custom_assets/fonts.gen.dart';
 import 'package:towservice/utils/app_colors.dart';
 import 'package:towservice/widgets/custom_container.dart';
 import 'package:towservice/widgets/custom_text.dart';
@@ -95,8 +96,7 @@ class CustomButton extends StatelessWidget {
                     child: CustomText(
                       text: label!,
                       color: foregroundColor ?? Colors.white,
-                      fontName: fontName ?? 'Inter',
-                      fontWeight: fontWeight ?? FontWeight.w500,
+                      fontName: fontName ?? FontFamily.csaction,
                       fontSize: fontSize ?? 18.sp,
                     ),
                   ),

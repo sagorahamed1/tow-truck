@@ -1,0 +1,9 @@
+export 'onboarding/get_started_screen.dart';
+export 'onboarding/role_screen.dart';
+export 'onboarding/onboarding_screen.dart';
+export 'splash/splash_screen.dart';
+export 'login/login_screen.dart';
+export 'otp/otp_screen.dart';
+export 'forgot_pass/forgot_password_screen.dart';
+export 'reset_pass/reset_password_screen.dart';
+export 'register/register_screen.dart';

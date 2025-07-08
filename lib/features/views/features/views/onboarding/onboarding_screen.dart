@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:towservice/global/custom_assets/assets.gen.dart';
+import 'package:towservice/routes/app_routes.dart';
 import 'package:towservice/utils/app_colors.dart';
 import 'package:towservice/widgets/widgets.dart';
 
@@ -38,7 +40,9 @@ class OnboardingScreen extends StatelessWidget {
             Padding(
               padding:  EdgeInsets.symmetric(horizontal: 24.w),
               child: CustomButton(
-                onPressed: (){},label: 'Login'),
+                onPressed: (){
+                  Get.offAllNamed(AppRoutes.loginScreen);
+                },label: 'Login'),
             ),
             SizedBox(height: 16.h),
             Padding(
@@ -46,7 +50,10 @@ class OnboardingScreen extends StatelessWidget {
               child: CustomButton(
                 backgroundColor: Colors.transparent,
                 showlinearColor: false,
-                onPressed: (){},label: 'Register'),
+                onPressed: (){
+                  Get.offAllNamed(AppRoutes.registerScreen);
+
+                },label: 'Register'),
             ),
             SizedBox(height: 44.h)
           ],
