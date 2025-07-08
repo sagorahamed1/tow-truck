@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:towservice/utils/app_colors.dart';
 
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -33,6 +34,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final ModalRoute<dynamic>? parentRoute = ModalRoute.of(context);
 
     return AppBar(
+      //leadingWidth: 44.r,
       titleSpacing: 0,
       shape: showBorder
           ? Border(
@@ -48,12 +50,30 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       flexibleSpace: flexibleSpace,
       leading: leading ??
           ((showLeading && (parentRoute?.canPop ?? false))
-              ? IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new,
-              //color: AppColors.darkColor,
-            ),
-            onPressed: backAction ?? () => Navigator.pop(context),
-          )
+              ? Padding(
+                padding:  EdgeInsets.only(left: 16.w),
+                child: GestureDetector(
+                            onTap: backAction ?? () => Navigator.pop(context),
+                            child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.whiteColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xff00000040).withOpacity(0.2),
+                      blurRadius: 2,
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  Icons.arrow_back_ios_new,
+                  color: AppColors.darkColor,
+                  size: 22.r,
+                ),
+                            ),
+                          ),
+              )
               : null),
       title: title != null && title!.isNotEmpty
           ? Text(

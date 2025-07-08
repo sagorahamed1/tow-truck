@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:towservice/global/custom_assets/fonts.gen.dart';
 import 'package:towservice/utils/app_colors.dart';
 
 
@@ -54,7 +55,7 @@ class CustomText extends StatelessWidget {
             decoration: decoration,
             decorationColor: decorationColor,
               fontSize: fontSize ?? 14.sp,
-              fontFamily: fontName ?? "Inter",
+              fontFamily: fontName ?? FontFamily.csaction,
               fontWeight: fontWeight == null ? FontWeight.w400 : fontWeight,
              color: color ?? AppColors.darkColor,
           ),

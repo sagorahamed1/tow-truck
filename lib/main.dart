@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:towservice/dependency/dependency_Injection.dart';
 import 'package:towservice/themes/theme.dart';
 import 'routes/app_routes.dart';
 
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       builder: (context, child) {
         return GetMaterialApp(
+          initialBinding: DependencyInjection(),
           debugShowCheckedModeBanner: false,
           title: 'Service App',
           initialRoute: AppRoutes.splashScreen,

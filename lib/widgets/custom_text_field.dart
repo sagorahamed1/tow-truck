@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:towservice/global/custom_assets/fonts.gen.dart';
 import 'package:towservice/helpers/time_format.dart';
 import 'package:towservice/utils/app_colors.dart';
 import 'package:towservice/utils/app_constant.dart';
@@ -134,8 +135,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
         if (widget.labelText != null)
           CustomText(
             text: widget.labelText ?? '',
-          //  fontName: FontFamily.inter,
-           // color: AppColors.appGreyColor,
+           fontName: FontFamily.csaction,
+            color: AppColors.hitTextColor000000,
             bottom: 4.h,
             fontSize: 14.sp,
             fontWeight: FontWeight.w500,
@@ -189,12 +190,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 return null;
               },
 
-        //  cursorColor: widget.cursorColor ?? AppColors.appGreyColor,
+         cursorColor: widget.cursorColor ?? AppColors.hitTextColor000000,
           obscureText: widget.isPassword ? obscureText : false,
           style: TextStyle(
-            //  color: widget.hintextColor ?? AppColors.appGreyColor,
-              fontSize: widget.hintextSize ?? 12.h,
-              fontFamily: widget.fontFamily),
+             color: widget.hintextColor ?? AppColors.hitTextColor000000,
+              fontSize: widget.hintextSize ?? 13.h,
+              fontFamily: widget.fontFamily ?? FontFamily.csaction,
+          ),
           decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
                   horizontal: widget.contentPaddingHorizontal ?? 20.w,
@@ -217,9 +219,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   BoxConstraints(minHeight: 24.w, minWidth: 24.w),
               hintText: widget.hintText,
               hintStyle: TextStyle(
-                  //color: widget.hintextColor ?? AppColors.appGreyColor,
-                  fontSize: widget.hintextSize ?? 12.h,
-                  fontWeight: FontWeight.w400),
+                  color: widget.hintextColor ?? AppColors.hitTextColor000000,
+                  fontSize: widget.hintextSize ?? 13.h,
+                  fontWeight: FontWeight.w400,
+                fontFamily: widget.fontFamily ?? FontFamily.csaction,
+              ),
               focusedBorder: focusedBorder(),
               enabledBorder: enabledBorder(),
               errorBorder: errorBorder(),
@@ -237,7 +241,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Padding(
         padding: const EdgeInsets.all(12.0),
         child: Icon(icon,
-            //color: AppColors.darkColor,
+            color: AppColors.hitTextColor000000,
         ));
   }
 
@@ -245,7 +249,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(widget.borderRadio?.r ?? 10.r),
       borderSide: BorderSide(
-         // width: 0.8, color: widget.borderColor ?? AppColors.borderColor,
+          width: 0.8, color: widget.borderColor ?? Color(0xffD6BDD4),
       ),
     );
   }
@@ -254,7 +258,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(widget.borderRadio?.r ?? 10.r),
       borderSide: BorderSide(
-        //  width: 1, color: widget.borderColor ?? AppColors.borderColor,
+          width: 1, color: widget.borderColor ?? Color(0xffD6BDD4),
       ),
     );
   }

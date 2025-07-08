@@ -19,9 +19,12 @@ class RoleScreen extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(height: 40.h),
-          const AuthTitleWidgets(
-            title: 'How will you use our Tow Service Platform?',
-            subtitle: 'Choose your role to get started',
+          Padding(
+            padding:  EdgeInsets.symmetric(horizontal: 24.w),
+            child: const AuthTitleWidgets(
+              title: 'How will you use our Tow Service Platform?',
+              subtitle: 'Choose your role to get started',
+            ),
           ),
         ],
       ),
