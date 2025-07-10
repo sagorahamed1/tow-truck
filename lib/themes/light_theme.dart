@@ -39,7 +39,8 @@ ThemeData light() => ThemeData(
       ),
 
      // backgroundColor: Colors.white,
-      backgroundColor: AppColors.primaryColor,
+     //  backgroundColor: AppColors.primaryColor,
+      backgroundColor: Colors.white,
       shadowColor: Colors.black.withOpacity(0.12),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: AppColors.whiteColor),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../features/views/features/views/driver/driver_bottom_nav_bar/driver_bottom_nav_bar.dart';
+import '../features/views/features/views/driver/driver_home/driver_home_screen.dart';
 import '../features/views/features/views/screens.dart';
 
 class AppRoutes{
@@ -11,6 +13,8 @@ class AppRoutes{
   static const String forgotPasswordScreen = "/forgotPasswordScreen";
   static const String otpScreen = "/otpScreen";
   static const String resetPasswordScreen = "/resetPasswordScreen";
+  static const String driverHomeScreen = "/DriverHomeScreen";
+  static const String customNavBarScreen = "/CustomNavBarScreen";
 
 
 
@@ -26,6 +30,8 @@ class AppRoutes{
     otpScreen: (context) => OtpScreen(),
     resetPasswordScreen: (context) => ResetPasswordScreen(),
     registerScreen : (context) => RegisterScreen(),
+    driverHomeScreen : (context) => DriverHomeScreen(),
+    customNavBarScreen : (context) => CustomNavBarScreen(),
 
   };
 

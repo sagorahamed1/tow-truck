@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:towservice/routes/app_routes.dart';
 import 'package:towservice/utils/app_colors.dart';
 import '../../../../../widgets/widgets.dart';
@@ -31,7 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 title: 'Login',
                 subtitle: 'Welcome Back! Please enter your details.',
               ),
-        
               SizedBox(height: 20.h),
               CustomTextField(
                 isEmail: true,
@@ -44,7 +44,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller: _passwordController,
                 hintText: 'Password',
               ),
-        
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
@@ -57,20 +56,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-        
               SizedBox(height: 24.h),
-              CustomButton(onPressed: () {
-                if(!_globalKey.currentState!.validate()) return;
-              }, label: 'Login'),
-
+              CustomButton(
+                  onPressed: () async{
+                   await requestLocationPermission();
+                    // if (!_globalKey.currentState!.validate()) return;
+                    // Get.toNamed(AppRoutes.customNavBarScreen);
+                  },
+                  label: 'Login'),
               SizedBox(height: 20.h),
-              RichText(text: TextSpan(
-                  style: TextStyle(
-                      color: AppColors.darkColor,
-                      fontSize: 14.sp
-                  ),
-                  text: "Don't have an account?",
-                  children: [
+              RichText(
+                  text: TextSpan(
+                      style: TextStyle(
+                          color: AppColors.darkColor, fontSize: 14.sp),
+                      text: "Don't have an account?",
+                      children: [
                     TextSpan(
                         style: TextStyle(
                           decoration: TextDecoration.underline,
@@ -78,19 +78,29 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: AppColors.primaryColor,
                         ),
                         text: '  Register',
-                        recognizer: TapGestureRecognizer()..onTap = (){
-                          Get.toNamed(AppRoutes.registerScreen);
-
-                        }
-                    )
-                  ]
-              )),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Get.toNamed(AppRoutes.registerScreen);
+                          })
+                  ])),
               SizedBox(height: 24.h),
-
             ],
           ),
         ),
       ),
     );
+  }
+
+
+  Future<void> requestLocationPermission() async {
+    var status = await Permission.location.request();
+    if (status.isGranted) {
+      print("✅ Location permission granted");
+      Get.toNamed(AppRoutes.customNavBarScreen);
+    } else if (status.isDenied) {
+      print("❌ Location permission denied");
+    } else if (status.isPermanentlyDenied) {
+
+    }
   }
 }
