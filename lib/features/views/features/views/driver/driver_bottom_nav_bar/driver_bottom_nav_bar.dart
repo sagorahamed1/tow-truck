@@ -6,6 +6,7 @@ import 'package:towservice/global/custom_assets/assets.gen.dart';
 import 'package:towservice/utils/app_colors.dart';
 
 import '../../message/message_user_screen.dart';
+import '../../profile/profile_screen.dart';
 
 class CustomNavBarScreen extends StatelessWidget {
   final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
@@ -17,7 +18,7 @@ class CustomNavBarScreen extends StatelessWidget {
       DriverHomeScreen(),
       DriverHomeScreen(),
       MessageUserScreen(),
-      DriverHomeScreen()
+      ProfileScreen()
 
     ];
   }

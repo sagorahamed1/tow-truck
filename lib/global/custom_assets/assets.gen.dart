@@ -15,6 +15,10 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/aboutUsIcon.svg
+  SvgGenImage get aboutUsIcon =>
+      const SvgGenImage('assets/icons/aboutUsIcon.svg');
+
   /// File path: assets/icons/app_logo.svg
   SvgGenImage get appLogo => const SvgGenImage('assets/icons/app_logo.svg');
 
@@ -24,9 +28,24 @@ class $AssetsIconsGen {
   /// File path: assets/icons/chatIcon.svg
   SvgGenImage get chatIcon => const SvgGenImage('assets/icons/chatIcon.svg');
 
+  /// File path: assets/icons/deleteIcon.svg
+  SvgGenImage get deleteIcon =>
+      const SvgGenImage('assets/icons/deleteIcon.svg');
+
+  /// File path: assets/icons/findTowServiceIcon.svg
+  SvgGenImage get findTowServiceIcon =>
+      const SvgGenImage('assets/icons/findTowServiceIcon.svg');
+
   /// File path: assets/icons/home_nav_Icon.svg
   SvgGenImage get homeNavIcon =>
       const SvgGenImage('assets/icons/home_nav_Icon.svg');
+
+  /// File path: assets/icons/lock.svg
+  SvgGenImage get lock => const SvgGenImage('assets/icons/lock.svg');
+
+  /// File path: assets/icons/logOutIcon.svg
+  SvgGenImage get logOutIcon =>
+      const SvgGenImage('assets/icons/logOutIcon.svg');
 
   /// File path: assets/icons/messageSendIcon.svg
   SvgGenImage get messageSendIcon =>
@@ -36,16 +55,38 @@ class $AssetsIconsGen {
   SvgGenImage get pickUpIcon =>
       const SvgGenImage('assets/icons/pickUpIcon.svg');
 
+  /// File path: assets/icons/privacyIcon.svg
+  SvgGenImage get privacyIcon =>
+      const SvgGenImage('assets/icons/privacyIcon.svg');
+
+  /// File path: assets/icons/profile.svg
+  SvgGenImage get profile => const SvgGenImage('assets/icons/profile.svg');
+
   /// File path: assets/icons/profileNavIcon.svg
   SvgGenImage get profileNavIcon =>
       const SvgGenImage('assets/icons/profileNavIcon.svg');
 
+  /// File path: assets/icons/rightArrow.svg
+  SvgGenImage get rightArrow =>
+      const SvgGenImage('assets/icons/rightArrow.svg');
+
   /// File path: assets/icons/searhIcon.svg
   SvgGenImage get searhIcon => const SvgGenImage('assets/icons/searhIcon.svg');
+
+  /// File path: assets/icons/settingIcon.svg
+  SvgGenImage get settingIcon =>
+      const SvgGenImage('assets/icons/settingIcon.svg');
 
   /// File path: assets/icons/splashIcon.svg
   SvgGenImage get splashIcon =>
       const SvgGenImage('assets/icons/splashIcon.svg');
+
+  /// File path: assets/icons/supportIcon.svg
+  SvgGenImage get supportIcon =>
+      const SvgGenImage('assets/icons/supportIcon.svg');
+
+  /// File path: assets/icons/termIcon.svg
+  SvgGenImage get termIcon => const SvgGenImage('assets/icons/termIcon.svg');
 
   /// File path: assets/icons/tow_driver.svg
   SvgGenImage get towDriver => const SvgGenImage('assets/icons/tow_driver.svg');
@@ -67,15 +108,26 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+        aboutUsIcon,
         appLogo,
         carIcon,
         chatIcon,
+        deleteIcon,
+        findTowServiceIcon,
         homeNavIcon,
+        lock,
+        logOutIcon,
         messageSendIcon,
         pickUpIcon,
+        privacyIcon,
+        profile,
         profileNavIcon,
+        rightArrow,
         searhIcon,
+        settingIcon,
         splashIcon,
+        supportIcon,
+        termIcon,
         towDriver,
         towService,
         tripIcon,
@@ -99,13 +151,26 @@ class $AssetsImagesGen {
   AssetGenImage get onboardingSecondIcon =>
       const AssetGenImage('assets/images/onboarding_second_icon.png');
 
+  /// File path: assets/images/profileBg.png
+  AssetGenImage get profileBg =>
+      const AssetGenImage('assets/images/profileBg.png');
+
   /// File path: assets/images/splash_image.png
   AssetGenImage get splashImage =>
       const AssetGenImage('assets/images/splash_image.png');
 
+  /// File path: assets/images/support.png
+  AssetGenImage get support => const AssetGenImage('assets/images/support.png');
+
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [onboardingFirstIcon, onboardingImage, onboardingSecondIcon, splashImage];
+  List<AssetGenImage> get values => [
+        onboardingFirstIcon,
+        onboardingImage,
+        onboardingSecondIcon,
+        profileBg,
+        splashImage,
+        support
+      ];
 }
 
 class Assets {

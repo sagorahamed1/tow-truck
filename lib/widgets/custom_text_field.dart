@@ -136,9 +136,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
           CustomText(
             text: widget.labelText ?? '',
            fontName: FontFamily.csaction,
-            color: AppColors.hitTextColor000000,
-            bottom: 4.h,
-            fontSize: 14.sp,
+            color: Colors.black,
+            bottom: 6.h,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w500,
           ),
         SizedBox(

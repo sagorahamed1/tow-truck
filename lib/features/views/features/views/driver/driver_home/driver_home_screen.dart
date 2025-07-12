@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:towservice/global/custom_assets/assets.gen.dart';
-import 'package:towservice/widgets/custom_button.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
 import 'package:towservice/widgets/custom_network_image.dart';
 import 'package:towservice/widgets/custom_text.dart';

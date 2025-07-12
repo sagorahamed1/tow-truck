@@ -3,6 +3,10 @@ import '../features/views/features/views/driver/driver_bottom_nav_bar/driver_bot
 import '../features/views/features/views/driver/driver_home/driver_home_screen.dart';
 import '../features/views/features/views/message/chat_screen.dart';
 import '../features/views/features/views/message/report_screen.dart';
+import '../features/views/features/views/profile/edit_profile_screen.dart';
+import '../features/views/features/views/profile/privacy_policy_all_screen.dart';
+import '../features/views/features/views/profile/setting_screen.dart';
+import '../features/views/features/views/profile/support_screen.dart';
 import '../features/views/features/views/screens.dart';
 
 class AppRoutes{
@@ -19,6 +23,10 @@ class AppRoutes{
   static const String customNavBarScreen = "/CustomNavBarScreen";
   static const String chatScreen = "/ChatScreen";
   static const String reportScreen = "/ReportScreen";
+  static const String editProfileScreen = "/EditProfileScreen";
+  static const String supportScreen = "/SupportScreen";
+  static const String settingScreen = "/SettingScreen";
+  static const String privacyPolicyAllScreen = "/PrivacyPolicyAllScreen";
 
 
 
@@ -38,6 +46,10 @@ class AppRoutes{
     customNavBarScreen : (context) => CustomNavBarScreen(),
     chatScreen : (context) => ChatScreen(),
     reportScreen : (context) => ReportScreen(),
+    editProfileScreen : (context) => EditProfileScreen(),
+    supportScreen : (context) => SupportScreen(),
+    settingScreen : (context) => SettingScreen(),
+    privacyPolicyAllScreen : (context) => PrivacyPolicyAllScreen(),
 
   };
 

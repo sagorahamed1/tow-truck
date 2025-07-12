@@ -30,6 +30,8 @@ dependencies:
   permission_handler:
   chat_bubbles:
   flutter_polygon:
+  flutter_rating_bar: ^4.0.1
+  url_launcher:
 
 dev_dependencies:
   flutter_test:
