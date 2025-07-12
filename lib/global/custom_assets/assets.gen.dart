@@ -21,9 +21,27 @@ class $AssetsIconsGen {
   /// File path: assets/icons/carIcon.svg
   SvgGenImage get carIcon => const SvgGenImage('assets/icons/carIcon.svg');
 
+  /// File path: assets/icons/chatIcon.svg
+  SvgGenImage get chatIcon => const SvgGenImage('assets/icons/chatIcon.svg');
+
+  /// File path: assets/icons/home_nav_Icon.svg
+  SvgGenImage get homeNavIcon =>
+      const SvgGenImage('assets/icons/home_nav_Icon.svg');
+
+  /// File path: assets/icons/messageSendIcon.svg
+  SvgGenImage get messageSendIcon =>
+      const SvgGenImage('assets/icons/messageSendIcon.svg');
+
   /// File path: assets/icons/pickUpIcon.svg
   SvgGenImage get pickUpIcon =>
       const SvgGenImage('assets/icons/pickUpIcon.svg');
+
+  /// File path: assets/icons/profileNavIcon.svg
+  SvgGenImage get profileNavIcon =>
+      const SvgGenImage('assets/icons/profileNavIcon.svg');
+
+  /// File path: assets/icons/searhIcon.svg
+  SvgGenImage get searhIcon => const SvgGenImage('assets/icons/searhIcon.svg');
 
   /// File path: assets/icons/splashIcon.svg
   SvgGenImage get splashIcon =>
@@ -36,19 +54,33 @@ class $AssetsIconsGen {
   SvgGenImage get towService =>
       const SvgGenImage('assets/icons/tow_service.svg');
 
+  /// File path: assets/icons/tripIcon.svg
+  SvgGenImage get tripIcon => const SvgGenImage('assets/icons/tripIcon.svg');
+
   /// File path: assets/icons/verifyBedgeIcon.svg
   SvgGenImage get verifyBedgeIcon =>
       const SvgGenImage('assets/icons/verifyBedgeIcon.svg');
+
+  /// File path: assets/icons/welletNavIcon.svg
+  SvgGenImage get welletNavIcon =>
+      const SvgGenImage('assets/icons/welletNavIcon.svg');
 
   /// List of all assets
   List<SvgGenImage> get values => [
         appLogo,
         carIcon,
+        chatIcon,
+        homeNavIcon,
+        messageSendIcon,
         pickUpIcon,
+        profileNavIcon,
+        searhIcon,
         splashIcon,
         towDriver,
         towService,
-        verifyBedgeIcon
+        tripIcon,
+        verifyBedgeIcon,
+        welletNavIcon
       ];
 }
 

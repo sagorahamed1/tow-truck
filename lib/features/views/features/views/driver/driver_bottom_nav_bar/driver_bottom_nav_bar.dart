@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_polygon/flutter_polygon.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:towservice/features/views/features/views/driver/driver_home/driver_home_screen.dart';
+import 'package:towservice/global/custom_assets/assets.gen.dart';
+import 'package:towservice/utils/app_colors.dart';
+
+import '../../message/message_user_screen.dart';
 
 class CustomNavBarScreen extends StatelessWidget {
   final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
@@ -10,6 +15,8 @@ class CustomNavBarScreen extends StatelessWidget {
 
       DriverHomeScreen(),
       DriverHomeScreen(),
+      DriverHomeScreen(),
+      MessageUserScreen(),
       DriverHomeScreen()
 
     ];
@@ -18,22 +25,61 @@ class CustomNavBarScreen extends StatelessWidget {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.home_filled),
+        icon: Assets.icons.homeNavIcon.svg(),
+        inactiveIcon: Assets.icons.homeNavIcon.svg(color: Colors.black),
         title: ("Home"),
-        activeColorPrimary: Colors.deepPurple,
-        inactiveColorPrimary: Colors.grey.shade500,
+        activeColorPrimary: AppColors.primaryColor,
+        inactiveColorPrimary: Colors.grey,
       ),
+
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.explore),
-        title: ("Explore"),
-        activeColorPrimary: Colors.teal,
-        inactiveColorPrimary: Colors.grey.shade500,
+        icon: Assets.icons.tripIcon.svg(color: AppColors.primaryColor),
+        inactiveIcon: Assets.icons.tripIcon.svg(color: Colors.black),
+        title: ("Trip"),
+        activeColorPrimary: AppColors.primaryColor,
+        inactiveColorPrimary: Colors.grey,
       ),
+
+      // PersistentBottomNavBarItem(
+      //   icon: Assets.icons.welletNavIcon.svg(),
+      //   title: ("Wallet"),
+      //   activeColorPrimary: AppColors.primaryColor,
+      //   inactiveColorPrimary: Colors.grey,
+      // ),
+
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.person),
+        icon: buildHexagonIcon(
+          Assets.icons.welletNavIcon.svg(width: 26, height: 26),
+          isActive: true,
+        ),
+        inactiveIcon: buildHexagonIcon(
+          Assets.icons.welletNavIcon.svg(width: 26, height: 26),
+          isActive: true,
+        ),
+        title: ("Wallet"),
+        activeColorPrimary: AppColors.primaryColor,
+        inactiveColorPrimary: Colors.grey,
+      ),
+
+
+
+
+      PersistentBottomNavBarItem(
+        icon: Assets.icons.chatIcon.svg(color: AppColors.primaryColor),
+        inactiveIcon: Assets.icons.chatIcon.svg(color: Colors.black),
+        title: ("Chat"),
+        activeColorPrimary: AppColors.primaryColor,
+        inactiveColorPrimary: Colors.grey,
+      ),
+
+
+
+      PersistentBottomNavBarItem(
+        icon: Assets.icons.profileNavIcon.svg(color: AppColors.primaryColor),
+        inactiveIcon: Assets.icons.profileNavIcon.svg(color: Colors.black),
         title: ("Profile"),
-        activeColorPrimary: Colors.pink,
-        inactiveColorPrimary: Colors.grey.shade500,
+        activeColorPrimary: AppColors.primaryColor,
+        inactiveColorPrimary: Colors.grey,
       ),
     ];
   }
@@ -51,8 +97,8 @@ class CustomNavBarScreen extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       stateManagement: true,
       // hideNavigationBarWhenKeyboardShows: true,
+
       decoration: NavBarDecoration(
-        borderRadius: BorderRadius.circular(25.0),
         colorBehindNavBar: Colors.grey.shade100,
         boxShadow: [
           BoxShadow(
@@ -62,7 +108,24 @@ class CustomNavBarScreen extends StatelessWidget {
           )
         ],
       ),
-      navBarStyle: NavBarStyle.style16, // Style 16 only supports 3 or 5 items
+      navBarStyle: NavBarStyle.style15,
     );
   }
+
+
+
+  Widget buildHexagonIcon(Widget icon, {bool isActive = false}) {
+    return ClipPolygon(
+      sides: 6,
+      borderRadius: 5.0,
+      rotate: 90.0,
+      child: Container(
+        width: 60,
+        height: 60,
+        color: isActive ? AppColors.primaryColor : Colors.grey.shade300,
+        child: Center(child: icon),
+      ),
+    );
+  }
+
 }

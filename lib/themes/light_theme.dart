@@ -35,7 +35,7 @@ ThemeData light() => ThemeData(
     appBarTheme: AppBarTheme(
       centerTitle: true,
       iconTheme: IconThemeData(
-          color: AppColors.whiteColor
+          color: Colors.black
       ),
 
      // backgroundColor: Colors.white,
