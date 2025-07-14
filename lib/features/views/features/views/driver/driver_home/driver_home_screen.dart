@@ -155,7 +155,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                      
 
 
-                        SizedBox(height: 20.h),
+                        SizedBox(height: 8.h),
                         
                         CustomButtonTwo(title: "Accept Offer", onpress: () {
 

@@ -61,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () async{
                    await requestLocationPermission();
                     // if (!_globalKey.currentState!.validate()) return;
-                    // Get.toNamed(AppRoutes.customNavBarScreen);
+                    Get.toNamed(AppRoutes.customNavBarScreen);
                   },
                   label: 'Login'),
               SizedBox(height: 20.h),

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import '../features/views/features/views/driver/driver_bottom_nav_bar/driver_bottom_nav_bar.dart';
 import '../features/views/features/views/driver/driver_home/driver_home_screen.dart';
+import '../features/views/features/views/driver/trip/trip_details_screen.dart';
+import '../features/views/features/views/driver/wallet/wallet_history_screen.dart';
 import '../features/views/features/views/message/chat_screen.dart';
 import '../features/views/features/views/message/report_screen.dart';
+import '../features/views/features/views/message/report_submit_screen.dart';
 import '../features/views/features/views/profile/edit_profile_screen.dart';
 import '../features/views/features/views/profile/privacy_policy_all_screen.dart';
 import '../features/views/features/views/profile/setting_screen.dart';
@@ -27,6 +30,9 @@ class AppRoutes{
   static const String supportScreen = "/SupportScreen";
   static const String settingScreen = "/SettingScreen";
   static const String privacyPolicyAllScreen = "/PrivacyPolicyAllScreen";
+  static const String reportSubmitScreen = "/ReportSubmitScreen";
+  static const String walletHistoryScreen = "/WalletHistoryScreen";
+  static const String tripDetailsScreen = "/TripDetailsScreen";
 
 
 
@@ -50,6 +56,9 @@ class AppRoutes{
     supportScreen : (context) => SupportScreen(),
     settingScreen : (context) => SettingScreen(),
     privacyPolicyAllScreen : (context) => PrivacyPolicyAllScreen(),
+    reportSubmitScreen : (context) => ReportSubmitScreen(),
+    walletHistoryScreen : (context) => WalletHistoryScreen(),
+    tripDetailsScreen : (context) => TripDetailsScreen(),
 
   };
 

@@ -19,6 +19,10 @@ class $AssetsIconsGen {
   SvgGenImage get aboutUsIcon =>
       const SvgGenImage('assets/icons/aboutUsIcon.svg');
 
+  /// File path: assets/icons/addMoneyIcon.svg
+  SvgGenImage get addMoneyIcon =>
+      const SvgGenImage('assets/icons/addMoneyIcon.svg');
+
   /// File path: assets/icons/app_logo.svg
   SvgGenImage get appLogo => const SvgGenImage('assets/icons/app_logo.svg');
 
@@ -40,12 +44,20 @@ class $AssetsIconsGen {
   SvgGenImage get homeNavIcon =>
       const SvgGenImage('assets/icons/home_nav_Icon.svg');
 
+  /// File path: assets/icons/leftBottomIcon.svg
+  SvgGenImage get leftBottomIcon =>
+      const SvgGenImage('assets/icons/leftBottomIcon.svg');
+
   /// File path: assets/icons/lock.svg
   SvgGenImage get lock => const SvgGenImage('assets/icons/lock.svg');
 
   /// File path: assets/icons/logOutIcon.svg
   SvgGenImage get logOutIcon =>
       const SvgGenImage('assets/icons/logOutIcon.svg');
+
+  /// File path: assets/icons/messageIcon.svg
+  SvgGenImage get messageIcon =>
+      const SvgGenImage('assets/icons/messageIcon.svg');
 
   /// File path: assets/icons/messageSendIcon.svg
   SvgGenImage get messageSendIcon =>
@@ -69,6 +81,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/rightArrow.svg
   SvgGenImage get rightArrow =>
       const SvgGenImage('assets/icons/rightArrow.svg');
+
+  /// File path: assets/icons/rightTopIcon.svg
+  SvgGenImage get rightTopIcon =>
+      const SvgGenImage('assets/icons/rightTopIcon.svg');
 
   /// File path: assets/icons/searhIcon.svg
   SvgGenImage get searhIcon => const SvgGenImage('assets/icons/searhIcon.svg');
@@ -109,20 +125,24 @@ class $AssetsIconsGen {
   /// List of all assets
   List<SvgGenImage> get values => [
         aboutUsIcon,
+        addMoneyIcon,
         appLogo,
         carIcon,
         chatIcon,
         deleteIcon,
         findTowServiceIcon,
         homeNavIcon,
+        leftBottomIcon,
         lock,
         logOutIcon,
+        messageIcon,
         messageSendIcon,
         pickUpIcon,
         privacyIcon,
         profile,
         profileNavIcon,
         rightArrow,
+        rightTopIcon,
         searhIcon,
         settingIcon,
         splashIcon,
