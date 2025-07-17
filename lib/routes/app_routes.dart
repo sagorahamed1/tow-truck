@@ -11,6 +11,8 @@ import '../features/views/features/views/profile/privacy_policy_all_screen.dart'
 import '../features/views/features/views/profile/setting_screen.dart';
 import '../features/views/features/views/profile/support_screen.dart';
 import '../features/views/features/views/screens.dart';
+import '../features/views/features/views/user/user_bottom_nav_bar/user_bottom_nav_bar.dart';
+import '../features/views/features/views/user/user_home/job_post_screen.dart';
 
 class AppRoutes{
   static const String splashScreen = "/splashScreen";
@@ -33,6 +35,8 @@ class AppRoutes{
   static const String reportSubmitScreen = "/ReportSubmitScreen";
   static const String walletHistoryScreen = "/WalletHistoryScreen";
   static const String tripDetailsScreen = "/TripDetailsScreen";
+  static const String userBottomNavBar = "/UserBottomNavBar";
+  static const String jobPostScreen = "/JobPostScreen";
 
 
 
@@ -59,6 +63,8 @@ class AppRoutes{
     reportSubmitScreen : (context) => ReportSubmitScreen(),
     walletHistoryScreen : (context) => WalletHistoryScreen(),
     tripDetailsScreen : (context) => TripDetailsScreen(),
+    userBottomNavBar : (context) => UserBottomNavBar(),
+    jobPostScreen : (context) => JobPostScreen(),
 
   };
 

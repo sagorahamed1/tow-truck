@@ -159,6 +159,10 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/customerHomeScreenImage.png
+  AssetGenImage get customerHomeScreenImage =>
+      const AssetGenImage('assets/images/customerHomeScreenImage.png');
+
   /// File path: assets/images/onboarding_first_icon.png
   AssetGenImage get onboardingFirstIcon =>
       const AssetGenImage('assets/images/onboarding_first_icon.png');
@@ -184,6 +188,7 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+        customerHomeScreenImage,
         onboardingFirstIcon,
         onboardingImage,
         onboardingSecondIcon,

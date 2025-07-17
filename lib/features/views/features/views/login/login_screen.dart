@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:towservice/helpers/prefs_helper.dart';
 import 'package:towservice/routes/app_routes.dart';
 import 'package:towservice/utils/app_colors.dart';
+import 'package:towservice/utils/app_constant.dart';
 import '../../../../../widgets/widgets.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -60,8 +62,16 @@ class _LoginScreenState extends State<LoginScreen> {
               CustomButton(
                   onPressed: () async{
                    await requestLocationPermission();
+                   var role = await PrefsHelper.getString(AppConstants.role);
+
                     // if (!_globalKey.currentState!.validate()) return;
-                    Get.toNamed(AppRoutes.customNavBarScreen);
+
+                   if(role == "user"){
+                     Get.toNamed(AppRoutes.userBottomNavBar);
+                   }else{
+                     Get.toNamed(AppRoutes.customNavBarScreen);
+                   }
+
                   },
                   label: 'Login'),
               SizedBox(height: 20.h),

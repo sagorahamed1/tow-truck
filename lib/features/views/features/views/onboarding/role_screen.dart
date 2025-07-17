@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:towservice/global/custom_assets/assets.gen.dart';
+import 'package:towservice/helpers/prefs_helper.dart';
 import 'package:towservice/routes/app_routes.dart';
 import 'package:towservice/utils/app_colors.dart';
+import 'package:towservice/utils/app_constant.dart';
 import 'package:towservice/widgets/auth_title_widgets.dart';
 import 'package:towservice/widgets/custom_container.dart';
 import 'package:towservice/widgets/custom_scaffold.dart';
@@ -53,9 +55,15 @@ class RoleScreen extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildIconsWidget(Assets.icons.towService.svg(),'I NEED A TOW SERVICES'),
+                    _buildIconsWidget(Assets.icons.towService.svg(),'I NEED A TOW SERVICES', (){
+                      PrefsHelper.setString(AppConstants.role, "user");
+                      Get.toNamed(AppRoutes.getStartedScreen);
+                    }),
                     SizedBox(height: 20.h),
-                    _buildIconsWidget(Assets.icons.towDriver.svg(),'I AM A TOW DRIVER'),
+                    _buildIconsWidget(Assets.icons.towDriver.svg(),'I AM A TOW DRIVER',(){
+                      PrefsHelper.setString(AppConstants.role, "driver");
+                      Get.toNamed(AppRoutes.getStartedScreen);
+                    }),
                   ],
                 ),
               ),
@@ -66,12 +74,10 @@ class RoleScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildIconsWidget(Widget icon,String title) {
+  Widget _buildIconsWidget(Widget icon,String title, VoidCallback? onTap) {
     return CustomContainer(
       alignment: Alignment.center,
-      onTap: (){
-        Get.toNamed(AppRoutes.getStartedScreen);
-      },
+      onTap: onTap,
       radiusAll: 8.r,
       color: AppColors.whiteShade500,
       elevationColor: const Color(0xffD46A6A1A).withOpacity(0.15),

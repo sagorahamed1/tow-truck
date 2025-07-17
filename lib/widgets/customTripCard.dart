@@ -8,7 +8,8 @@ import 'custom_network_image.dart';
 import 'custom_text.dart';
 
 class Customtripcard extends StatelessWidget {
-  const Customtripcard({super.key});
+  final VoidCallback? acceptOnTap;
+  const Customtripcard({super.key, this.acceptOnTap});
 
   @override
   Widget build(BuildContext context) {
@@ -31,40 +32,43 @@ class Customtripcard extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Color(0xffF7F3EC),
                   borderRadius: BorderRadius.circular(4.r)),
-              child: Row(
-                children: [
-                  CustomNetworkImage(
-                    height: 49.h,
-                    width: 49.w,
-                    boxShape: BoxShape.circle,
-                    imageUrl:
-                    "https://randomuser.me/api/portraits/women/79.jpg",
-                  ),
-                  SizedBox(width: 12.w),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomText(text: "Najma"),
-                      Row(
-                        children: [
-                          CustomText(
-                              text: "★★★★★", color: Color(0xffFFCE31)),
-                          SizedBox(width: 4.w),
-                          CustomText(text: "5(2)"),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Spacer(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomText(
-                          text: "\$ 20", fontWeight: FontWeight.w600),
-                      CustomText(text: "3.3 km"),
-                    ],
-                  ),
-                ],
+              child: Padding(
+                padding:  EdgeInsets.all(8.r),
+                child: Row(
+                  children: [
+                    CustomNetworkImage(
+                      height: 49.h,
+                      width: 49.w,
+                      boxShape: BoxShape.circle,
+                      imageUrl:
+                      "https://randomuser.me/api/portraits/women/79.jpg",
+                    ),
+                    SizedBox(width: 12.w),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomText(text: "Najma"),
+                        Row(
+                          children: [
+                            CustomText(
+                                text: "★★★★★", color: Color(0xffFFCE31)),
+                            SizedBox(width: 4.w),
+                            CustomText(text: "5(2)"),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Spacer(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomText(
+                            text: "\$ 20", fontWeight: FontWeight.w600),
+                        CustomText(text: "3.3 km"),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(height: 12.h),
@@ -160,9 +164,7 @@ class Customtripcard extends StatelessWidget {
                   flex: 1,
                   child: CustomButtonTwo(
                       height: 35.h,
-                      title: "Accept", onpress: () {
-
-                  }),
+                      title: "Accept", onpress: acceptOnTap ?? (){}),
                 ),
               ],
             )

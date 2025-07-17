@@ -32,6 +32,9 @@ dependencies:
   flutter_polygon:
   flutter_rating_bar: ^4.0.1
   url_launcher:
+  location:
+  geocoding:
+  location_picker_text_field:
 
 dev_dependencies:
   flutter_test:
