@@ -2,6 +2,7 @@
 
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -71,8 +72,9 @@ class CurrentLocationController extends GetxController {
       } else {
         address.value = "Address not found";
       }
-    } catch (e) {
-      address.value = "Failed to get address";
+    } catch (e, s) {
+      address.value = "Failed get location!";
+      debugPrint("====================$s");
     }
 
 

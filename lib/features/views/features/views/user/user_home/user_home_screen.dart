@@ -19,8 +19,7 @@ class UserHomeScreen extends StatefulWidget {
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
   CurrentLocationController controller = Get.put(CurrentLocationController());
-  LiveLocationChangeController liveLocationChangeController =
-      Get.put(LiveLocationChangeController());
+  LiveLocationChangeController liveLocationChangeController = Get.put(LiveLocationChangeController());
 
   @override
   void initState() {
@@ -30,8 +29,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     super.initState();
   }
 
+
+  @override
+  void didChangeDependencies() {
+    controller.getCurrentLocation();
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
+
+
     if (controller.address.value == "") {
       print("======================================= do not have address");
       controller.getCurrentLocation();
@@ -84,49 +92,59 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             .svg(color: Colors.white, height: 50.h),
                       ],
                     ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        decoration: BoxDecoration(
+
+
+                    Obx(
+                          () {
+                        return Container(
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4.r),
                             border: Border.all(color: Colors.black),
-                            color: Colors.white),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10.w, vertical: 8.h),
-                          child: Row(
-                            children: [
-                              Icon(Icons.location_on),
-                              CustomText(text: "Your location", color: Colors.black),
-                              const Spacer()
-                            ],
                           ),
-                        ),
-                      ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.location_on),
+                                Expanded(
+                                  child: CustomText(
+                                    textAlign: TextAlign.start,
+                                    maxline: 1,
+                                    text: controller.isLoading.value
+                                        ? "Loading..."
+                                        : controller.address.value,
+                                    color: Colors.black
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
+
+
+
+
                     SizedBox(height: 10.h),
                     Obx(
                       () {
                         controller.isLoading.value;
                         return GestureDetector(
                           onTap: () {
-                            if (controller.address.value.isEmpty) {
-                              // context.pushNamed(AppRoutes.customerSelectCarScreen,
-                              //     extra: {
-                              //       "title": "Tow Truck",
-                              //       "address" : "${controller.address.value}"
-                              //     });
+                            // if (controller.address.value.isNotEmpty) {
+
 
                               Get.toNamed(AppRoutes.jobPostScreen, arguments: {
-                                "address" : 'address'
+                                "address" : '${controller.address.value}'
 
                               });
 
 
-                            } else {
-                              ToastMessageHelper.showToastMessage(
-                                  "Please wait 10 seconds while we fetch your location. Then try again.");
-                            }
+                            // } else {
+                            //   ToastMessageHelper.showToastMessage(
+                            //       "Please wait 10 seconds while we fetch your location. Then try again.");
+                            // }
                           },
                           child: Container(
                             decoration: BoxDecoration(

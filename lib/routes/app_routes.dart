@@ -12,7 +12,9 @@ import '../features/views/features/views/profile/setting_screen.dart';
 import '../features/views/features/views/profile/support_screen.dart';
 import '../features/views/features/views/screens.dart';
 import '../features/views/features/views/user/user_bottom_nav_bar/user_bottom_nav_bar.dart';
+import '../features/views/features/views/user/user_home/job_details_screen.dart';
 import '../features/views/features/views/user/user_home/job_post_screen.dart';
+import '../features/views/features/views/user/user_home/user_map_screen.dart';
 
 class AppRoutes{
   static const String splashScreen = "/splashScreen";
@@ -37,6 +39,8 @@ class AppRoutes{
   static const String tripDetailsScreen = "/TripDetailsScreen";
   static const String userBottomNavBar = "/UserBottomNavBar";
   static const String jobPostScreen = "/JobPostScreen";
+  static const String userMapScreen = "/UserMapScreen";
+  static const String jobDetailsScreen = "/JobDetailsScreen";
 
 
 
@@ -65,6 +69,8 @@ class AppRoutes{
     tripDetailsScreen : (context) => TripDetailsScreen(),
     userBottomNavBar : (context) => UserBottomNavBar(),
     jobPostScreen : (context) => JobPostScreen(),
+    userMapScreen : (context) => UserMapScreen(),
+    jobDetailsScreen : (context) => JobDetailsScreen(),
 
   };
 

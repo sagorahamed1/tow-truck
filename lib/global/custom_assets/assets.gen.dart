@@ -26,6 +26,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/app_logo.svg
   SvgGenImage get appLogo => const SvgGenImage('assets/icons/app_logo.svg');
 
+  /// File path: assets/icons/callIcon.svg
+  SvgGenImage get callIcon => const SvgGenImage('assets/icons/callIcon.svg');
+
   /// File path: assets/icons/carIcon.svg
   SvgGenImage get carIcon => const SvgGenImage('assets/icons/carIcon.svg');
 
@@ -127,6 +130,7 @@ class $AssetsIconsGen {
         aboutUsIcon,
         addMoneyIcon,
         appLogo,
+        callIcon,
         carIcon,
         chatIcon,
         deleteIcon,
