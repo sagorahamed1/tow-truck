@@ -7,6 +7,7 @@ import 'package:towservice/widgets/custom_app_bar.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
 import 'package:towservice/widgets/custom_network_image.dart';
 import 'package:towservice/widgets/custom_text.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class JobDetailsScreen extends StatelessWidget {
   JobDetailsScreen({super.key});
@@ -96,12 +97,22 @@ class JobDetailsScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(width: 20.w),
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white, shape: BoxShape.circle),
-                            child: Padding(
-                              padding: EdgeInsets.all(8.r),
-                              child: Assets.icons.callIcon.svg(),
+                          GestureDetector(
+                              onTap: () async {
+                                final Uri url = Uri.parse('tel:(609)327-7992');
+                                if (await launchUrl(url)) {
+                                  await launchUrl(url);
+                                } else {
+                                  debugPrint('Could not launch phone dialer');
+                                }
+                              },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white, shape: BoxShape.circle),
+                              child: Padding(
+                                padding: EdgeInsets.all(8.r),
+                                child: Assets.icons.callIcon.svg(),
+                              ),
                             ),
                           )
                         ],

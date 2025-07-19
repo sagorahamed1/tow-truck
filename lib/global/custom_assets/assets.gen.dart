@@ -32,12 +32,24 @@ class $AssetsIconsGen {
   /// File path: assets/icons/carIcon.svg
   SvgGenImage get carIcon => const SvgGenImage('assets/icons/carIcon.svg');
 
+  /// File path: assets/icons/carRegistrationIcon.svg
+  SvgGenImage get carRegistrationIcon =>
+      const SvgGenImage('assets/icons/carRegistrationIcon.svg');
+
   /// File path: assets/icons/chatIcon.svg
   SvgGenImage get chatIcon => const SvgGenImage('assets/icons/chatIcon.svg');
 
   /// File path: assets/icons/deleteIcon.svg
   SvgGenImage get deleteIcon =>
       const SvgGenImage('assets/icons/deleteIcon.svg');
+
+  /// File path: assets/icons/dirverAndCarPictureIcon.svg
+  SvgGenImage get dirverAndCarPictureIcon =>
+      const SvgGenImage('assets/icons/dirverAndCarPictureIcon.svg');
+
+  /// File path: assets/icons/drivingIcon.svg
+  SvgGenImage get drivingIcon =>
+      const SvgGenImage('assets/icons/drivingIcon.svg');
 
   /// File path: assets/icons/findTowServiceIcon.svg
   SvgGenImage get findTowServiceIcon =>
@@ -65,6 +77,13 @@ class $AssetsIconsGen {
   /// File path: assets/icons/messageSendIcon.svg
   SvgGenImage get messageSendIcon =>
       const SvgGenImage('assets/icons/messageSendIcon.svg');
+
+  /// File path: assets/icons/nidIcon.svg
+  SvgGenImage get nidIcon => const SvgGenImage('assets/icons/nidIcon.svg');
+
+  /// File path: assets/icons/notification_Icon.svg
+  SvgGenImage get notificationIcon =>
+      const SvgGenImage('assets/icons/notification_Icon.svg');
 
   /// File path: assets/icons/pickUpIcon.svg
   SvgGenImage get pickUpIcon =>
@@ -117,6 +136,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/tripIcon.svg
   SvgGenImage get tripIcon => const SvgGenImage('assets/icons/tripIcon.svg');
 
+  /// File path: assets/icons/uploadIcon.svg
+  SvgGenImage get uploadIcon =>
+      const SvgGenImage('assets/icons/uploadIcon.svg');
+
   /// File path: assets/icons/verifyBedgeIcon.svg
   SvgGenImage get verifyBedgeIcon =>
       const SvgGenImage('assets/icons/verifyBedgeIcon.svg');
@@ -132,8 +155,11 @@ class $AssetsIconsGen {
         appLogo,
         callIcon,
         carIcon,
+        carRegistrationIcon,
         chatIcon,
         deleteIcon,
+        dirverAndCarPictureIcon,
+        drivingIcon,
         findTowServiceIcon,
         homeNavIcon,
         leftBottomIcon,
@@ -141,6 +167,8 @@ class $AssetsIconsGen {
         logOutIcon,
         messageIcon,
         messageSendIcon,
+        nidIcon,
+        notificationIcon,
         pickUpIcon,
         privacyIcon,
         profile,
@@ -155,6 +183,7 @@ class $AssetsIconsGen {
         towDriver,
         towService,
         tripIcon,
+        uploadIcon,
         verifyBedgeIcon,
         welletNavIcon
       ];

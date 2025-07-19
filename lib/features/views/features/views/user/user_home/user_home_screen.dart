@@ -48,30 +48,80 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
+      // appBar: AppBar(
+      //   titleSpacing: 0,
+      //   leading: Padding(
+      //     padding:  EdgeInsets.only(left: 10.w),
+      //     child: CustomNetworkImage(
+      //         border: Border.all(color: Color(0xffFAEFD7), width: 2.5),
+      //         height: 100.h,
+      //         width: 100.w,
+      //         boxShape: BoxShape.circle,
+      //         imageUrl: "https://randomuser.me/api/portraits/men/75.jpg"),
+      //   ),
+      //
+      //
+      //   title: Column(
+      //     crossAxisAlignment: CrossAxisAlignment.start,
+      //     mainAxisAlignment: MainAxisAlignment.start,
+      //     children: [
+      //
+      //       CustomText(text: "Henry Silver", fontSize: 17.h, color: Colors.black),
+      //       CustomText(text: "Dhaka, Banasree", fontSize: 12.h)
+      //
+      //
+      //     ],
+      //   ),
+      //
+      //
+      //   actions: [
+      //
+      //     Assets.icons.notificationIcon.svg(),
+      //     SizedBox(width: 20.w)
+      //   ],
+      //
+      // ),
+
+
+
+
       appBar: AppBar(
-        leading: Padding(
-          padding:  EdgeInsets.only(left: 10.w),
-          child: CustomNetworkImage(
-              border: Border.all(color: Color(0xffFAEFD7), width: 2.5),
-              height: 100.h,
-              width: 100.w,
-              boxShape: BoxShape.circle,
-              imageUrl: "https://randomuser.me/api/portraits/men/75.jpg"),
-        ),
-
-
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        titleSpacing: 0, // important to avoid spacing from default leading
+        title: Row(
           children: [
-
-            CustomText(text: "Henry Silver", fontSize: 17.h, color: Colors.black),
-            CustomText(text: "Dhaka, Banasree", fontSize: 12.h)
-
-
+            Padding(
+              padding: EdgeInsets.only(left: 10.w, right: 10.w),
+              child: CustomNetworkImage(
+                border: Border.all(color: Color(0xffFAEFD7), width: 2.5),
+                height: 40.h,
+                width: 40.w,
+                boxShape: BoxShape.circle,
+                imageUrl: "https://randomuser.me/api/portraits/men/75.jpg",
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomText(text: "Henry Silver", fontSize: 17.h, color: Colors.black),
+                CustomText(text: "Dhaka, Banasree", fontSize: 12.h),
+              ],
+            ),
           ],
         ),
-
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 20.w),
+            child: GestureDetector(
+                onTap: () {
+                  Get.toNamed(AppRoutes.notificationScreen);
+                },
+                child: Assets.icons.notificationIcon.svg()),
+          ),
+        ],
       ),
+
 
 
 

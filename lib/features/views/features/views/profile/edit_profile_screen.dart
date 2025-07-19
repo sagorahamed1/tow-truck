@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:towservice/global/custom_assets/assets.gen.dart';
+import 'package:towservice/routes/app_routes.dart';
 import 'package:towservice/utils/app_colors.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
+import 'package:towservice/widgets/custom_text.dart';
 
 import '../../../../../widgets/custom_app_bar.dart';
 import '../../../../../widgets/custom_network_image.dart';
@@ -100,16 +103,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
 
               CustomTextField(
-                controller: emailCtrl,
-                hintText: "*****@gmail.com",
-                labelText: "Email",
-                borderColor: AppColors.primaryColor,
-                hintextColor: Colors.black,
-                contentPaddingVertical: 10.h,
-              ),
-
-
-              CustomTextField(
                 controller: addressCtrl,
                 hintText: "address",
                 labelText: "Address",
@@ -189,6 +182,43 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
 
 
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: CustomText(text: "Documents", fontSize: 16.h, bottom: 10.h, top: 4.h)),
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(AppRoutes.documentScreen);
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  height: 42.h,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.primaryColor),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Row(
+                    children: [
+
+                      Icon(Icons.file_copy_outlined, color: AppColors.primaryColor),
+
+                      CustomText(text: "My Documents", left: 8.w),
+
+
+                      Spacer(),
+
+                      Assets.icons.rightArrow.svg(),
+
+
+                    ],
+                  ),
+                ),
+              ),
+
+
+              SizedBox(height: 16.h),
+
+
+
 
               CustomTextField(
                 controller: descriptionCtrl,
@@ -205,7 +235,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               SizedBox(height: 40.h),
 
               CustomButtonTwo(title: "Update Profile", onpress: (){
-                Get.back();
                 Get.back();
               }),
 

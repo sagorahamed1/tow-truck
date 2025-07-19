@@ -132,6 +132,16 @@ class ProfileScreen extends StatelessWidget {
                     title: "Customer Support",
                     icon: Assets.icons.supportIcon.svg(),
                   ),
+
+
+
+                  _customCart(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.notificationScreen);
+                    },
+                    title: "Notifications",
+                    icon: Assets.icons.notificationIcon.svg(color: AppColors.primaryColor),
+                  ),
                 ],
               ),
             ),

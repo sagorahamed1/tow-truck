@@ -7,6 +7,7 @@ import 'package:towservice/widgets/custom_buttonTwo.dart';
 import 'package:towservice/widgets/custom_network_image.dart';
 import 'package:towservice/widgets/custom_text.dart';
 import 'package:towservice/widgets/custom_text_field.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../global/custom_assets/assets.gen.dart';
 
@@ -153,68 +154,144 @@ class TripDetailsScreen extends StatelessWidget {
 
 
 
-
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 8.h),
-            margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12.r),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.shade300,
-                      blurRadius: 5,
-                      offset: Offset(2, 4))
-                ]),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: CustomNetworkImage(
-                        border:
-                        Border.all(color: AppColors.primaryColor, width: 2.5),
-                        height: 48.h,
-                        width: 48.w,
-                        boxShape: BoxShape.circle,
-                        imageUrl:
-                        "https://randomuser.me/api/portraits/men/75.jpg"),
-                  ),
-
-                  SizedBox(width: 10.w),
-                  Expanded(
-                      flex: 16,
-                      child: CustomTextField(
-                        controller: supportNoteCtrl,
-                        borderColor: Colors.grey,
-                        borderRadio: 30.r,
-                        hintText: "Support note for trip",
-                        prefixIcon: Assets.icons.messageIcon.svg(),
-                      )),
-
-
-                  SizedBox(width: 10.w),
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                      height: 60,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          shape: BoxShape.circle, color: Colors.white),
-                      child: Padding(
-                        padding: EdgeInsets.all(8.r),
-                        child: Icon(
-                          Icons.phone,
-                          color: AppColors.primaryColor,
+          Padding(
+            padding:  EdgeInsets.symmetric(horizontal: 20.w),
+            child: Row(
+              children: [
+                CustomNetworkImage(
+                    height: 53.h,
+                    boxShape: BoxShape.circle,
+                    width: 53.w,
+                    imageUrl:
+                    "https://randomuser.me/api/portraits/men/75.jpg"),
+                SizedBox(width: 10.w),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(text: "Sabbir Hossein"),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(Icons.star, color: Colors.yellow, size: 14.h),
+                        CustomText(
+                            text: "4.65     |   24545 Trips   |",
+                            fontSize: 11.h),
+                      ],
+                    ),
+                  ],
+                ),
+                Spacer(),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Color(0xffE4E4E4),
+                      borderRadius: BorderRadius.circular(40.r),
+                      border: Border.all(
+                          color: AppColors.primaryColor, width: 1.5.r)),
+                  child: Padding(
+                    padding:
+                    EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white, shape: BoxShape.circle),
+                          child: Padding(
+                            padding: EdgeInsets.all(8.r),
+                            child: Assets.icons.messageIcon
+                                .svg(color: AppColors.primaryColor),
+                          ),
                         ),
-                      ),
+                        SizedBox(width: 30.w),
+                        GestureDetector(
+                            onTap: () async {
+                              final Uri url = Uri.parse('tel:(609)327-7992');
+                              if (await launchUrl(url)) {
+                                await launchUrl(url);
+                              } else {
+                                debugPrint('Could not launch phone dialer');
+                              }
+                            },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white, shape: BoxShape.circle),
+                            child: Padding(
+                              padding: EdgeInsets.all(8.r),
+                              child: Assets.icons.callIcon.svg(),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                ],
-              ),
-            )
+                )
+              ],
+            ),
           ),
+
+
+
+          // Container(
+          //   padding: EdgeInsets.symmetric(vertical: 8.h),
+          //   margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+          //   decoration: BoxDecoration(
+          //       color: Colors.white,
+          //       borderRadius: BorderRadius.circular(12.r),
+          //       boxShadow: [
+          //         BoxShadow(
+          //             color: Colors.grey.shade300,
+          //             blurRadius: 5,
+          //             offset: Offset(2, 4))
+          //       ]),
+          //   child: Padding(
+          //     padding: EdgeInsets.symmetric(horizontal: 10.w),
+          //     child: Row(
+          //       children: [
+          //         Expanded(
+          //           flex: 3,
+          //           child: CustomNetworkImage(
+          //               border:
+          //               Border.all(color: AppColors.primaryColor, width: 2.5),
+          //               height: 48.h,
+          //               width: 48.w,
+          //               boxShape: BoxShape.circle,
+          //               imageUrl:
+          //               "https://randomuser.me/api/portraits/men/75.jpg"),
+          //         ),
+          //
+          //         SizedBox(width: 10.w),
+          //         Expanded(
+          //             flex: 16,
+          //             child: CustomTextField(
+          //               controller: supportNoteCtrl,
+          //               borderColor: Colors.grey,
+          //               borderRadio: 30.r,
+          //               hintText: "Support note for trip",
+          //               prefixIcon: Assets.icons.messageIcon.svg(),
+          //             )),
+          //
+          //
+          //         SizedBox(width: 10.w),
+          //         Expanded(
+          //           flex: 3,
+          //           child: Container(
+          //             height: 60,
+          //             decoration: BoxDecoration(
+          //                 border: Border.all(color: Colors.grey),
+          //                 shape: BoxShape.circle, color: Colors.white),
+          //             child: Padding(
+          //               padding: EdgeInsets.all(8.r),
+          //               child: Icon(
+          //                 Icons.phone,
+          //                 color: AppColors.primaryColor,
+          //               ),
+          //             ),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   )
+          // ),
 
 
 

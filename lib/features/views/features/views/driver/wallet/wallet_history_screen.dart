@@ -49,7 +49,7 @@ class WalletHistoryScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
 
-                              CustomText(text: "Welton"),
+                              CustomText(text: "#G68F78"),
                               CustomText(text: "today at 09:20 AM", color: AppColors.primaryColor )
 
                             ],

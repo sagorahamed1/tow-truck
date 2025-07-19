@@ -72,7 +72,7 @@ class _TripScreenState extends State<TripScreen> {
             // List
             Expanded(
               child: ListView.builder(
-                itemCount: 4,
+                itemCount: selectedBtnIndex == 0 ?  11 : 1,
                 padding: EdgeInsets.only(top: 8.h),
                 itemBuilder: (context, index) {
                   return GestureDetector(

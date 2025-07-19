@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../features/views/features/views/document_screen/document_screen.dart';
+import '../features/views/features/views/document_screen/national_id_screen.dart';
 import '../features/views/features/views/driver/driver_bottom_nav_bar/driver_bottom_nav_bar.dart';
 import '../features/views/features/views/driver/driver_home/driver_home_screen.dart';
 import '../features/views/features/views/driver/trip/trip_details_screen.dart';
@@ -6,6 +8,7 @@ import '../features/views/features/views/driver/wallet/wallet_history_screen.dar
 import '../features/views/features/views/message/chat_screen.dart';
 import '../features/views/features/views/message/report_screen.dart';
 import '../features/views/features/views/message/report_submit_screen.dart';
+import '../features/views/features/views/notification/notification_screen.dart';
 import '../features/views/features/views/profile/edit_profile_screen.dart';
 import '../features/views/features/views/profile/privacy_policy_all_screen.dart';
 import '../features/views/features/views/profile/setting_screen.dart';
@@ -41,6 +44,9 @@ class AppRoutes{
   static const String jobPostScreen = "/JobPostScreen";
   static const String userMapScreen = "/UserMapScreen";
   static const String jobDetailsScreen = "/JobDetailsScreen";
+  static const String documentScreen = "/DocumentScreen";
+  static const String nationalIDScreen = "/NationalIDScreen";
+  static const String notificationScreen = "/NotificationScreen";
 
 
 
@@ -71,6 +77,9 @@ class AppRoutes{
     jobPostScreen : (context) => JobPostScreen(),
     userMapScreen : (context) => UserMapScreen(),
     jobDetailsScreen : (context) => JobDetailsScreen(),
+    documentScreen : (context) => DocumentScreen(),
+    nationalIDScreen : (context) => NationalIDScreen(),
+    notificationScreen : (context) => NotificationScreen(),
 
   };
 

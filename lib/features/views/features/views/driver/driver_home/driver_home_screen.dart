@@ -242,9 +242,9 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                                                           fontWeight:
                                                           FontWeight.w500),
                                                       SizedBox(height: 20.h),
-                                                      CustomButtonTwo(
-                                                          title: "Details",
-                                                          onpress: () {})
+                                                      // CustomButtonTwo(
+                                                      //     title: "Details",
+                                                      //     onpress: () {})
                                                     ],
                                                   ),
                                                 ),
