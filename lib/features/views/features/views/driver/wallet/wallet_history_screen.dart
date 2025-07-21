@@ -7,22 +7,18 @@ import '../../../../../../utils/app_colors.dart';
 import '../../../../../../widgets/custom_text.dart';
 
 class WalletHistoryScreen extends StatelessWidget {
-   const WalletHistoryScreen({super.key});
+  const WalletHistoryScreen({super.key});
 
   final int trans = 20;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: CustomAppBar(title: "Transactions"),
-
       body: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: 20.w),
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
           children: [
-
-
             SizedBox(height: 20.h),
             Expanded(
               child: ListView.builder(
@@ -37,30 +33,26 @@ class WalletHistoryScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Padding(
-                      padding:  EdgeInsets.all(12.r),
+                      padding: EdgeInsets.all(12.r),
                       child: Row(
                         children: [
-
-                          index.isOdd ? Assets.icons.rightTopIcon.svg() : Assets.icons.leftBottomIcon.svg(),
-
-
+                          index.isOdd
+                              ? Assets.icons.rightTopIcon.svg()
+                              : Assets.icons.leftBottomIcon.svg(),
                           SizedBox(width: 12.w),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-
                               CustomText(text: "#G68F78"),
-                              CustomText(text: "today at 09:20 AM", color: AppColors.primaryColor )
-
+                              CustomText(
+                                  text: "today at 09:20 AM",
+                                  color: AppColors.primaryColor)
                             ],
                           ),
-
-
-
                           Spacer(),
-
-                          CustomText(text: "-₦570.00", color: index.isOdd ? Colors.red : Colors.black)
-
+                          CustomText(
+                              text: "-₦570.00",
+                              color: index.isOdd ? Colors.red : Colors.black)
                         ],
                       ),
                     ),
@@ -68,9 +60,6 @@ class WalletHistoryScreen extends StatelessWidget {
                 },
               ),
             )
-
-
-
           ],
         ),
       ),

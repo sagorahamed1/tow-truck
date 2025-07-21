@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           initialBinding: DependencyInjection(),
           debugShowCheckedModeBanner: false,
           title: 'Service App',
-          initialRoute: AppRoutes.splashScreen,
+          initialRoute: AppRoutes.customNavBarScreen,
           routes: AppRoutes.routes,
           theme: light(),
           themeMode: ThemeMode.light,

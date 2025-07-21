@@ -20,6 +20,7 @@ class AppColors{
   static const Color cardColorE8F1EE = Color(0xffE8F1EE);
   static const Color iconColor = const  Color(0xff072543);
   static const Color errorColor = const  Color(0xffFF0000);
+  static const Color paymentCardColor =  Color(0xffEFF5F5);
 
 
 }

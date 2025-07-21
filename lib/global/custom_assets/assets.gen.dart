@@ -39,6 +39,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/chatIcon.svg
   SvgGenImage get chatIcon => const SvgGenImage('assets/icons/chatIcon.svg');
 
+  /// File path: assets/icons/confirmationIcon.svg
+  SvgGenImage get confirmationIcon =>
+      const SvgGenImage('assets/icons/confirmationIcon.svg');
+
   /// File path: assets/icons/deleteIcon.svg
   SvgGenImage get deleteIcon =>
       const SvgGenImage('assets/icons/deleteIcon.svg');
@@ -157,6 +161,7 @@ class $AssetsIconsGen {
         carIcon,
         carRegistrationIcon,
         chatIcon,
+        confirmationIcon,
         deleteIcon,
         dirverAndCarPictureIcon,
         drivingIcon,

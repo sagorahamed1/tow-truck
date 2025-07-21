@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:towservice/global/custom_assets/assets.gen.dart';
 import 'package:towservice/routes/app_routes.dart';
 import 'package:towservice/utils/app_colors.dart';
+import 'package:towservice/widgets/custom_button.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
 import 'package:towservice/widgets/custom_text.dart';
 import 'package:towservice/widgets/custom_text_field.dart';
@@ -79,7 +80,57 @@ class WalletScreen extends StatelessWidget {
                           SizedBox(height: 40.h),
                           CustomButtonTwo(
                             title: "Confirm",
-                            onpress: () {},
+                            onpress: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content: Column(
+                                        // mainAxisAlignment: MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          IconButton(
+                                            onPressed: () {
+                                              Get.back();
+                                            },
+                                            icon: Icon(Icons.close),
+                                          ),
+                                          Center(
+                                              child: Column(
+                                            children: [
+                                              Assets.icons.confirmationIcon.svg(
+                                                height: 124.h,
+                                                width: 124.w,
+                                              ),
+                                              CustomText(
+                                                text:
+                                                    'Withdraw Req. Successful',
+                                                fontSize: 22.sp,
+                                              ),
+                                              SizedBox(
+                                                height: 16.h,
+                                              ),
+                                              CustomText(
+                                                text:
+                                                    'Your Withdraw request has been sent successfully. You will get the money within 24 hours.',
+                                                fontSize: 13.sp,
+                                              ),
+                                              SizedBox(
+                                                height: 16.h,
+                                              ),
+                                              CustomButton(
+                                                onPressed: () {},
+                                                label: 'Go To My Wallet',
+                                              ),
+                                            ],
+                                          ))
+                                        ],
+                                      ),
+                                    );
+                                  });
+                            },
                           )
                         ],
                       ),

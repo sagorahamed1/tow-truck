@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:towservice/features/views/features/views/driver/trip/trip_history/trip_history_screen.dart';
 import '../features/views/features/views/document_screen/document_screen.dart';
 import '../features/views/features/views/document_screen/national_id_screen.dart';
 import '../features/views/features/views/driver/driver_bottom_nav_bar/driver_bottom_nav_bar.dart';
@@ -47,6 +48,7 @@ class AppRoutes{
   static const String documentScreen = "/DocumentScreen";
   static const String nationalIDScreen = "/NationalIDScreen";
   static const String notificationScreen = "/NotificationScreen";
+  static const String tripHistoryScreen = "/TripHistoryScreen";
 
 
 
@@ -80,6 +82,7 @@ class AppRoutes{
     documentScreen : (context) => DocumentScreen(),
     nationalIDScreen : (context) => NationalIDScreen(),
     notificationScreen : (context) => NotificationScreen(),
+    tripHistoryScreen : (context) => TripHistoryScreen(),
 
   };
 

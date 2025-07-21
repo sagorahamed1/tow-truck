@@ -9,7 +9,7 @@ import 'package:towservice/widgets/widgets.dart';
 import '../../../../../../widgets/custom_text.dart';
 
 class TripScreen extends StatefulWidget {
-   TripScreen({super.key});
+  TripScreen({super.key});
 
   @override
   State<TripScreen> createState() => _TripScreenState();
@@ -34,8 +34,12 @@ class _TripScreenState extends State<TripScreen> {
                 Expanded(
                   child: CustomButtonTwo(
                     boderColor: AppColors.primaryColor,
-                    color: selectedBtnIndex == 0 ?  Colors.transparent : AppColors.primaryColor ,
-                    titlecolor: selectedBtnIndex == 0 ?  AppColors.primaryColor : Colors.white,
+                    color: selectedBtnIndex == 0
+                        ? Colors.transparent
+                        : AppColors.primaryColor,
+                    titlecolor: selectedBtnIndex == 0
+                        ? AppColors.primaryColor
+                        : Colors.white,
                     height: 40.h,
                     borderRadius: 4.r,
                     title: "Ongoing",
@@ -50,8 +54,12 @@ class _TripScreenState extends State<TripScreen> {
                 Expanded(
                   child: CustomButtonTwo(
                     boderColor: AppColors.primaryColor,
-                    color: selectedBtnIndex == 1 ? Colors.transparent : AppColors.primaryColor,
-                    titlecolor:  selectedBtnIndex == 1 ? AppColors.primaryColor : Colors.white,
+                    color: selectedBtnIndex == 1
+                        ? Colors.transparent
+                        : AppColors.primaryColor,
+                    titlecolor: selectedBtnIndex == 1
+                        ? AppColors.primaryColor
+                        : Colors.white,
                     height: 40.h,
                     borderRadius: 4.r,
                     title: "Completed",
@@ -66,21 +74,22 @@ class _TripScreenState extends State<TripScreen> {
               ],
             ),
             SizedBox(height: 10.h),
-            Divider(color: AppColors.primaryColor,height: 1.5.h),
+            Divider(color: AppColors.primaryColor, height: 1.5.h),
             SizedBox(height: 10.h),
 
             // List
             Expanded(
               child: ListView.builder(
-                itemCount: selectedBtnIndex == 0 ?  11 : 1,
+                itemCount: selectedBtnIndex == 0 ? 11 : 1,
                 padding: EdgeInsets.only(top: 8.h),
                 itemBuilder: (context, index) {
-                  return GestureDetector(
-                      child: CompletedCard(
-                        onTap: () {
-                          Get.toNamed(AppRoutes.tripDetailsScreen);
-                        },
-                      ));
+                  return GestureDetector(child: CompletedCard(
+                    onTap: () {
+                      selectedBtnIndex == 1
+                          ? Get.toNamed(AppRoutes.tripDetailsScreen)
+                          : Get.toNamed(AppRoutes.tripHistoryScreen);
+                    },
+                  ));
                 },
               ),
             ),
@@ -93,6 +102,7 @@ class _TripScreenState extends State<TripScreen> {
 
 class CompletedCard extends StatelessWidget {
   final VoidCallback? onTap;
+
   const CompletedCard({super.key, this.onTap});
 
   @override
@@ -171,7 +181,7 @@ class CompletedCard extends StatelessWidget {
               color: Colors.transparent,
               titlecolor: Colors.black,
               title: "View Details",
-              onpress: onTap ?? (){})
+              onpress: onTap ?? () {})
         ],
       ),
     );
