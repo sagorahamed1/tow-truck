@@ -25,7 +25,7 @@ void main() {
 
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+   MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           initialBinding: DependencyInjection(),
           debugShowCheckedModeBanner: false,
           title: 'Service App',
-          initialRoute: AppRoutes.customNavBarScreen,
+          initialRoute: AppRoutes.splashScreen,
           routes: AppRoutes.routes,
           theme: light(),
           themeMode: ThemeMode.light,

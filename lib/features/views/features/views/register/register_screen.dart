@@ -2,9 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:towservice/controller/auth_controller.dart';
 import 'package:towservice/helpers/privacy_and_terms_helper.dart';
+import 'package:towservice/helpers/toast_message_helper.dart';
 import 'package:towservice/routes/app_routes.dart';
 import 'package:towservice/utils/app_colors.dart';
+import 'package:towservice/widgets/custom_buttonTwo.dart';
 import '../../../../../widgets/widgets.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -22,6 +25,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _confirmPassController = TextEditingController();
 
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+
+  AuthController authController = Get.find<AuthController>();
+  final PrivacyController privacyController = Get.find<PrivacyController>();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _numberController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPassController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,13 +98,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 },
               ),
 
-              SizedBox(height: 24.h),
-              CustomButton(onPressed: () {
-                if(!_globalKey.currentState!.validate()) return;
-                Get.toNamed(AppRoutes.otpScreen,arguments: {'screenType' : 'register'});
-              }, label: 'Register'),
-
               PrivacyAndTermsHelper(),
+
+              SizedBox(height: 10.h),
+              Obx(()=>
+                 CustomButtonTwo(
+                    loading: authController.signUpLoading.value,
+                    onpress: () {
+                  if(_globalKey.currentState!.validate()){
+
+                    if(privacyController.isChecked.value == true){
+                      authController.handleSignUp(
+                          name: _nameController.text,
+                          phone: _numberController.text,
+                          email: _emailController.text,
+                          password: _passwordController.text
+                      );
+                    }else{
+                      ToastMessageHelper.showToastMessage("Please accept terms of services and privacy policy");
+                    }
+
+
+
+                  }
+
+
+
+
+
+                }, title: 'Register'),
+              ),
+
+
 
               SizedBox(height: 20.h),
               RichText(text: TextSpan(

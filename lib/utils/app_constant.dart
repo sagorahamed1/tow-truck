@@ -6,15 +6,14 @@ class AppConstants{
   // static String roleMock = 'roleMock';
   static String bearerToken = 'token';
   static String email = 'email';
+  static String name = 'name';
+  static String isLogged = 'isLogged';
   static String isHotDeals = 'true';
    static String userId = 'userId';
   static String userIdTest = '';
   static String businessID = '';
-  static String firstname = 'firstName';
-  static String lastname = 'lastName';
   static String image = '';
   static String dateOfBirth = '';
-  // static String promoCode = '';
   static String stribeUrl = '';
 
   static RegExp emailValidate = RegExp(

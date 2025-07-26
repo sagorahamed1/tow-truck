@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:towservice/routes/app_routes.dart';
+import 'package:towservice/widgets/custom_buttonTwo.dart';
+import '../../../../../controller/auth_controller.dart';
 import '../../../../../widgets/widgets.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -15,6 +17,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  AuthController authController = Get.find<AuthController>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +56,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         
 
               SizedBox(height: 24.h),
-              CustomButton(onPressed: () {
-                if(!_globalKey.currentState!.validate()) return;
-                Get.offAllNamed(AppRoutes.loginScreen);
-              }, label: 'Save Password'),
+              CustomButtonTwo(
+                  loading: authController.setPasswordLoading.value,
+                  onpress: () {
+                if(_globalKey.currentState!.validate()) {
+                  authController.setPassword(_passwordController.text);
+                }
+
+              }, title: 'Save Password'),
 
               SizedBox(height: 24.h),
 

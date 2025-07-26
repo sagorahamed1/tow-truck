@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:towservice/routes/app_routes.dart';
 import 'package:towservice/utils/app_colors.dart';
+import 'package:towservice/widgets/custom_buttonTwo.dart';
+import '../../../../../controller/auth_controller.dart';
 import '../../../../../widgets/widgets.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -15,6 +17,7 @@ class OtpScreen extends StatefulWidget {
 class _OtpScreenState extends State<OtpScreen> {
   final TextEditingController _otpController = TextEditingController();
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  AuthController authController = Get.find<AuthController>();
 
   final String  screenType = Get.arguments['screenType'];
 
@@ -42,7 +45,9 @@ class _OtpScreenState extends State<OtpScreen> {
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: () => Get.toNamed(AppRoutes.forgotPasswordScreen),
+                onPressed: () {
+                  authController.reSendOtp();
+                },
                 child: CustomText(
                   text: 'Resend Code',
                   color: AppColors.errorColor,
@@ -52,15 +57,19 @@ class _OtpScreenState extends State<OtpScreen> {
               ),
             ),
             SizedBox(height: 44.h),
-            CustomButton(onPressed: () {
-              if(!_globalKey.currentState!.validate()) return;
-              if(screenType == 'register'){
-                Get.offAllNamed(AppRoutes.loginScreen);
-              }else{
-                Get.toNamed(AppRoutes.resetPasswordScreen);
-
-              }
-            }, label: 'Verify'),
+            Obx(() =>
+               CustomButtonTwo(
+                  loading: authController.verfyLoading.value,
+                  onpress: () {
+                if(!_globalKey.currentState!.validate()) return;
+                if(screenType == 'register'){
+                  authController.verfyEmail(_otpController.text);
+                  _otpController.clear();
+                }else{
+                  authController.verfyEmail(_otpController.text, screenType: "forgot");
+                }
+              }, title: 'Verify'),
+            ),
 
             SizedBox(height: 24.h),
           ],

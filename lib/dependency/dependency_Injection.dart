@@ -1,10 +1,13 @@
 import 'package:get/get.dart';
 import 'package:towservice/helpers/privacy_and_terms_helper.dart';
 
+import '../controller/auth_controller.dart';
+
 class DependencyInjection implements Bindings {
   @override
   void dependencies() {
     Get.put(PrivacyController());
+    Get.lazyPut(() => AuthController(), fenix: true);
   }
 
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:towservice/routes/app_routes.dart';
+import 'package:towservice/widgets/custom_buttonTwo.dart';
+import '../../../../../controller/auth_controller.dart';
 import '../../../../../widgets/widgets.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -14,6 +16,8 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  AuthController authController = Get.find<AuthController>();
+
 
 
   @override
@@ -38,10 +42,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
             ),
             SizedBox(height: 24.h),
-            CustomButton(onPressed: () {
-              if(!_globalKey.currentState!.validate()) return;
-              Get.toNamed(AppRoutes.otpScreen,arguments: {'screenType' : 'forget'});
-            }, label: 'Send OTP'),
+            Obx(() =>
+              CustomButtonTwo(
+                  loading: authController.forgotLoading.value,
+                  onpress: () {
+                if(!_globalKey.currentState!.validate()) return;
+                authController.handleForgot(_emailController.text);
+              }, title: 'Send OTP'),
+            ),
 
             SizedBox(height: 24.h),
           ],

@@ -7,6 +7,8 @@ import 'package:towservice/helpers/prefs_helper.dart';
 import 'package:towservice/routes/app_routes.dart';
 import 'package:towservice/utils/app_colors.dart';
 import 'package:towservice/utils/app_constant.dart';
+import 'package:towservice/widgets/custom_buttonTwo.dart';
+import '../../../../../controller/auth_controller.dart';
 import '../../../../../widgets/widgets.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,6 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  AuthController authController = Get.find<AuthController>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,21 +63,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(height: 24.h),
-              CustomButton(
-                  onPressed: () async{
-                   await requestLocationPermission();
-                   var role = await PrefsHelper.getString(AppConstants.role);
+              Obx(() =>
+                 CustomButtonTwo(
+                  loading: authController.logInLoading.value,
+                    onpress: () async{
+                     await requestLocationPermission();
 
-                    // if (!_globalKey.currentState!.validate()) return;
+                      if (_globalKey.currentState!.validate()) {
+                        authController.handleLogIn(_emailController.text, _passwordController.text);
+                      }
 
-                   if(role == "user"){
-                     Get.toNamed(AppRoutes.userBottomNavBar);
-                   }else{
-                     Get.toNamed(AppRoutes.customNavBarScreen);
-                   }
+                     // if(role == "user"){
+                     //   Get.toNamed(AppRoutes.userBottomNavBar);
+                     // }else{
+                     //   Get.toNamed(AppRoutes.customNavBarScreen);
+                     // }
 
-                  },
-                  label: 'Login'),
+                    },
+                    title: 'Login'),
+              ),
               SizedBox(height: 20.h),
               RichText(
                   text: TextSpan(
@@ -106,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
     var status = await Permission.location.request();
     if (status.isGranted) {
       print("✅ Location permission granted");
-      Get.toNamed(AppRoutes.customNavBarScreen);
+      // Get.toNamed(AppRoutes.customNavBarScreen);
     } else if (status.isDenied) {
       print("❌ Location permission denied");
     } else if (status.isPermanentlyDenied) {
