@@ -61,7 +61,7 @@ class RoleScreen extends StatelessWidget {
                     }),
                     SizedBox(height: 20.h),
                     _buildIconsWidget(Assets.icons.towDriver.svg(),'I AM A TOW DRIVER',(){
-                      PrefsHelper.setString(AppConstants.role, "driver");
+                      PrefsHelper.setString(AppConstants.role, "provider");
                       Get.toNamed(AppRoutes.getStartedScreen);
                     }),
                   ],

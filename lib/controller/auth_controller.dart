@@ -65,12 +65,17 @@ class AuthController extends GetxController {
         ApiConstants.verifyEmailEndPoint, jsonEncode(body));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // await PrefsHelper.setString(AppConstants.bearerToken, response.body['token']);
+      var role = await PrefsHelper.getString(AppConstants.role);
 
       if (screenType == 'forgot') {
         Get.toNamed(AppRoutes.resetPasswordScreen);
       } else {
-        Get.offAllNamed(AppRoutes.loginScreen);
+        if(role == "user"){
+          Get.offAllNamed(AppRoutes.loginScreen);
+        }else{
+          Get.offAllNamed(AppRoutes.fillProfileScreen);
+        }
+
       }
       verfyLoading(false);
     } else if (response.statusCode == 1) {
@@ -312,4 +317,32 @@ class AuthController extends GetxController {
       }
     });
   }
+
+
+
+
+
+  ///===============fillProfile================<>
+  RxBool fillProfileLoading = false.obs;
+
+  fillProfile() async {
+    fillProfileLoading(true);
+    var body = {};
+
+    var response = await ApiClient.postData(
+        ApiConstants.resendOtpEndPoint, jsonEncode(body));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      PrefsHelper.setString(
+          AppConstants.bearerToken, response.body["data"]["verificationToken"]);
+      ToastMessageHelper.showToastMessage(
+          'You have got an one time code to your email');
+      print("======>>> successful");
+      fillProfileLoading(false);
+    } else {
+      ToastMessageHelper.showToastMessage("${response.body["message"]}");
+      fillProfileLoading(false);
+    }
+  }
+
 }
