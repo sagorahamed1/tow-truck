@@ -2,16 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:towservice/controller/profile_controller.dart';
+import 'package:towservice/helpers/prefs_helper.dart';
 import 'package:towservice/routes/app_routes.dart';
+import 'package:towservice/services/api_constants.dart';
 import 'package:towservice/utils/app_colors.dart';
+import 'package:towservice/utils/app_constant.dart';
 import 'package:towservice/widgets/custom_text.dart';
 
 import '../../../../../global/custom_assets/assets.gen.dart';
 import '../../../../../widgets/custom_buttonTwo.dart';
 import '../../../../../widgets/custom_network_image.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+
+
+  ProfileController profileController = Get.find<ProfileController>();
+
+  @override
+  void initState() {
+    profileController.getUserLocalData();
+    super.initState();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -20,85 +41,87 @@ class ProfileScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-        
+
             Container(
               height: 300.h,
               width: double.infinity,
               decoration: BoxDecoration(
                 image: DecorationImage(image: AssetImage("assets/images/profileBg.png"), fit: BoxFit.cover),
               ),
-        
-              child: Column(
-                children: [
-        
-        
-                  SizedBox(height: 80.h),
-        
-                  Stack(
-                    children: [
-                      CustomNetworkImage(
-                        border: Border.all(color: Color(0xffFAEFD7), width: 2.5),
-                          height: 100.h,
-                          width: 100.w,
-                          boxShape: BoxShape.circle,
-                          imageUrl: "https://randomuser.me/api/portraits/men/75.jpg"),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child:
-                        Assets.icons.verifyBedgeIcon.svg(height: 32.h, width: 32.w),
-                      )
-                    ],
-                  ),
-        
-        
-        
-                  CustomText(text: "Al Jamil", color: Colors.white, fontSize: 16.h, top: 9.h, bottom: 8.h),
-        
-        
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      RatingBar(
-                        initialRating: 3,
-                        minRating: 1,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        ratingWidget: RatingWidget(
-                          full: Icon(Icons.star, color: Colors.amber),
-                          half: Icon(Icons.star_half, color: Colors.amber),
-                          empty: Icon(Icons.star_border, color: Colors.amber),
+
+              child: Obx(()=>
+                 Column(
+                  children: [
+
+
+                    SizedBox(height: 80.h),
+
+                    Stack(
+                      children: [
+                        CustomNetworkImage(
+                          border: Border.all(color: Color(0xffFAEFD7), width: 2.5),
+                            height: 100.h,
+                            width: 100.w,
+                            boxShape: BoxShape.circle,
+                            imageUrl: "${ApiConstants.imageBaseUrl}/${profileController.image.value}"),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child:
+                          Assets.icons.verifyBedgeIcon.svg(height: 32.h, width: 32.w),
+                        )
+                      ],
+                    ),
+
+
+
+                    CustomText(text: "${profileController.name.value}", color: Colors.white, fontSize: 16.h, top: 9.h, bottom: 8.h),
+
+
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RatingBar(
+                          initialRating: 3,
+                          minRating: 1,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          ratingWidget: RatingWidget(
+                            full: Icon(Icons.star, color: Colors.amber),
+                            half: Icon(Icons.star_half, color: Colors.amber),
+                            empty: Icon(Icons.star_border, color: Colors.amber),
+                          ),
+                          itemSize: 14.h,
+                          itemPadding: EdgeInsets.only(right: 4.w, bottom: 8.h),
+                          onRatingUpdate: (rating) {
+                            print(rating);
+                          },
                         ),
-                        itemSize: 14.h,
-                        itemPadding: EdgeInsets.only(right: 4.w, bottom: 8.h),
-                        onRatingUpdate: (rating) {
-                          print(rating);
-                        },
-                      ),
-        
-        
-                      CustomText(text: "5 (2)" , color: Colors.white, bottom: 8.h),
-        
-                    ],
-                  ),
-        
-        
-                  CustomText(text: "aljamil248@gmail.com", color: Colors.white, fontSize: 16.h),
-        
-        
-        
-        
-        
-                ],
+
+
+                        CustomText(text: "5 (2)" , color: Colors.white, bottom: 8.h),
+
+                      ],
+                    ),
+
+
+                    CustomText(text: "${profileController.email.value}", color: Colors.white, fontSize: 16.h),
+
+
+
+
+
+                  ],
+                ),
               ),
             ),
 
 
             SizedBox(height: 20.h),
-        
-        
+
+
             Container(
               padding: EdgeInsets.symmetric(vertical: 8.h),
               margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
@@ -115,16 +138,23 @@ class ProfileScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-        
+
                   _customCart(
                     onTap: () {
-                      Get.toNamed(AppRoutes.editProfileScreen);
+                      Get.toNamed(AppRoutes.editProfileScreen, arguments: {
+                        "name" : profileController.name,
+                        "phone" : profileController.phone,
+                        "email" : profileController.email,
+                        "role" : profileController.role,
+                        "address" : profileController.address,
+                        "image" : profileController.image,
+                       });
                     },
                     title: "Personal Info",
                     icon: Assets.icons.profile.svg(),
                   ),
-        
-        
+
+
                   _customCart(
                     onTap: () {
                       Get.toNamed(AppRoutes.supportScreen);
@@ -145,10 +175,10 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
-        
-        
-        
-        
+
+
+
+
             Container(
               padding: EdgeInsets.symmetric(vertical: 8.h),
               margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
@@ -165,20 +195,20 @@ class ProfileScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-        
+
                   _customCart(
                     onTap: () {},
                     title: "Find Tow Services",
                     icon: Assets.icons.findTowServiceIcon.svg(),
                   ),
-        
+
                 ],
               ),
             ),
-        
-        
-        
-        
+
+
+
+
             Container(
               padding: EdgeInsets.symmetric(vertical: 8.h),
               margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
@@ -195,7 +225,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-        
+
                   _customCart(
                     onTap: () {
                       Get.toNamed(AppRoutes.settingScreen);
@@ -203,8 +233,8 @@ class ProfileScreen extends StatelessWidget {
                     title: "Setting",
                     icon: Assets.icons.settingIcon.svg(),
                   ),
-        
-        
+
+
                   _customCart(
                     onTap: () {
 
@@ -312,8 +342,18 @@ class ProfileScreen extends StatelessWidget {
                                           boderColor: Colors.red,
                                           height: 50.h,
                                           title: "Log Out",
-                                          onpress: () {
-                                            Get.back();
+                                          onpress: () async{
+                                            await PrefsHelper.remove(AppConstants.image);
+                                            await PrefsHelper.remove(AppConstants.name);
+                                            await PrefsHelper.remove(AppConstants.address);
+                                            await PrefsHelper.remove(AppConstants.email);
+                                            await PrefsHelper.remove(AppConstants.isLogged);
+                                            await PrefsHelper.remove(AppConstants.role);
+                                            await PrefsHelper.remove(AppConstants.number);
+                                            await PrefsHelper.remove(AppConstants.bearerToken);
+                                            await PrefsHelper.remove(AppConstants.userId);
+                                            await PrefsHelper.remove(AppConstants.dateOfBirth);
+                                            Get.offAllNamed(AppRoutes.loginScreen);
                                           },
                                           fontSize: 11.h),
                                     ),
@@ -347,8 +387,6 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-
-
   Widget _customCart(
       {required String title,
         required Widget icon,
@@ -381,5 +419,4 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
-
 }

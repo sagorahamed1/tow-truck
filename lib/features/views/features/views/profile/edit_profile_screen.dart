@@ -32,6 +32,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController genderCtrl = TextEditingController();
   TextEditingController descriptionCtrl = TextEditingController();
 
+
+  @override
+  void initState() {
+    Map? data = Get.arguments;
+    nameCtrl.text = data?["name"]?.toString() ?? "";
+    emailCtrl.text = data?["email"]?.toString() ?? "";
+    addressCtrl.text = data?["address"]?.toString() ?? "";
+    phoneCtrl.text = data?["phone"]?.toString() ?? "";
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -143,6 +143,7 @@ class AuthController extends GetxController {
       PrefsHelper.setString(AppConstants.bearerToken, response.body["data"]['tokens']["accessToken"]);
       PrefsHelper.setString(AppConstants.email, email);
       PrefsHelper.setString(AppConstants.name, data["user"]['name']);
+      PrefsHelper.setString(AppConstants.number, data["user"]['name']);
       PrefsHelper.setString(AppConstants.userId, data["user"]['_id']);
       PrefsHelper.setBool(AppConstants.isLogged, true);
 
@@ -325,18 +326,26 @@ class AuthController extends GetxController {
   ///===============fillProfile================<>
   RxBool fillProfileLoading = false.obs;
 
-  fillProfile() async {
+  fillProfile({required String image, required String name, address, typeOfTowTruck, dateOfBirth, gender, description}) async {
     fillProfileLoading(true);
-    var body = {};
+    var body =
+    {
+      "profileImage": "$image",
+      "address": "$address",
+      "companyName": "$name",
+      "towTypeId": "64d2fa21e1b8e2a1c0d2f9aa",
+      "dateOfBirth": "$dateOfBirth",
+      "gender": "${gender.toString().toLowerCase()}",
+      "description": "$description"
+    };
 
     var response = await ApiClient.postData(
         ApiConstants.resendOtpEndPoint, jsonEncode(body));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      PrefsHelper.setString(
-          AppConstants.bearerToken, response.body["data"]["verificationToken"]);
-      ToastMessageHelper.showToastMessage(
-          'You have got an one time code to your email');
+
+      ToastMessageHelper.showToastMessage('${response.body["message"]}');
+      Get.toNamed(AppRoutes.documentScreen);
       print("======>>> successful");
       fillProfileLoading(false);
     } else {

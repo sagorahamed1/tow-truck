@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:towservice/controller/upload_app_file.dart';
+import 'package:towservice/helpers/toast_message_helper.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
 import 'package:towservice/widgets/custom_text_field.dart';
 
@@ -34,8 +36,6 @@ class _FillProfileScreenState extends State<FillProfileScreen> {
   DateTime selectedDate = DateTime.now();
   Uint8List? _image;
   File? selectedIMage;
-  File? insuranceImageFile;
-  Uint8List? insuranceImageUint;
   RxBool isDropDown = false.obs;
 
   TextEditingController nameCtrl = TextEditingController();
@@ -235,7 +235,22 @@ class _FillProfileScreenState extends State<FillProfileScreen> {
                         loading: _authController.fillProfileLoading.value,
                         onpress: () {
                           if (_formKey.currentState!.validate()) {
-                            // _authController.fillProfileOrUpDate(selectedIMage, insuranceImageFile);
+
+                            if(_image == null){
+                              ToastMessageHelper.showToastMessage("Please select your profile image");
+                            }else{
+                              _authController.fillProfile(
+                                  name: nameCtrl.text,
+                                  description: descriptionCtrl.text,
+                                  address: addressCtrl.text,
+                                  dateOfBirth: dateOfBirthCtrl.text,
+                                  gender: genderCtrl.text,
+                                  typeOfTowTruck: typeOfTowTruckCtrl.text,
+                                  image: profileImagePath
+                              );
+                            }
+
+
                           }
                         },
                         title: "Next"),
@@ -309,33 +324,16 @@ class _FillProfileScreenState extends State<FillProfileScreen> {
         });
   }
 
-  Future<void> _pickImage() async {
-    // final pickedImage = await ImagePickerInsurence.pickImageFromGallery();
-    // if (pickedImage != null) {
-    //   setState(() {
-    //     insuranceImageUint = pickedImage;
-    //     insuranceImageFile = File.fromRawPath(pickedImage);
-    //   });
-    // }
-
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returnImage == null) return;
-    setState(() {
-      insuranceImageFile = File(returnImage.path);
-      insuranceImageUint = File(returnImage.path).readAsBytesSync();
-    });
-    // Get.back();
-  }
+  String profileImagePath = "";
 
   //==================================> Gallery <===============================
   Future _pickImageFromGallery() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    final returnImage = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (returnImage == null) return;
     setState(() {
       selectedIMage = File(returnImage.path);
       _image = File(returnImage.path).readAsBytesSync();
+      profileImagePath = UploadAppFile.uploadFile(file: selectedIMage!);
     });
     Get.back();
   }
@@ -348,6 +346,7 @@ class _FillProfileScreenState extends State<FillProfileScreen> {
     setState(() {
       selectedIMage = File(returnImage.path);
       _image = File(returnImage.path).readAsBytesSync();
+      profileImagePath = UploadAppFile.uploadFile(file: selectedIMage!);
     });
     // Get.back();
   }
@@ -363,20 +362,9 @@ class _FillProfileScreenState extends State<FillProfileScreen> {
 
     if (pickedDate != null && pickedDate != selectedDate) {
       selectedDate = pickedDate;
-      dateOfBirthCtrl.text = TimeFormatHelper.formatDate(selectedDate);
+      dateOfBirthCtrl.text = TimeFormatHelper.formatDateWithHifen(selectedDate);
       print('Selected date: ${dateOfBirthCtrl.text}');
     }
   }
 }
 
-class ImagePickerInsurence {
-  //==================================> Gallery <===============================
-  static Future<Uint8List?> pickImageFromGallery() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returnImage != null) {
-      return await File(returnImage.path).readAsBytes();
-    }
-    return null;
-  }
-}

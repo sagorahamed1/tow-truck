@@ -2,8 +2,8 @@ class ApiConstants{
   // static const String baseUrl = "http://192.168.40.142:5000/api/v1";
   // static const String imageBaseUrl = "http://192.168.40.142:5000";
 
-  static const String baseUrl = "http://10.10.10.86:8082/api/v1";
-  static const String imageBaseUrl = "http://10.10.10.86:8082";
+  static const String baseUrl = "https://roam-mamun.sarv.live/api/v1";
+  static const String imageBaseUrl = "https://roam-mamun.sarv.live";
 
 
   static const String signUpEndPoint = "/auth/register";

@@ -125,105 +125,108 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
 
 
-      body: Column(
-        children: [
-          Assets.images.customerHomeScreenImage
-              .image(fit: BoxFit.cover, colorBlendMode: BlendMode.darken),
-          SingleChildScrollView(
-            child: Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: Column(
-                  children: [
-                    SizedBox(height: 44.h),
-                    Row(
-                      children: [
-                        Assets.icons.logOutIcon
-                            .svg(color: Colors.white, height: 50.h),
-                      ],
-                    ),
+      body: Container(
+        color: Color(0xffE7ECE9),
+        child: Column(
+          children: [
+            Assets.images.customerHomeScreenImage
+                .image(fit: BoxFit.cover, colorBlendMode: BlendMode.darken),
+            SingleChildScrollView(
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 44.h),
+                      // Row(
+                      //   children: [
+                      //     Assets.icons.logOutIcon
+                      //         .svg(color: Colors.white, height: 50.h),
+                      //   ],
+                      // ),
 
 
-                    Obx(
-                          () {
-                        return Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4.r),
-                            border: Border.all(color: Colors.black),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.location_on),
-                                Expanded(
-                                  child: CustomText(
-                                    textAlign: TextAlign.start,
-                                    maxline: 1,
-                                    text: controller.isLoading.value
-                                        ? "Loading..."
-                                        : controller.address.value,
-                                    color: Colors.black
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-
-
-
-
-                    SizedBox(height: 10.h),
-                    Obx(
-                      () {
-                        controller.isLoading.value;
-                        return GestureDetector(
-                          onTap: () {
-                            // if (controller.address.value.isNotEmpty) {
-
-
-                              Get.toNamed(AppRoutes.jobPostScreen, arguments: {
-                                "address" : '${controller.address.value}'
-
-                              });
-
-
-                            // } else {
-                            //   ToastMessageHelper.showToastMessage(
-                            //       "Please wait 10 seconds while we fetch your location. Then try again.");
-                            // }
-                          },
-                          child: Container(
+                      Obx(
+                            () {
+                          return Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4.r),
-                            border: Border.all(color: Colors.black)
+                              borderRadius: BorderRadius.circular(4.r),
+                              border: Border.all(color: Colors.black),
                             ),
                             child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10.w, vertical: 8.h),
+                              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
                               child: Row(
                                 children: [
                                   const Icon(Icons.location_on),
-                                  CustomText(
-                                      text: "Choose your location", color: Colors.black),
-                                  const Spacer(),
-
+                                  Expanded(
+                                    child: CustomText(
+                                      textAlign: TextAlign.start,
+                                      maxline: 1,
+                                      text: controller.isLoading.value
+                                          ? "Loading..."
+                                          : controller.address.value,
+                                      color: Colors.black
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    )
-                  ],
+                          );
+                        },
+                      ),
+
+
+
+
+                      SizedBox(height: 10.h),
+                      Obx(
+                        () {
+                          controller.isLoading.value;
+                          return GestureDetector(
+                            onTap: () {
+                              // if (controller.address.value.isNotEmpty) {
+
+
+                                Get.toNamed(AppRoutes.jobPostScreen, arguments: {
+                                  "address" : '${controller.address.value}'
+
+                                });
+
+
+                              // } else {
+                              //   ToastMessageHelper.showToastMessage(
+                              //       "Please wait 10 seconds while we fetch your location. Then try again.");
+                              // }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4.r),
+                              border: Border.all(color: Colors.black)
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10.w, vertical: 8.h),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.location_on),
+                                    CustomText(
+                                        text: "Choose your location", color: Colors.black),
+                                    const Spacer(),
+
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

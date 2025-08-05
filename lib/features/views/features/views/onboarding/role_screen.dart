@@ -34,7 +34,7 @@ class RoleScreen extends StatelessWidget {
         topLeftRadius: 40.r,
         topRightRadius: 40.r,
         color: AppColors.whiteShade400,
-        height: 500.h,
+        height: 450.h,
         elevation: true,
         elevationColor: const Color(0xffD46A6A1A).withOpacity(0.15),
         child: Stack(
@@ -47,11 +47,12 @@ class RoleScreen extends StatelessWidget {
               child: Assets.images.onboardingImage.image(),
             ),
 
+
             /// Role Selection Options
             Align(
               alignment: Alignment.topCenter,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 40.h),
+                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 40.h),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [

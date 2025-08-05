@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:towservice/features/views/features/views/splash/widgets/splash_loading.dart';
 import 'package:towservice/global/custom_assets/assets.gen.dart';
+import 'package:towservice/helpers/prefs_helper.dart';
 import 'package:towservice/routes/app_routes.dart';
+import 'package:towservice/utils/app_constant.dart';
 import 'package:towservice/widgets/custom_scaffold.dart';
 import 'package:towservice/widgets/custom_text.dart';
 
@@ -25,8 +27,26 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
   Future<void> _goNextScreen() async {
-    await Future.delayed(const Duration(seconds: 3));
-    Get.offAllNamed(AppRoutes.roleScreen);
+    String role = await PrefsHelper.getString(AppConstants.role);
+    String token = await PrefsHelper.getString(AppConstants.bearerToken);
+    bool isLogged = await PrefsHelper.getBool(AppConstants.isLogged);
+
+    await Future.delayed(const Duration(seconds: 3), (){
+
+      if(isLogged && token.isNotEmpty){
+        if(role == "user"){
+          Get.offAllNamed(AppRoutes.userBottomNavBar);
+        }else{
+          Get.offAllNamed(AppRoutes.customNavBarScreen);
+        }
+
+      }else{
+        Get.offAllNamed(AppRoutes.roleScreen);
+      }
+
+
+    });
+
   }
 
 
