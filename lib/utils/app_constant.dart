@@ -10,8 +10,9 @@ class AppConstants{
    static String userId = 'userId';
    static String address = 'address';
    static String number = 'number';
-  static String image = '';
-  static String dateOfBirth = '';
+  static String image = 'image';
+  static String dateOfBirth = 'dateOfBirth';
+  static String rating = 'rating';
 
   static RegExp emailValidate = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");

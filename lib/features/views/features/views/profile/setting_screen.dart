@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:towservice/controller/auth_controller.dart';
 import 'package:towservice/utils/app_colors.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
 import '../../../../../global/custom_assets/assets.gen.dart';
@@ -14,12 +15,15 @@ import '../../../../../widgets/custom_text_field.dart';
 class SettingScreen extends StatelessWidget {
    SettingScreen({super.key});
 
+   AuthController authController = Get.find<AuthController>();
+
   TextEditingController oldPassCtrl = TextEditingController();
   TextEditingController newPassCtrl = TextEditingController();
   TextEditingController confirmPassCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    String email = Get.arguments["email"];
     return Scaffold(
       appBar: CustomAppBar(title: "Settings"),
       body: Padding(
@@ -39,73 +43,90 @@ class SettingScreen extends StatelessWidget {
 
                   showModalBottomSheet(
                     context: context,
+                    isScrollControlled: true,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                     ),
                     builder: (context) {
-                      return Padding(
-                        padding:
-                        EdgeInsets.symmetric(horizontal: 20.w, vertical: 28.h),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
+                      return SizedBox(
+                        height: 600.h,
+                        child: Padding(
+                          padding:
+                          EdgeInsets.symmetric(horizontal: 20.w, vertical: 28.h),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
 
-                            CustomText(text: "Password Change", fontSize: 18.h, bottom: 24.h),
-
-
-                            CustomTextField(
-                              isPassword: true,
-                              controller: oldPassCtrl,
-                              hintText: "Old Password",
-                              borderColor: AppColors.primaryColor,
-                              hintextColor: Colors.black,
-                              contentPaddingVertical: 10.h,
-                              borderRadio: 40,
-                            ),
+                              CustomText(text: "Password Change", fontSize: 18.h, bottom: 24.h),
 
 
-
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: CustomText(text: "Forgot Password?", color: Colors.black87),
-                            ),
-
-                            SizedBox(height: 16.h),
+                              CustomTextField(
+                                isPassword: true,
+                                controller: oldPassCtrl,
+                                hintText: "Old Password",
+                                borderColor: AppColors.primaryColor,
+                                hintextColor: Colors.black,
+                                contentPaddingVertical: 10.h,
+                                borderRadio: 40,
+                              ),
 
 
 
-                            CustomTextField(
-                              isPassword: true,
-                              controller: newPassCtrl,
-                              hintText: "New Password",
-                              borderColor: AppColors.primaryColor,
-                              hintextColor: Colors.black,
-                              contentPaddingVertical: 10.h,
-                              borderRadio: 40,
-                            ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: GestureDetector(
+                                    onTap: () {
+                                      Get.toNamed(AppRoutes.forgotPasswordScreen, arguments: {"email" : "$email"});
+                                    },
+                                    child: CustomText(text: "Forgot Password?", color: Colors.black87)),
+                              ),
+
+                              SizedBox(height: 16.h),
+
+
+
+                              CustomTextField(
+                                isPassword: true,
+                                controller: newPassCtrl,
+                                hintText: "New Password",
+                                borderColor: AppColors.primaryColor,
+                                hintextColor: Colors.black,
+                                contentPaddingVertical: 10.h,
+                                borderRadio: 40,
+                              ),
 
 
 
 
-                            CustomTextField(
-                              isPassword: true,
-                              controller: confirmPassCtrl,
-                              hintText: "Confirm Password",
-                              borderColor: AppColors.primaryColor,
-                              hintextColor: Colors.black,
-                              borderRadio: 40,
-                              contentPaddingVertical: 10.h,
-                            ),
+                              CustomTextField(
+                                isPassword: true,
+                                controller: confirmPassCtrl,
+                                hintText: "Confirm Password",
+                                borderColor: AppColors.primaryColor,
+                                hintextColor: Colors.black,
+                                borderRadio: 40,
+                                contentPaddingVertical: 10.h,
+                              ),
 
 
 
-                            SizedBox(height: 40.h),
+                              SizedBox(height: 40.h),
 
-                            CustomButtonTwo(title: "Save Password", onpress: () {
+                              Obx(()=>
+                                 CustomButtonTwo(
+                                    loading: authController.changePasswordLoading.value,
+                                    title: "Save Password", onpress: () {
+                                      authController.changePassword(oldPassCtrl.text, newPassCtrl.text);
 
-                            })
-                          ],
+                                      oldPassCtrl.clear();
+                                      newPassCtrl.clear();
+                                      confirmPassCtrl.clear();
+
+                                }),
+                              )
+                            ],
+                          ),
                         ),
                       );
                     },

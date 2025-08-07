@@ -1,13 +1,21 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:towservice/controller/profile_controller.dart';
 import 'package:towservice/global/custom_assets/assets.gen.dart';
 import 'package:towservice/routes/app_routes.dart';
+import 'package:towservice/services/api_constants.dart';
 import 'package:towservice/utils/app_colors.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
+import 'package:towservice/widgets/custom_loader.dart';
 import 'package:towservice/widgets/custom_text.dart';
 
+import '../../../../../controller/upload_app_file.dart';
 import '../../../../../widgets/custom_app_bar.dart';
 import '../../../../../widgets/custom_network_image.dart';
 import '../../../../../widgets/custom_text_field.dart';
@@ -22,6 +30,7 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
 
+  ProfileController profileController = Get.find<ProfileController>();
   TextEditingController nameCtrl = TextEditingController();
   TextEditingController companyCtrl = TextEditingController();
   TextEditingController emailCtrl = TextEditingController();
@@ -31,6 +40,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController dateCtrl = TextEditingController();
   TextEditingController genderCtrl = TextEditingController();
   TextEditingController descriptionCtrl = TextEditingController();
+  TextEditingController role = TextEditingController();
+  TextEditingController image = TextEditingController();
+
 
 
   @override
@@ -40,7 +52,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     emailCtrl.text = data?["email"]?.toString() ?? "";
     addressCtrl.text = data?["address"]?.toString() ?? "";
     phoneCtrl.text = data?["phone"]?.toString() ?? "";
-
+    role.text = data?["role"]?.toString() ?? "";
+    dateCtrl.text = data?["dateOfBirth"]?.toString() ?? "";
+    image.text = data?["image"]?.toString() ?? "";
+    profileImagePath = data?["image"]?.toString() ?? "";
     super.initState();
   }
 
@@ -61,8 +76,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: Stack(
                   children: [
 
+                    _image != null ?
+                    CircleAvatar(
+                        radius: 50.r,
+                        backgroundImage: MemoryImage(_image!)) :
                     CustomNetworkImage(
-                      imageUrl: "https://i.pravatar.cc/140?img=3",
+                      imageUrl: "${ApiConstants.imageBaseUrl}${image.text}",
                       height: 100.h,
                       width: 100.w,
                       boxShape: BoxShape.circle,
@@ -72,16 +91,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     Positioned(
                         bottom: 0.h,
                         right: 0.w,
-                        child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              border: Border.all(color: Colors.black)
-                            ),
-                            child: Padding(
-                              padding:  EdgeInsets.all(5.r),
-                              child: Icon(Icons.edit),
-                            ))
+                        child: GestureDetector(
+                          onTap: () {
+                            showImagePickerOption(context);
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                                border: Border.all(color: Colors.black)
+                              ),
+                              child: Padding(
+                                padding:  EdgeInsets.all(5.r),
+                                child: Icon(Icons.edit),
+                              )),
+                        )
 
                     )
                   ],
@@ -90,6 +114,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
 
               SizedBox(height: 16.h),
+
 
 
               CustomTextField(
@@ -103,6 +128,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
 
 
+              if(role.text != "user")
               CustomTextField(
                 controller: companyCtrl,
                 hintText: "company name",
@@ -125,11 +151,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
 
 
-
               CustomTextField(
                 controller: phoneCtrl,
                 hintText: "",
                 labelText: "Phone",
+                keyboardType: TextInputType.number,
                 borderColor: AppColors.primaryColor,
                 hintextColor: Colors.black,
                 contentPaddingVertical: 10.h,
@@ -139,6 +165,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
 
 
+              if(role.text != "user")
               CustomTextField(
                 controller: typeOfTowTruckCtrl,
                 hintText: "Type of tow truck",
@@ -166,7 +193,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     context: context,
                     initialDate: DateTime.now(),
                     firstDate: DateTime(2000),
-                    lastDate: DateTime(2101),
+                    lastDate: DateTime.now(),
                   );
 
                   if (pickedDate != null) {
@@ -182,6 +209,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
 
 
+              if(role.text != "user")
               CustomTextField(
                 controller: genderCtrl,
                 hintText: "Gender",
@@ -194,9 +222,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
 
 
+              if(role.text != "user")
               Align(
                   alignment: Alignment.centerLeft,
                   child: CustomText(text: "Documents", fontSize: 16.h, bottom: 10.h, top: 4.h)),
+              if(role.text != "user")
               GestureDetector(
                 onTap: () {
                   Get.toNamed(AppRoutes.documentScreen);
@@ -232,6 +262,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
 
 
+              if(role.text != "user")
               CustomTextField(
                 controller: descriptionCtrl,
                 hintText: "Description",
@@ -246,9 +277,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
               SizedBox(height: 40.h),
 
-              CustomButtonTwo(title: "Update Profile", onpress: (){
-                Get.back();
-              }),
+              Obx(() =>
+                 CustomButtonTwo(
+                    loading: profileController.updateProfileLoading.value,
+                    title: "Update Profile", onpress: (){
+                  if(role.text == "user"){
+                    profileController.updateUserProfile(
+                        dateOfBirth: dateCtrl.text,
+                        address: addressCtrl.text,
+                        name: nameCtrl.text,
+                        phone: phoneCtrl.text,
+                        profileImage: "${profileImagePath}"
+                    );
+                  }else{
+
+                  }
+
+                }),
+              ),
 
               SizedBox(height: 100.h)
 
@@ -259,4 +305,99 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
     );
   }
+
+
+
+
+
+  //==================================> ShowImagePickerOption Function <===============================
+
+  void showImagePickerOption(BuildContext context) {
+    showModalBottomSheet(
+        backgroundColor: Colors.white,
+        context: context,
+        builder: (builder) {
+          return Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 6.2,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        _pickImageFromGallery();
+                      },
+                      child: SizedBox(
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.image,
+                              size: 50.w,
+                            ),
+                            CustomText(text: 'Gallery')
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        _pickImageFromCamera();
+                      },
+                      child: SizedBox(
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.camera_alt,
+                              size: 50.w,
+                            ),
+                            CustomText(text: 'Camera')
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  String profileImagePath = "";
+  Uint8List? _image;
+  File? selectedIMage;
+  RxBool isDropDown = false.obs;
+
+  //==================================> Gallery <===============================
+  Future _pickImageFromGallery() async {
+    final returnImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returnImage == null) return;
+
+    selectedIMage = File(returnImage.path);
+    _image = File(returnImage.path).readAsBytesSync();
+    profileImagePath = await UploadAppFile.uploadFile(file: selectedIMage!);
+    setState(() {
+    });
+    Get.back();
+  }
+
+//==================================> Camera <===============================
+  Future _pickImageFromCamera() async {
+    final returnImage =
+    await ImagePicker().pickImage(source: ImageSource.camera);
+    if (returnImage == null) return;
+
+    Get.back();
+    selectedIMage = File(returnImage.path);
+    _image = File(returnImage.path).readAsBytesSync();
+    profileImagePath =await UploadAppFile.uploadFile(file: selectedIMage!);
+    setState(() {});
+
+  }
+
 }

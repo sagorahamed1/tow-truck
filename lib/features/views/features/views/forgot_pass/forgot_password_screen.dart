@@ -19,6 +19,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   AuthController authController = Get.find<AuthController>();
 
 
+  @override
+  void initState() {
+    _emailController.text = Get.arguments["email"] ?? "";
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

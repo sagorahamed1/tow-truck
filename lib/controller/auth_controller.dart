@@ -143,7 +143,7 @@ class AuthController extends GetxController {
       PrefsHelper.setString(AppConstants.bearerToken, response.body["data"]['tokens']["accessToken"]);
       PrefsHelper.setString(AppConstants.email, email);
       PrefsHelper.setString(AppConstants.name, data["user"]['name']);
-      PrefsHelper.setString(AppConstants.number, data["user"]['name']);
+      PrefsHelper.setString(AppConstants.number, data["user"]['phone']);
       PrefsHelper.setString(AppConstants.userId, data["user"]['_id']);
       PrefsHelper.setBool(AppConstants.isLogged, true);
 
@@ -159,8 +159,12 @@ class AuthController extends GetxController {
       ToastMessageHelper.showToastMessage('Your are logged in');
 
       logInLoading(false);
-      await PrefsHelper.setString(
-          AppConstants.image, data['image']["publicFileURL"]);
+      await PrefsHelper.setString(AppConstants.image, data['user']["profileImage"]);
+      await PrefsHelper.setString(AppConstants.address, data['user']["address"]);
+      PrefsHelper.setString(AppConstants.dateOfBirth, data["user"]['dateOfBirth']);
+      PrefsHelper.setString(AppConstants.rating, data["user"]['totalRating']);
+
+
       SocketServices socketService = SocketServices();
       socketService.disconnect(isManual: true);
       await socketService.init();
@@ -282,21 +286,21 @@ class AuthController extends GetxController {
 
   changePassword(String oldPassword, newPassword) async {
     changePasswordLoading(true);
-    var body = {"oldPassword": "$oldPassword", "newPassword": "$newPassword"};
+    var body = {"currentPassword": "$oldPassword", "password": "$newPassword", "confirmPassword": "$newPassword"};
 
-    var response =
-        await ApiClient.postData(ApiConstants.changePassword, jsonEncode(body));
+    var response = await ApiClient.postData(ApiConstants.changePassword, jsonEncode(body));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       ToastMessageHelper.showToastMessage('Password Changed Successful');
+      Get.back();
       print("======>>> successful");
       changePasswordLoading(false);
     } else if (response.statusCode == 1) {
       changePasswordLoading(false);
       ToastMessageHelper.showToastMessage("Server error! \n Please try later");
     } else {
-      ToastMessageHelper.showToastMessage(response.body['message']);
       changePasswordLoading(false);
+      ToastMessageHelper.showToastMessage(response.body['message']);
     }
   }
 
