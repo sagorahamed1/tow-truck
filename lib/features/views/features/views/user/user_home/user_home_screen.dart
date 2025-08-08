@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:towservice/controller/profile_controller.dart';
 import 'package:towservice/routes/app_routes.dart';
+import 'package:towservice/services/api_constants.dart';
 
 import '../../../../../../controller/current_location_controller.dart';
 import '../../../../../../controller/live_location_change_controller.dart';
@@ -20,12 +22,13 @@ class UserHomeScreen extends StatefulWidget {
 class _UserHomeScreenState extends State<UserHomeScreen> {
   CurrentLocationController controller = Get.put(CurrentLocationController());
   LiveLocationChangeController liveLocationChangeController = Get.put(LiveLocationChangeController());
+  ProfileController profileController = Get.find<ProfileController>();
 
   @override
   void initState() {
     controller.getCurrentLocation();
     liveLocationChangeController.listenToLocationChanges();
-
+    profileController.getUserLocalData();
     super.initState();
   }
 
@@ -41,49 +44,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
 
     if (controller.address.value == "") {
-      print("======================================= do not have address");
       controller.getCurrentLocation();
     }
 
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
-      // appBar: AppBar(
-      //   titleSpacing: 0,
-      //   leading: Padding(
-      //     padding:  EdgeInsets.only(left: 10.w),
-      //     child: CustomNetworkImage(
-      //         border: Border.all(color: Color(0xffFAEFD7), width: 2.5),
-      //         height: 100.h,
-      //         width: 100.w,
-      //         boxShape: BoxShape.circle,
-      //         imageUrl: "https://randomuser.me/api/portraits/men/75.jpg"),
-      //   ),
-      //
-      //
-      //   title: Column(
-      //     crossAxisAlignment: CrossAxisAlignment.start,
-      //     mainAxisAlignment: MainAxisAlignment.start,
-      //     children: [
-      //
-      //       CustomText(text: "Henry Silver", fontSize: 17.h, color: Colors.black),
-      //       CustomText(text: "Dhaka, Banasree", fontSize: 12.h)
-      //
-      //
-      //     ],
-      //   ),
-      //
-      //
-      //   actions: [
-      //
-      //     Assets.icons.notificationIcon.svg(),
-      //     SizedBox(width: 20.w)
-      //   ],
-      //
-      // ),
-
-
-
 
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -98,14 +64,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 height: 40.h,
                 width: 40.w,
                 boxShape: BoxShape.circle,
-                imageUrl: "https://randomuser.me/api/portraits/men/75.jpg",
+                imageUrl: "${ApiConstants.imageBaseUrl}${profileController.image.value}",
               ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomText(text: "Henry Silver", fontSize: 17.h, color: Colors.black),
-                CustomText(text: "Dhaka, Banasree", fontSize: 12.h),
+                CustomText(text: "${profileController.name.value}", fontSize: 17.h, color: Colors.black),
+                CustomText(text: "${profileController.address.value}", fontSize: 12.h),
               ],
             ),
           ],

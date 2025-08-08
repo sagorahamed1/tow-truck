@@ -32,6 +32,7 @@ class _TripScreenState extends State<TripScreen> {
             Row(
               children: [
                 Expanded(
+                  flex: 1,
                   child: CustomButtonTwo(
                     boderColor: AppColors.primaryColor,
                     color: selectedBtnIndex == 0
@@ -42,6 +43,8 @@ class _TripScreenState extends State<TripScreen> {
                         : Colors.white,
                     height: 40.h,
                     borderRadius: 4.r,
+                    loaderIgnore: false,
+                    loading: false,
                     title: "Ongoing",
                     onpress: () {
                       setState(() {
@@ -50,8 +53,9 @@ class _TripScreenState extends State<TripScreen> {
                     },
                   ),
                 ),
-                SizedBox(width: 20.w),
+                SizedBox(width: 12.w),
                 Expanded(
+                  flex: 1,
                   child: CustomButtonTwo(
                     boderColor: AppColors.primaryColor,
                     color: selectedBtnIndex == 1
@@ -63,6 +67,8 @@ class _TripScreenState extends State<TripScreen> {
                     height: 40.h,
                     borderRadius: 4.r,
                     title: "Completed",
+                    loaderIgnore: false,
+                    loading: false,
                     onpress: () {
                       print("==================");
                       setState(() {

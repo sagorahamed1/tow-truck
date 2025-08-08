@@ -19,6 +19,7 @@ class ApiConstants{
 
   static const String support = "/setting/support";
   static const String updateProfile = "/user/me";
+  static const String postJob = "/job";
 
 
 }

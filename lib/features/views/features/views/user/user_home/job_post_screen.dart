@@ -7,6 +7,7 @@ import 'package:towservice/widgets/custom_app_bar.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
 
 import '../../../../../../controller/current_location_controller.dart';
+import '../../../../../../controller/user/user_job_post_controller.dart';
 import '../../../../../../global/custom_assets/assets.gen.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../widgets/custom_text.dart';
@@ -21,6 +22,8 @@ class JobPostScreen extends StatefulWidget {
 
 class _JobPostScreenState extends State<JobPostScreen> {
   CurrentLocationController controller = Get.put(CurrentLocationController());
+  UserJobPostController userJobPostController =
+      Get.put(UserJobPostController());
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   var address = "";
@@ -31,11 +34,9 @@ class _JobPostScreenState extends State<JobPostScreen> {
     super.initState();
   }
 
-  priviuseScreenData(){
+  priviuseScreenData() {
     address = "${Get.arguments["address"] ?? ""}";
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   TextEditingController carCtrl = TextEditingController();
@@ -50,7 +51,6 @@ class _JobPostScreenState extends State<JobPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
@@ -100,8 +100,7 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                           Expanded(
                                             child: CustomText(
                                                 textAlign: TextAlign.start,
-                                                text:
-                                                    "$address",
+                                                text: "$address",
                                                 color:
                                                     AppColors.primaryShade600,
                                                 left: 8.w),
@@ -227,12 +226,18 @@ class _JobPostScreenState extends State<JobPostScreen> {
                     labelText: "Note",
                     hintText: "Write note"),
                 SizedBox(height: 16.h),
-                CustomButtonTwo(title: "Request Tow", onpress: () {
-
-                  Get.toNamed(AppRoutes.userMapScreen);
-
-                }),
-                SizedBox(height: 50.h)
+                CustomButtonTwo(
+                    title: "Request Tow",
+                    onpress: () {
+                      userJobPostController.jobPost(
+                          car: carCtrl.text,
+                          issue: vehicleIssueCtrl.text,
+                          note: noteCtrl.text,
+                          coodinates: [],
+                          destCoodinate: [],
+                          distance: 11);
+                    }),
+                SizedBox(height: 250.h)
               ],
             ),
           ),
@@ -241,16 +246,7 @@ class _JobPostScreenState extends State<JobPostScreen> {
     );
   }
 
-
-  final List<String> carOptions = [
-    'Stuck / Emergency',
-    'Jump Start',
-    'Flat Tire',
-    'Out of Fuel',
-    'Recovery (mud/snow)',
-    'Lockout Out',
-    'Other',
-  ];
+  final List<String> carOptions = ['Motor-Bike', 'Car', 'Jeep', 'Close_Truck', 'Open_Truck', 'Other'];
 
   void openCarOptions(BuildContext context) async {
     final result = await showModalBottomSheet<String>(
@@ -260,9 +256,7 @@ class _JobPostScreenState extends State<JobPostScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
-        return HelpOptionsSheet(
-          options: carOptions
-        );
+        return HelpOptionsSheet(options: carOptions);
       },
     );
 
@@ -273,17 +267,16 @@ class _JobPostScreenState extends State<JobPostScreen> {
     }
   }
 
-
-
-
   final List<String> vehicleIssueOption = [
-    'Motor Bike',
-    'Car',
-    'Jeep',
-    'Car',
-    'Close Truck',
-    'Open Truck',
-    'Other',
+
+
+    "Emergency",
+    "Jump_Start",
+    "Flat_Tire",
+    "Out_of_fuel",
+    "Recovery",
+    "Lockout",
+    "Other"
   ];
 
   void openVehicleIssueOptions(BuildContext context) async {
@@ -294,9 +287,7 @@ class _JobPostScreenState extends State<JobPostScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
-        return HelpOptionsSheet(
-            options: vehicleIssueOption
-        );
+        return HelpOptionsSheet(options: vehicleIssueOption);
       },
     );
 
@@ -306,10 +297,7 @@ class _JobPostScreenState extends State<JobPostScreen> {
       print("Selected option: $result");
     }
   }
-
 }
-
-
 
 class HelpOptionsSheet extends StatefulWidget {
   final List<String> options;
@@ -354,15 +342,15 @@ class _HelpOptionsSheetState extends State<HelpOptionsSheet> {
                   ),
                   child: selectedIndex == index
                       ? Center(
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.black,
-                      ),
-                    ),
-                  )
+                          child: Container(
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.black,
+                            ),
+                          ),
+                        )
                       : null,
                 ),
                 Text(
