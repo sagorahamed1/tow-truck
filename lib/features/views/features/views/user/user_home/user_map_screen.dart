@@ -3,8 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:towservice/routes/app_routes.dart';
+import 'package:towservice/services/api_constants.dart';
+import 'package:towservice/utils/app_colors.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
+import 'package:towservice/widgets/custom_loader.dart';
+import 'package:towservice/widgets/custom_network_image.dart';
 import 'package:towservice/widgets/custom_text.dart';
+
+import '../../../../../../controller/user/user_job_post_controller.dart';
 
 class UserMapScreen extends StatefulWidget {
   const UserMapScreen({super.key});
@@ -22,7 +28,6 @@ class _UserMapScreenState extends State<UserMapScreen> {
     mapController = controller;
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -39,99 +44,9 @@ class _UserMapScreenState extends State<UserMapScreen> {
     });
   }
 
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     showModalBottomSheet(
-  //       context: context,
-  //       isScrollControlled: true,
-  //       builder: (context) {
-  //         return Padding(
-  //           padding: EdgeInsets.all(16.0),
-  //           child: SizedBox(
-  //             height: 700.h,
-  //             child: Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //
-  //                 Expanded(
-  //                   child: ListView.builder(
-  //                       itemCount: 10,
-  //                       itemBuilder: (context, index) {
-  //                         return Container(
-  //                           width: double.infinity,
-  //                           decoration: BoxDecoration(
-  //                             border: Border.all(color: Color(0xffB78D39), width: 1.5),
-  //                             borderRadius: BorderRadius.circular(16.r),
-  //                           ),
-  //                           padding: EdgeInsets.all(12.r),
-  //                           margin: EdgeInsets.only(top: 12.h),
-  //                           child: Column(
-  //                             crossAxisAlignment: CrossAxisAlignment.start,
-  //                             children: [
-  //                               CustomText(text: "Driver Name: abcd"),
-  //                               SizedBox(height: 8.h),
-  //                               CustomText(
-  //                                   text: "Flatbed Tow Truck (Rollback)", bottom: 12.h),
-  //                               Row(
-  //                                 children: [
-  //                                   Icon(Icons.location_on),
-  //                                   CustomText(text: "800m (5mins away)"),
-  //                                 ],
-  //                               ),
-  //                               SizedBox(height: 12.h),
-  //                               Row(
-  //                                 children: [
-  //                                   Icon(Icons.star, color: Colors.yellow),
-  //                                   CustomText(
-  //                                       text: "4.65     |   24545 Trips   |",
-  //                                       fontSize: 11.h),
-  //                                 ],
-  //                               ),
-  //                               SizedBox(height: 16.h),
-  //
-  //                               Container(
-  //                                 width: double.infinity,
-  //                                 decoration: BoxDecoration(
-  //                                     borderRadius: BorderRadius.circular(16.r),
-  //                                     gradient: LinearGradient(
-  //                                       begin: Alignment.topCenter,
-  //                                       end: Alignment.bottomCenter,
-  //                                       colors: [
-  //                                         Color(0xffAA8F5D),
-  //                                         Color(0xff5D5036),
-  //                                       ],
-  //                                     )
-  //                                 ),
-  //                                 child: CustomText(
-  //                                     top: 9.h,
-  //                                     bottom: 9.h,
-  //                                     text: "View Details", color: Colors.white),
-  //                               )
-  //                             ],
-  //                           ),
-  //                         );
-  //
-  //                   }),
-  //                 ),
-  //
-  //
-  //               ],
-  //             ),
-  //           ),
-  //         );
-  //       },
-  //     );
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Stack(
         children: [
           SizedBox(
@@ -148,8 +63,6 @@ class _UserMapScreenState extends State<UserMapScreen> {
               zoomControlsEnabled: false,
             ),
           ),
-
-
           GestureDetector(
             onTap: () {
               Get.back();
@@ -157,12 +70,11 @@ class _UserMapScreenState extends State<UserMapScreen> {
             child: Container(
               margin: EdgeInsets.only(top: 40.h, left: 20.w),
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-                border: Border.all(color: Colors.grey, width: .15.r)
-              ),
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  border: Border.all(color: Colors.grey, width: .15.r)),
               child: Padding(
-                padding:  EdgeInsets.all(8.r),
+                padding: EdgeInsets.all(8.r),
                 child: Icon(Icons.arrow_back),
               ),
             ),
@@ -173,9 +85,6 @@ class _UserMapScreenState extends State<UserMapScreen> {
   }
 }
 
-
-
-
 class TowTruckDraggableSheet extends StatefulWidget {
   @override
   State<TowTruckDraggableSheet> createState() => _TowTruckDraggableSheetState();
@@ -184,9 +93,12 @@ class TowTruckDraggableSheet extends StatefulWidget {
 class _TowTruckDraggableSheetState extends State<TowTruckDraggableSheet> {
   late DraggableScrollableController _draggableController;
   bool isExpanded = false;
+  UserJobPostController userJobPostController = Get.put(UserJobPostController());
+  List towTruckProviderList = [];
 
   @override
   void initState() {
+    userJobPostController.getTowTruck();
     super.initState();
     _draggableController = DraggableScrollableController();
   }
@@ -226,15 +138,15 @@ class _TowTruckDraggableSheetState extends State<TowTruckDraggableSheet> {
           ),
           child: Column(
             children: [
-
               SizedBox(height: 8.h),
               Row(
                 children: [
-
                   GestureDetector(
                     onTap: toggleSheet,
                     child: Icon(
-                      isExpanded ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
+                      isExpanded
+                          ? Icons.keyboard_arrow_down
+                          : Icons.keyboard_arrow_up,
                       size: 28.h,
                     ),
                   ),
@@ -246,81 +158,139 @@ class _TowTruckDraggableSheetState extends State<TowTruckDraggableSheet> {
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                   ),
+
+                  Spacer(),
+
+                  CustomButtonTwo(
+                      fontSize: 11.h,
+                      loaderIgnore: true,
+                      height: 32.h,
+                      title: "Request All",
+                      onpress: () {
+                        userJobPostController.requestJobPost(providerList: towTruckProviderList);
+                      },
+                      width: 120.w)
+
+                  // CustomText(
+                  //   text: "Request All",
+                  //   fontSize: 18.sp,
+                  //   fontWeight: FontWeight.bold,
+                  // ),
                 ],
               ),
               SizedBox(height: 8.h),
               Expanded(
-                child: ListView.builder(
-                  controller: controller,
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Color(0xffB78D39), width: 1.5),
-                          borderRadius: BorderRadius.circular(16.r),
-                        ),
-                        padding: EdgeInsets.all(12.r),
-                        margin: EdgeInsets.only(top: 12.h),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomText(text: "Driver Name: abcd"),
-                            SizedBox(height: 8.h),
-                            CustomText(
-                                text: "Flatbed Tow Truck (Rollback)", bottom: 12.h),
-                            Row(
-                              children: [
-                                Icon(Icons.location_on, size: 15.h),
-                                CustomText(text: "800m (5mins away)"),
-                              ],
-                            ),
-                            SizedBox(height: 12.h),
-                            Row(
-                              children: [
-                                Icon(Icons.star, color: Colors.yellow, size: 15.h),
-                                CustomText(
-                                    text: "4.65     |   24545 Trips   |",
-                                    fontSize: 11.h),
-                              ],
-                            ),
-                            SizedBox(height: 16.h),
-
-                            GestureDetector(
-                              onTap: () {
-                                // toggleSheet();
-                                Get.toNamed(AppRoutes.jobDetailsScreen);
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16.r),
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      Color(0xffAA8F5D),
-                                      Color(0xff5D5036),
-                                    ],
+                child: Obx(
+                  () => userJobPostController.towTruckLoading.value
+                      ? CustomLoader()
+                      : userJobPostController.towTrucks.isEmpty
+                          ? CustomText(text: "No Data Found!")
+                          : ListView.builder(
+                              controller: controller,
+                              itemCount: userJobPostController.towTrucks.length,
+                              itemBuilder: (context, index) {
+                                var towTruck = userJobPostController.towTrucks[index];
+                                towTruckProviderList.add(towTruck.id);
+                                return GestureDetector(
+                                  onTap: () {},
+                                  child: Container(
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Color(0xffB78D39), width: 1.5),
+                                      borderRadius: BorderRadius.circular(16.r),
+                                    ),
+                                    padding: EdgeInsets.all(12.r),
+                                    margin: EdgeInsets.only(top: 12.h),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 2,
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  CustomText(
+                                                      text:
+                                                          "Driver Name: ${towTruck.name}"),
+                                                  SizedBox(height: 8.h),
+                                                  CustomText(
+                                                      text:
+                                                          "Company: ${towTruck.companyName}",
+                                                      bottom: 12.h),
+                                                  Row(
+                                                    children: [
+                                                      Icon(Icons.location_on,
+                                                          size: 15.h),
+                                                      CustomText(
+                                                          text:
+                                                              "${towTruck.distance}"),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 12.h),
+                                                  Row(
+                                                    children: [
+                                                      Icon(Icons.star,
+                                                          color: Colors.yellow,
+                                                          size: 15.h),
+                                                      CustomText(
+                                                          text:
+                                                              "${towTruck.rating}   |  ${towTruck.trips} Trips  |   ${towTruck.amount}₦",
+                                                          fontSize: 11.h),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                                flex: 1,
+                                                child: CustomNetworkImage(
+                                                  height: 95.h,
+                                                    borderRadius: 12.r,
+                                                    width: double.infinity,
+                                                    imageUrl:
+                                                        "${ApiConstants.imageBaseUrl}${towTruck.carImage}"))
+                                          ],
+                                        ),
+                                        SizedBox(height: 16.h),
+                                        GestureDetector(
+                                          onTap: () {
+                                            // toggleSheet();
+                                            Get.toNamed(AppRoutes.jobDetailsScreen, arguments: {
+                                              "providerId" : "${towTruck.id}"
+                                            });
+                                          },
+                                          child: Container(
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(16.r),
+                                              gradient: LinearGradient(
+                                                begin: Alignment.topCenter,
+                                                end: Alignment.bottomCenter,
+                                                colors: [
+                                                  Color(0xffAA8F5D),
+                                                  Color(0xff5D5036),
+                                                ],
+                                              ),
+                                            ),
+                                            child: CustomText(
+                                                top: 9.h,
+                                                bottom: 9.h,
+                                                text: "View Details",
+                                                color: Colors.white,
+                                                textAlign: TextAlign.center),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                child: CustomText(
-                                    top: 9.h,
-                                    bottom: 9.h,
-                                    text: "View Details",
-                                    color: Colors.white,
-                                    textAlign: TextAlign.center),
-                              ),
+                                );
+                              },
                             ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
                 ),
               ),
             ],

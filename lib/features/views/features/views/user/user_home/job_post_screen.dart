@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:location_picker_text_field/open_street_location_picker.dart';
+import 'package:towservice/helpers/toast_message_helper.dart';
 import 'package:towservice/routes/app_routes.dart';
 import 'package:towservice/widgets/custom_app_bar.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
@@ -22,8 +23,7 @@ class JobPostScreen extends StatefulWidget {
 
 class _JobPostScreenState extends State<JobPostScreen> {
   CurrentLocationController controller = Get.put(CurrentLocationController());
-  UserJobPostController userJobPostController =
-      Get.put(UserJobPostController());
+  UserJobPostController userJobPostController = Get.put(UserJobPostController());
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   var address = "";
@@ -229,13 +229,22 @@ class _JobPostScreenState extends State<JobPostScreen> {
                 CustomButtonTwo(
                     title: "Request Tow",
                     onpress: () {
-                      userJobPostController.jobPost(
-                          car: carCtrl.text,
-                          issue: vehicleIssueCtrl.text,
-                          note: noteCtrl.text,
-                          coodinates: [],
-                          destCoodinate: [],
-                          distance: 11);
+
+                      if(locationName.text == ""){
+                        ToastMessageHelper.showToastMessage("Please enter location!");
+                      }else if(!formKey.currentState!.validate()){
+
+                      }else{
+                        userJobPostController.jobPost(
+                            car: carCtrl.text,
+                            issue: vehicleIssueCtrl.text,
+                            note: noteCtrl.text,
+                            coodinates: [],
+                            destCoodinate: [],
+                            distance: 11);
+                      }
+
+
                     }),
                 SizedBox(height: 250.h)
               ],

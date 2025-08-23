@@ -59,19 +59,21 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           children: [
             Padding(
               padding: EdgeInsets.only(left: 10.w, right: 10.w),
-              child: CustomNetworkImage(
-                border: Border.all(color: Color(0xffFAEFD7), width: 2.5),
-                height: 40.h,
-                width: 40.w,
-                boxShape: BoxShape.circle,
-                imageUrl: "${ApiConstants.imageBaseUrl}${profileController.image.value}",
+              child: Obx(() =>
+                 CustomNetworkImage(
+                  border: Border.all(color: Color(0xffFAEFD7), width: 2.5),
+                  height: 40.h,
+                  width: 40.w,
+                  boxShape: BoxShape.circle,
+                  imageUrl: "${ApiConstants.imageBaseUrl}${profileController.image.value}",
+                ),
               ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomText(text: "${profileController.name.value}", fontSize: 17.h, color: Colors.black),
-                CustomText(text: "${profileController.address.value}", fontSize: 12.h),
+                Obx(() => CustomText(text: "${profileController.name.value}", fontSize: 17.h, color: Colors.black)),
+                Obx(() => CustomText(text: "${profileController.address.value}", fontSize: 12.h)),
               ],
             ),
           ],

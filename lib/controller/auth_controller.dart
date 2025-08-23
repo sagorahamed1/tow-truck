@@ -67,6 +67,8 @@ class AuthController extends GetxController {
     if (response.statusCode == 200 || response.statusCode == 201) {
       var role = await PrefsHelper.getString(AppConstants.role);
 
+      await PrefsHelper.setString(AppConstants.bearerToken, response.body["data"]["accessToken"]);
+
       if (screenType == 'forgot') {
         Get.toNamed(AppRoutes.resetPasswordScreen);
       } else {
@@ -87,39 +89,7 @@ class AuthController extends GetxController {
     }
   }
 
-  ///************************************************************************///
 
-  RxBool moreInfoLoading = false.obs;
-
-  ///===============Fill profile or update profile================<>
-  moreInformationProfile(File? profileImage, File? driverLicenseFront,
-      File? driverLicenseback, String address) async {
-    moreInfoLoading(true);
-    List<MultipartBody> multipartBody = [
-      MultipartBody("image", profileImage!),
-      MultipartBody("licenceFront", driverLicenseFront!),
-      MultipartBody("licenceBack", driverLicenseback!),
-    ];
-    Map<String, String> body = {
-      "address": address,
-    };
-    debugPrint('======================> $multipartBody  ==> $body');
-    var response = await ApiClient.postMultipartData(
-      ApiConstants.updateMoreInformationEndPoint,
-      body,
-      multipartBody: multipartBody,
-    );
-    debugPrint("=========${response.body}");
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      // Get.toNamed(AppRoutes.thankYouScreen, parameters: {'screenType': "moreInformation"});
-      moreInfoLoading(false);
-    } else if (response.statusCode == 1) {
-      moreInfoLoading(false);
-      ToastMessageHelper.showToastMessage("Server error! \n Please try later");
-    } else {
-      moreInfoLoading(false);
-    }
-  }
 
   ///************************************************************************///
   ///===============Log in================<>
@@ -344,7 +314,7 @@ class AuthController extends GetxController {
     };
 
     var response = await ApiClient.postData(
-        ApiConstants.resendOtpEndPoint, jsonEncode(body));
+        ApiConstants.completedProfile, jsonEncode(body));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
 

@@ -13,6 +13,7 @@ class AppConstants{
   static String image = 'image';
   static String dateOfBirth = 'dateOfBirth';
   static String rating = 'rating';
+  static String jobId = 'jobId';
 
   static RegExp emailValidate = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");

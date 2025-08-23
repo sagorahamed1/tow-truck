@@ -222,7 +222,7 @@ class _FillProfileScreenState extends State<FillProfileScreen> {
                     controller: descriptionCtrl,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Enter your mobile number";
+                        return "Enter description";
                       }
                       return null;
                     },
@@ -330,11 +330,10 @@ class _FillProfileScreenState extends State<FillProfileScreen> {
   Future _pickImageFromGallery() async {
     final returnImage = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (returnImage == null) return;
-    setState(() {
-      selectedIMage = File(returnImage.path);
-      _image = File(returnImage.path).readAsBytesSync();
-      profileImagePath = UploadAppFile.uploadFile(file: selectedIMage!);
-    });
+    selectedIMage = File(returnImage.path);
+    _image = File(returnImage.path).readAsBytesSync();
+    profileImagePath = await UploadAppFile.uploadFile(file: selectedIMage!);
+    setState(() {});
     Get.back();
   }
 
@@ -343,11 +342,10 @@ class _FillProfileScreenState extends State<FillProfileScreen> {
     final returnImage =
         await ImagePicker().pickImage(source: ImageSource.camera);
     if (returnImage == null) return;
-    setState(() {
-      selectedIMage = File(returnImage.path);
-      _image = File(returnImage.path).readAsBytesSync();
-      profileImagePath = UploadAppFile.uploadFile(file: selectedIMage!);
-    });
+    selectedIMage = File(returnImage.path);
+    _image = File(returnImage.path).readAsBytesSync();
+    profileImagePath = await UploadAppFile.uploadFile(file: selectedIMage!);
+    setState(() {});
     // Get.back();
   }
 
