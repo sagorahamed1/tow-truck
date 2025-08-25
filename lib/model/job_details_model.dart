@@ -1,9 +1,16 @@
 
+
 class JobDetailsModel {
   final String? jobId;
   final String? providerId;
   final String? providerName;
+  final String? profileImage;
+  final String? phone;
+  final String? email;
+  final String? address;
+  final String? carImage;
   final String? companyName;
+  final String? towType;
   final String? description;
   final int? totalRating;
   final bool? isVerified;
@@ -21,7 +28,13 @@ class JobDetailsModel {
     this.jobId,
     this.providerId,
     this.providerName,
+    this.profileImage,
+    this.phone,
+    this.email,
+    this.address,
+    this.carImage,
     this.companyName,
+    this.towType,
     this.description,
     this.totalRating,
     this.isVerified,
@@ -40,7 +53,13 @@ class JobDetailsModel {
     jobId: json["jobId"],
     providerId: json["providerId"],
     providerName: json["providerName"],
+    profileImage: json["profileImage"],
+    phone: json["phone"],
+    email: json["email"],
+    address: json["address"],
+    carImage: json["carImage"],
     companyName: json["companyName"],
+    towType: json["towType"],
     description: json["description"],
     totalRating: json["totalRating"],
     isVerified: json["isVerified"],
@@ -59,7 +78,13 @@ class JobDetailsModel {
     "jobId": jobId,
     "providerId": providerId,
     "providerName": providerName,
+    "profileImage": profileImage,
+    "phone": phone,
+    "email": email,
+    "address": address,
+    "carImage": carImage,
     "companyName": companyName,
+    "towType": towType,
     "description": description,
     "totalRating": totalRating,
     "isVerified": isVerified,

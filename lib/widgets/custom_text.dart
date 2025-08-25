@@ -55,7 +55,7 @@ class CustomText extends StatelessWidget {
             decoration: decoration,
             decorationColor: decorationColor,
               fontSize: fontSize ?? 14.sp,
-              fontFamily: fontName ?? FontFamily.csaction,
+              fontFamily: fontName ?? "Csaction",// FontFamily.csaction,
               fontWeight: fontWeight == null ? FontWeight.w400 : fontWeight,
              color: color ?? AppColors.darkColor,
           ),

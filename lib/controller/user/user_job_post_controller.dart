@@ -50,6 +50,7 @@ class UserJobPostController extends GetxController{
 
 
   RxList<TowTruckModel> towTrucks = <TowTruckModel>[].obs;
+  RxList towTruckProviderList = [].obs;
 
   RxBool towTruckLoading = false.obs;
   getTowTruck()async{
@@ -58,8 +59,8 @@ class UserJobPostController extends GetxController{
 
     if(response.statusCode == 200){
 
-      towTrucks.value = List<TowTruckModel>.from(
-          response.body["data"]["providers"].map((x) => TowTruckModel.fromJson(x)));
+      towTrucks.value = List<TowTruckModel>.from(response.body["data"]["providers"].map((x) => TowTruckModel.fromJson(x)));
+      towTruckProviderList.value = towTrucks.map((e) => e.id).toList();
       towTruckLoading(false);
     }else{
       towTruckLoading(false);
@@ -69,12 +70,13 @@ class UserJobPostController extends GetxController{
 
 
 
-
+  RxString providerId = "".obs;
   Rx<JobDetailsModel> jobDetails = JobDetailsModel().obs;
   RxBool jobDetailsLoading = false.obs;
-  getJobDetails({required String jobId, providerId})async{
+  getJobDetails()async{
+    var jobId = await PrefsHelper.getString(AppConstants.jobId);
     jobDetailsLoading(true);
-    var response = await ApiClient.getData("${ApiConstants.towTruck}/${jobId}/${providerId}");
+    var response = await ApiClient.getData("${ApiConstants.jobDetails}/${jobId}/${providerId.value}");
 
     if(response.statusCode == 200){
       jobDetails.value = JobDetailsModel.fromJson(response.body["data"]);
@@ -90,11 +92,12 @@ class UserJobPostController extends GetxController{
 
   requestJobPost({required List providerList}) async {
     requestProviderLoading(true);
+    String jobId = await PrefsHelper.getString(AppConstants.jobId);
     var body = {
       "providerIds": providerList.toList()
     };
 
-    var response = await ApiClient.postData(ApiConstants.requestJob, jsonEncode(body));
+    var response = await ApiClient.postData("${ApiConstants.requestJob}/$jobId", jsonEncode(body));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       Get.back();

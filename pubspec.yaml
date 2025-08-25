@@ -40,6 +40,7 @@ dependencies:
   socket_io_client: ^3.1.2
   lottie:
   flutter_widget_from_html:
+  timeago: ^3.6.1
 
 dev_dependencies:
   flutter_test:

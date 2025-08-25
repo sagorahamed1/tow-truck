@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:towservice/global/custom_assets/assets.gen.dart';
-import 'package:towservice/helpers/prefs_helper.dart';
 import 'package:towservice/helpers/time_format.dart';
+import 'package:towservice/helpers/toast_message_helper.dart';
 import 'package:towservice/services/api_constants.dart';
 import 'package:towservice/utils/app_colors.dart';
-import 'package:towservice/utils/app_constant.dart';
 import 'package:towservice/widgets/custom_app_bar.dart';
+import 'package:towservice/widgets/custom_button.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
 import 'package:towservice/widgets/custom_network_image.dart';
 import 'package:towservice/widgets/custom_text.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:timeago/timeago.dart' as TimeAgo;
 
 import '../../../../../../controller/user/user_job_post_controller.dart';
 
@@ -24,23 +26,18 @@ class JobDetailsScreen extends StatefulWidget {
 
 class _JobDetailsScreenState extends State<JobDetailsScreen> {
   TextEditingController promoCode = TextEditingController();
-  UserJobPostController userJobPostController = Get.put(UserJobPostController());
-
+  UserJobPostController userJobPostController =
+      Get.put(UserJobPostController());
+  RxBool loading = false.obs;
+  RxDouble? discountPrice = 0.0.obs;
+  RxDouble? initPromoPrice = 0.0.obs;
+  RxString? promoType = "".obs;
 
   @override
   void initState() {
-    // WidgetsBinding.instance.addPostFrameCallback((_){
-      getJobDetails();
-    // });
-
+    userJobPostController.getJobDetails();
     super.initState();
   }
-
-  getJobDetails()async{
-    var jobId = await PrefsHelper.getString(AppConstants.jobId);
-    userJobPostController.getJobDetails(jobId: "${jobId}", providerId: Get.arguments["providerId"]);
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -49,30 +46,33 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: SingleChildScrollView(
-          child: Obx(() =>
-             Column(
+          child: Obx(() {
+            if (userJobPostController.jobDetailsLoading.value) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            final job = userJobPostController.jobDetails.value;
+            return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomNetworkImage(
                     height: 247.h,
                     borderRadius: 12.r,
                     width: double.infinity,
-                    imageUrl: "${ApiConstants.imageBaseUrl}/${userJobPostController.jobDetails.value}"),
-
-
+                    imageUrl:
+                        "${ApiConstants.imageBaseUrl}/${job.carImage ?? ""}"),
                 CustomText(
-                    text: "${userJobPostController.jobDetails.value.providerName}",
+                    text: "${job.providerName ?? ""}",
                     fontSize: 20.h,
                     top: 16.h,
                     bottom: 20.h),
-                CustomText(text: "${userJobPostController.jobDetails.value.companyName}"),
-                CustomText(text: "Suzuki Alto 800", bottom: 16.h),
+                CustomText(text: "${job.companyName ?? ""}"),
+                CustomText(text: "${job.towType}", bottom: 16.h),
                 CustomText(
                     maxline: 50,
                     textAlign: TextAlign.start,
                     fontSize: 11.h,
-                    text:
-                        "${userJobPostController.jobDetails.value.description}"),
+                    text: "${job.description ?? ""}"),
                 CustomText(
                     text: "Driver info",
                     top: 16.h,
@@ -85,18 +85,19 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                         boxShape: BoxShape.circle,
                         width: 53.w,
                         imageUrl:
-                            "https://randomuser.me/api/portraits/men/75.jpg"),
+                            "${ApiConstants.imageBaseUrl}/${job.profileImage ?? ""}"),
                     SizedBox(width: 10.w),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomText(text: "${userJobPostController.jobDetails.value.providerName}"),
+                        CustomText(text: "${job.providerName ?? ""}"),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Icon(Icons.star, color: Colors.yellow, size: 14.h),
                             CustomText(
-                                text: "${userJobPostController.jobDetails.value.totalRating}  |  24545 Trips  |  ${userJobPostController.jobDetails.value.amount}₦",
+                                text:
+                                    "${job.totalRating ?? ""}  |  ${job.totalRating} Ratings  |  ${job.amount ?? ""}₦",
                                 fontSize: 11.h),
                           ],
                         ),
@@ -110,33 +111,49 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                           border: Border.all(
                               color: AppColors.primaryColor, width: 1.5.r)),
                       child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 8.h, horizontal: 16.w),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white, shape: BoxShape.circle),
-                              child: Padding(
-                                padding: EdgeInsets.all(8.r),
-                                child: Assets.icons.messageIcon
-                                    .svg(color: AppColors.primaryColor),
+                            GestureDetector(
+                              onTap: () async {
+                                final Uri emailUrl = Uri(
+                                  scheme: 'mailto',
+                                  path: '${job.email ?? ""}',
+                                  query: 'subject=Support Inquiry&body=Hello, I need assistance with...',
+                                );
+                                if (await launchUrl(emailUrl)) {
+                                  await launchUrl(emailUrl);
+                                } else {
+                                  debugPrint('Could not launch email client');
+                                }
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white, shape: BoxShape.circle),
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.r),
+                                  child: Assets.icons.messageIcon
+                                      .svg(color: AppColors.primaryColor),
+                                ),
                               ),
                             ),
                             SizedBox(width: 20.w),
                             GestureDetector(
-                                onTap: () async {
-                                  final Uri url = Uri.parse('tel:(609)327-7992');
-                                  if (await launchUrl(url)) {
-                                    await launchUrl(url);
-                                  } else {
-                                    debugPrint('Could not launch phone dialer');
-                                  }
-                                },
+                              onTap: () async {
+                                final Uri url =
+                                    Uri.parse('tel:(${job.phone ?? ""}');
+                                if (await launchUrl(url)) {
+                                  await launchUrl(url);
+                                } else {
+                                  debugPrint('Could not launch phone dialer');
+                                }
+                              },
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: Colors.white, shape: BoxShape.circle),
+                                    color: Colors.white,
+                                    shape: BoxShape.circle),
                                 child: Padding(
                                   padding: EdgeInsets.all(8.r),
                                   child: Assets.icons.callIcon.svg(),
@@ -149,7 +166,8 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                     )
                   ],
                 ),
-                CustomText(text: "Suzuki Alto 800", top: 20.h, bottom: 10.h),
+                CustomText(
+                    text: "${job.towType ?? ""}", top: 20.h, bottom: 10.h),
                 Row(
                   children: [
                     Icon(Icons.location_on, size: 14.h),
@@ -157,21 +175,29 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                         maxline: 50,
                         textAlign: TextAlign.start,
                         fontSize: 11.h,
-                        text: "Green Road, Dhanmondi, Dhaka."),
+                        text: "${job.address ?? ""}"),
                   ],
                 ),
                 SizedBox(height: 20.h),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: userJobPostController.jobDetails.value.promos?.length,
+                  itemCount: job.promos?.length,
                   itemBuilder: (context, index) {
-                    var promo = userJobPostController.jobDetails.value.promos?[index];
+                    var promo = job.promos?[index];
                     return Padding(
                       padding: EdgeInsets.only(bottom: 5.h),
                       child: GestureDetector(
                         onTap: () {
-                          promoCode.text = "MERN33";
+                          promoCode.text = "${promo?.code ?? ""}";
+                          if (promo?.type == "percent") {
+                            promoType?.value = "percent";
+                            initPromoPrice?.value = ((promo?.value?.toDouble() ?? 0) * job.minAmount!) / 100;
+                          } else {
+                            promoType?.value = "fixed";
+                            initPromoPrice?.value = promo?.value?.toDouble() ?? 0.0;
+                          }
+
                         },
                         child: Container(
                           width: double.infinity,
@@ -181,13 +207,17 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                 vertical: 8.h, horizontal: 12.w),
                             child: Row(
                               children: [
-                                Icon(Icons.copy, color: Colors.white, size: 16.h),
-                                CustomText(
-                                    left: 12.w,
-                                    color: Colors.white,
-                                    fontSize: 12.h,
-                                    text:
-                                        "“${promo?.code}”      |     ${promo}% OFF!       |       ${TimeFormatHelper.timeWithAMPM(promo?.expireDate ?? DateTime.now())} left "),
+                                Icon(Icons.copy,
+                                    color: Colors.white, size: 16.h),
+                                Expanded(
+                                  child: CustomText(
+                                      textAlign: TextAlign.start,
+                                      left: 12.w,
+                                      color: Colors.white,
+                                      fontSize: 12.h,
+                                      text:
+                                          "“${promo?.code ?? ""}”    |   ${promo?.value ?? ""}${promo?.type == "percent" ? "%" : "Taka"} OFF!   |   ${TimeAgo.format(promo?.expireDate ?? DateTime.now(), allowFromNow: true)} left "),
+                                ),
                               ],
                             ),
                           ),
@@ -205,9 +235,13 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                       children: [
                         Expanded(
                           child: TextField(
+                            onTap: (){
+                              ToastMessageHelper.showToastMessage("Please tap the promo code");
+                            },
+                            readOnly: true,
                             controller: promoCode,
                             decoration: InputDecoration(
-                              hintText: "Enter Promo Code",
+                              hintText: "Select Promo Code",
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 12.w, vertical: 8.h),
                               border: OutlineInputBorder(
@@ -218,33 +252,41 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                           ),
                         ),
                         SizedBox(width: 10.w),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primaryColor,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16.w, vertical: 12.h),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
+                        Obx(
+                          () => CustomButtonTwo(
+                            loading: loading.value,
+                            loaderIgnore: true,
+                            width: 80.w,
+                            fontSize: 12.h,
+                            height: 40.w,
+                            onpress: () async {
+                              loading(true);
+                              discountPrice?.value =
+                                  initPromoPrice?.value ?? 0.0;
+                              Future.delayed(Duration(seconds: 2));
+                              loading(false);
+                            },
+                            title: "Apply",
                           ),
-                          child: CustomText(
-                            text: "Apply",
-                            fontSize: 14.sp,
-                            color: Colors.white,
-                          ),
-                        ),
+                        )
                       ],
                     ),
                     SizedBox(height: 20.h),
 
                     // Order Summary
-                    summaryRow("Order amount", "39.44 ₦"),
-                    summaryRow("Discount", "-9.44 ₦"),
-                    summaryRow("Platform Fee", "30.44 ₦"),
+                    summaryRow("Order amount", "${job.amount ?? ""} ₦"),
+
+                    Obx(() => summaryRow("Discount",
+                        "${discountPrice?.value ?? job.discount ?? ""} ₦")),
+                    summaryRow("Platform Fee", "${job.charge ?? ""} ₦"),
                     Divider(
-                        height: 24.h, thickness: 1, color: Colors.grey.shade300),
-                    summaryRow("Final amount", "30.44 ₦", isBold: true),
+                        height: 24.h,
+                        thickness: 1,
+                        color: Colors.grey.shade300),
+                    summaryRow("Final amount",
+                        "${job.minAmount! - (discountPrice!.value)} ₦",
+                        isBold: true),
+
 
                     SizedBox(height: 20.h),
 
@@ -261,7 +303,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                         ),
                         Spacer(),
                         CustomText(
-                          text: "30.44 ₦",
+                          text: "${job.minAmount! - (discountPrice!.value)} ₦",
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w700,
                         ),
@@ -280,19 +322,15 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                   ],
                 ),
                 SizedBox(height: 20.h),
-
-
-                CustomButtonTwo(title: "Book Now", onpress: () {
-                  // userJobPostController.requestJobPost(providerList: towTruckProviderList);
-
-                }),
-
-
-
+                CustomButtonTwo(
+                    title: "Book Now",
+                    onpress: () {
+                      // userJobPostController.requestJobPost(providerList: towTruckProviderList);
+                    }),
                 SizedBox(height: 50.h)
               ],
-            ),
-          ),
+            );
+          }),
         ),
       ),
     );
