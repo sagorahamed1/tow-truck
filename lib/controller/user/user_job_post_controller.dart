@@ -15,7 +15,6 @@ class UserJobPostController extends GetxController{
 
 
 
-  ///===============fillProfile================<>
   RxBool jobPostLoading = false.obs;
 
   jobPost({required String car, required String issue, note, distance, required List coodinates, destCoodinate }) async {

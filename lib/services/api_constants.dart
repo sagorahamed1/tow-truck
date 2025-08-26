@@ -24,7 +24,10 @@ class ApiConstants{
   static const String towTruck = "/tow-truck";
   static const String jobDetails = "/job/details";
   static const String requestJob = "/job/req-providers";
+  static const String acceptJob = "/job/provider/accept";
   static const String completedProfile = "/tow-truck/complete-profile";
+  static const String getJobFromUser = "/job/provider/requested";
+  static  String getUserRequest(String role) => "/job/${role}/requested";
 
 
 }
