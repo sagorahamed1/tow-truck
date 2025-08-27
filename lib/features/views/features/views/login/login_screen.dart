@@ -53,7 +53,9 @@ class _LoginScreenState extends State<LoginScreen> {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () => Get.toNamed(AppRoutes.forgotPasswordScreen),
+                  onPressed: () => Get.toNamed(AppRoutes.forgotPasswordScreen, arguments: {
+                    "email" : "${_emailController.text}"
+                  }),
                   child: CustomText(
                     text: 'Forgot Password?',
                     color: AppColors.errorColor,

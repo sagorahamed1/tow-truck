@@ -9,6 +9,8 @@ import 'package:towservice/utils/app_constant.dart';
 import 'package:towservice/widgets/custom_scaffold.dart';
 import 'package:towservice/widgets/custom_text.dart';
 
+import '../../../../../services/socket_services.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -29,6 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _goNextScreen() async {
     String role = await PrefsHelper.getString(AppConstants.role);
     String token = await PrefsHelper.getString(AppConstants.bearerToken);
+    String userId = await PrefsHelper.getString(AppConstants.userId);
     bool isLogged = await PrefsHelper.getBool(AppConstants.isLogged);
 
     await Future.delayed(const Duration(seconds: 3), (){
@@ -39,6 +42,10 @@ class _SplashScreenState extends State<SplashScreen> {
         }else{
           Get.offAllNamed(AppRoutes.customNavBarScreen);
         }
+
+
+        SocketServices socketServices = SocketServices();
+        socketServices.init(userId: userId.toString());
 
       }else{
         Get.offAllNamed(AppRoutes.roleScreen);

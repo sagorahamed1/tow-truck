@@ -23,11 +23,10 @@ class CustomScaffold extends StatelessWidget {
     return Scaffold(
         backgroundColor: Color(0xffFFFFFF),
       appBar: appBar,
-      body: SafeArea(
-          child: Padding(
-        padding: EdgeInsets.only(left: paddingSide ?? 16.w,right: paddingSide ?? 16.w),
-        child: body,
-      )),
+      body: Padding(
+              padding: EdgeInsets.only(left: paddingSide ?? 16.w,right: paddingSide ?? 16.w),
+              child: body,
+            ),
       floatingActionButton: floatingActionButton,
       bottomSheet: bottomSheet,
       bottomNavigationBar: bottomNavigationBar,

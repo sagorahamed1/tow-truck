@@ -439,7 +439,7 @@ class _DraggableListSheetState extends State<DraggableListSheet> {
                                               color: Color(0xff7B6846),
                                               boderColor: Color(0xff7B6846),
                                               loaderIgnore: true,
-                                              width: 160.w,
+                                              width: 140.w,
                                                 title: "Negotiate",
                                                 onpress: () {}),
 
@@ -450,7 +450,7 @@ class _DraggableListSheetState extends State<DraggableListSheet> {
                                                 loading: towTruckJobController.acceptJobLoading.value,
                                                 height: 40.h,
                                                   loaderIgnore: true,
-                                                  width: 160.w,
+                                                  width: 140.w,
                                                   title: "Accept",
                                                   onpress: () {
 

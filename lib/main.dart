@@ -4,12 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:towservice/dependency/dependency_Injection.dart';
+import 'package:towservice/services/socket_services.dart';
 import 'package:towservice/themes/theme.dart';
 import 'routes/app_routes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // SocketServices.init();
+
   // DependencyInjection di = DependencyInjection();
   // di.dependencies();
 

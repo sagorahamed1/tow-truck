@@ -29,6 +29,9 @@ class ApiConstants{
   static const String getJobFromUser = "/job/provider/requested";
   static  String getUserRequest(String role) => "/job/${role}/requested";
   static  String getJobOngoing(String role) => "/job/${role}/ongoing";
+  static  String message(String id) => "/message/${id}";
+  static const String chatUser = "/message/thread/";
+
 
 
 }
