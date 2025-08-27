@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:towservice/global/custom_assets/assets.gen.dart';
+import 'package:towservice/helpers/time_format.dart';
 import 'package:towservice/routes/app_routes.dart';
 import 'package:towservice/utils/app_colors.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
 import 'package:towservice/widgets/widgets.dart';
+import '../../../../../../controller/profile_controller.dart';
 import '../../../../../../controller/tow_truck/tow_trcuk_job_controller.dart';
 import '../../../../../../services/api_constants.dart';
 import '../../../../../../widgets/custom_text.dart';
@@ -19,18 +21,31 @@ class TripScreen extends StatefulWidget {
 
 class _TripScreenState extends State<TripScreen> {
   TowTruckJobController towTruckJobController = Get.put(TowTruckJobController());
+  ProfileController profileController = Get.find<ProfileController>();
+
   int selectedBtnIndex = 0;
 
 
   @override
   void initState() {
-    towTruckJobController.userRequest.value = [];
-    towTruckJobController.getUserRequest();
     super.initState();
+  }
+
+  getApiData(){
+    if(selectedBtnIndex == 0){
+      towTruckJobController.userRequest.value = [];
+      towTruckJobController.getUserRequest();
+    }else if(selectedBtnIndex == 1){
+      towTruckJobController.jobOngoing.value = [];
+      towTruckJobController.getOngoingJob();
+    }
+
   }
 
   @override
   Widget build(BuildContext context) {
+    print("=======================role : ${profileController.role}");
+    getApiData();
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -302,6 +317,17 @@ class _TripScreenState extends State<TripScreen> {
                             SizedBox(height: 10.h),
 
 
+                            userJob.negBy == "${profileController.role}" ?
+                            Container(
+                                height: 40.h,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor,
+                                  borderRadius: BorderRadius.circular(12.r),
+                                ),
+                                child: Center(child: CustomText(text: "You already request to ${profileController.role == "user"? "Provider" : "User"}", color: Colors.white))
+                            )
+                                :
                             Row(
                               children: [
                                 CustomButtonTwo(
@@ -323,7 +349,7 @@ class _TripScreenState extends State<TripScreen> {
                                         width: 140.w,
                                         title: "Accept",
                                         onpress: () {
-                                          towTruckJobController.acceptJob(jobId: userJob.jobId.toString());
+                                          towTruckJobController.acceptJob(jobId: userJob.jobId.toString(), providerId: userJob.userId, trxId: userJob.trId);
                                         }),
                                 )
                               ],
@@ -342,18 +368,45 @@ class _TripScreenState extends State<TripScreen> {
             )
                 :
             Expanded(
-              child: ListView.builder(
-                itemCount: selectedBtnIndex == 0 ? 11 : 1,
-                padding: EdgeInsets.only(top: 8.h),
-                itemBuilder: (context, index) {
-                  return GestureDetector(child: CompletedCard(
-                    onTap: () {
-                      selectedBtnIndex == 1
-                          ? Get.toNamed(AppRoutes.tripDetailsScreen)
-                          : Get.toNamed(AppRoutes.tripHistoryScreen);
-                    },
-                  ));
-                },
+              child: Obx(() =>towTruckJobController.ongoingLoading.value
+                  ? CustomLoader()
+                  : towTruckJobController.jobOngoing.isEmpty
+                  ? CustomText(text: "No Data Found!")
+                  :
+                 ListView.builder(
+                  itemCount:towTruckJobController.jobOngoing.length,
+                  padding: EdgeInsets.only(top: 8.h),
+                  itemBuilder: (context, index) {
+                    var job = towTruckJobController.jobOngoing[index];
+                    return GestureDetector(child: CompletedCard(
+                      image: "${job.profileImage}",
+                      dateTime: job.date,
+                      fromAddress: job.fromAddress,
+                      toAddress: job.toAddress,
+                      onTap: () {
+                        // selectedBtnIndex == 1
+                        //     ? Get.toNamed(AppRoutes.tripDetailsScreen)
+                        //     :
+                        print("===================kkk ${job.coordinate?[0]}");
+                        Get.toNamed(AppRoutes.tripHistoryScreen, arguments: {
+                          "name" : job.name,
+                          "dateTime" : job.date,
+                          "fromAddress" : job.fromAddress,
+                          "toAddress" : job.toAddress,
+                          "distance" : "null",
+                          "promo" : "null",
+                          "email" : "null",
+                          "phone" : "null",
+                          "status" : job.status,
+                          "fromLat" : job.coordinate?[0],
+                          "fromLng" : job.coordinate?[1],
+                          "toLat" : job.destCoordinate?[0],
+                          "toLng" : job.destCoordinate?[1]
+                        });
+                      },
+                    ));
+                  },
+                ),
               ),
             )
 
@@ -371,9 +424,13 @@ class _TripScreenState extends State<TripScreen> {
 }
 
 class CompletedCard extends StatelessWidget {
+  final DateTime? dateTime;
+  final String? fromAddress;
+  final String? toAddress;
+  final String? image;
   final VoidCallback? onTap;
 
-  const CompletedCard({super.key, this.onTap});
+  const CompletedCard({super.key, this.onTap, this.dateTime, this.fromAddress, this.toAddress, this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -398,14 +455,14 @@ class CompletedCard extends StatelessWidget {
             children: [
               Expanded(
                 child: CustomText(
-                  text: "05 July 2024, 04:40 PM",
+                  text: "${TimeFormatHelper.formatDate(dateTime?? DateTime.now())}, ${TimeFormatHelper.timeWithAMPM(dateTime ?? DateTime.now())}",
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
                   textAlign: TextAlign.left,
                 ),
               ),
               CustomNetworkImage(
-                  imageUrl: "https://randomuser.me/api/portraits/men/75.jpg",
+                  imageUrl: "${ApiConstants.imageBaseUrl}/${image}",
                   boxShape: BoxShape.circle,
                   height: 40.h,
                   width: 40.w)
@@ -420,7 +477,7 @@ class CompletedCard extends StatelessWidget {
               SizedBox(width: 6.w),
               Expanded(
                 child: CustomText(
-                  text: "  Block B, Banasree, Dhaka.",
+                  text: "  ${fromAddress}",
                   fontSize: 13.sp,
                   textAlign: TextAlign.left,
                 ),
@@ -437,7 +494,7 @@ class CompletedCard extends StatelessWidget {
               SizedBox(width: 6.w),
               Expanded(
                 child: CustomText(
-                  text: "Green Road, Dhanmondi, Dhaka.",
+                  text: "${toAddress}",
                   fontSize: 13.sp,
                   textAlign: TextAlign.left,
                 ),

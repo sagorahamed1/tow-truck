@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:towservice/global/custom_assets/assets.gen.dart';
+import 'package:towservice/helpers/time_format.dart';
 import 'package:towservice/utils/app_colors.dart';
 import 'package:towservice/widgets/custom_app_bar.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
@@ -10,40 +15,113 @@ import 'package:towservice/widgets/custom_network_image.dart';
 import 'package:towservice/widgets/custom_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class TripHistoryScreen extends StatelessWidget {
+import '../../../../../../../controller/current_location_controller.dart';
+import '../../../../../../../controller/live_location_change_controller.dart';
+import 'package:http/http.dart' as http;
+
+class TripHistoryScreen extends StatefulWidget {
   TripHistoryScreen({super.key});
 
+  @override
+  State<TripHistoryScreen> createState() => _TripHistoryScreenState();
+}
+
+class _TripHistoryScreenState extends State<TripHistoryScreen> {
   TextEditingController supportNoteCtrl = TextEditingController();
-
   late GoogleMapController mapController;
+  LiveLocationChangeController liveLocationChangeController = Get.find<LiveLocationChangeController>();
+  CurrentLocationController currentLocationController = Get.find<CurrentLocationController>();
 
-  final LatLng _center = const LatLng(23.8103, 90.4125);
+  var routeData = Get.arguments;
 
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
+
+  Set<Polyline> polylines = {};
+  List<LatLng> polylineCoordinates = [];
+  LatLng userLatLng = const LatLng(23.7805733, 90.2792399);
+  LatLng mechanicLatLng = const LatLng(23.7855733, 90.2852399);
+
+  BitmapDescriptor carIcon = BitmapDescriptor.defaultMarker;
+
+  @override
+  void initState() {
+    loadRouteData();
+    super.initState();
   }
 
-  final List<Map<String, dynamic>> paymentDetails = [
-    {
-      'paymentTitle': "Order Value",
-      'amount': '39.44 ₦',
-    },
-    {
-      'paymentTitle': "Discount",
-      'amount': '39.44 ₦',
-    },
-    {
-      'paymentTitle': "vat Paid by rider",
-      'amount': '39.44 ₦',
-    },
-    {
-      'paymentTitle': "Total amount with Tax",
-      'amount': '39.44 ₦',
-    },
-  ];
+
+
+
+  void loadRouteData() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      if (routeData["fromLat"] != null) {
+
+        if (currentLocationController.latitude.value != null) {
+          userLatLng = LatLng(
+            currentLocationController.latitude.value,
+            currentLocationController.longitude.value,
+          );
+        }
+
+        mechanicLatLng = LatLng(
+          routeData["toLat"] ?? 23.78,
+          routeData["toLng"] ?? 90.28,
+        );
+
+        getRoutePolyline(userLatLng, mechanicLatLng);
+      } else {
+        // 🔁 Retry after 500 milliseconds
+        Future.delayed(const Duration(milliseconds: 500), () {
+          loadRouteData();
+        });
+      }
+    });
+  }
+
+
+
+  Future<void> getRoutePolyline(LatLng origin, LatLng destination) async {
+    String apiKey = "AIzaSyA-Iri6x5mzNv45XO3a-Ew3z4nvF4CdYo0";
+    final String url = "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&key=$apiKey";
+
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final points = data["routes"][0]["overview_polyline"]["points"];
+
+      PolylinePoints polylinePoints = PolylinePoints();
+      List<PointLatLng> result = polylinePoints.decodePolyline(points);
+
+      polylineCoordinates.clear();
+      for (var point in result) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      }
+
+      setState(() {
+        polylines = {
+          Polyline(
+            polylineId: PolylineId("route"),
+            color: Colors.blue,
+            width: 5,
+            points: polylineCoordinates,
+          )
+        };
+      });
+    } else {
+      print("Failed to load directions: ${response.body}");
+    }
+  }
+
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(title: "Trip History"),
@@ -66,17 +144,38 @@ class TripHistoryScreen extends StatelessWidget {
                   ],
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16.r),
-                    child: GoogleMap(
-                      onMapCreated: _onMapCreated,
-                      initialCameraPosition: CameraPosition(
-                        target: _center,
-                        zoom: 12.0,
-                      ),
-                      mapType: MapType.normal,
-                      myLocationEnabled: true,
-                      myLocationButtonEnabled: true,
-                      zoomControlsEnabled: false,
-                    ),
+                    child: GetBuilder<CurrentLocationController>(
+                      builder: (controller) {
+                        if (controller.isLoading.value || controller.initialCameraPosition == null) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                        return  GoogleMap(
+                          myLocationEnabled: true,
+                          initialCameraPosition: controller.initialCameraPosition!,
+                          markers: {
+                            Marker(
+                                markerId: const MarkerId("mechanic"),
+                                position: mechanicLatLng,
+                                infoWindow: InfoWindow(title: "${routeData["name"]}"),
+                                 icon: carIcon
+
+                            ),
+                            Marker(
+                              markerId: const MarkerId("user"),
+                              position: userLatLng,
+                              infoWindow: const InfoWindow(title: "Your Location"),
+                            ),
+                          },
+                          polylines: polylines,
+                          onMapCreated: (GoogleMapController mapCtrl) {
+                            controller.mapController = mapCtrl;
+                          },
+                        );
+                      },
+
+                    )
+
+
                   ),
                 ),
 
@@ -98,11 +197,12 @@ class TripHistoryScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomText(text: "Najma", fontSize: 16.h),
+                            CustomText(text: "${routeData["name"]}", fontSize: 16.h),
                             CustomText(
-                                text: "Ongoing",
-                                fontSize: 11.h,
+                                text: "${routeData["status"].toString()}",
+                                fontSize: 13.h,
                                 color: AppColors.primaryColor),
                           ],
                         ),
@@ -110,8 +210,8 @@ class TripHistoryScreen extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomText(text: "09 Aug,2024", fontSize: 16.h),
-                            CustomText(text: "08:07 PM", fontSize: 11.h),
+                            CustomText(text: "${TimeFormatHelper.formatDate(DateTime.parse("${routeData["dateTime"]}"))}", fontSize: 16.h),
+                            CustomText(text: "${TimeFormatHelper.timeWithAMPM(DateTime.parse("${routeData["dateTime"]}"))}", fontSize: 11.h),
                           ],
                         ),
                         SizedBox(width: 16.w)
@@ -143,7 +243,7 @@ class TripHistoryScreen extends StatelessWidget {
                           children: [
                             Assets.icons.pickUpIcon.svg(),
                             CustomText(
-                                text: " Block B, Banasree, Dhaka.",
+                                text: " ${routeData["fromAddress"]}",
                                 fontWeight: FontWeight.w500)
                           ],
                         ),
@@ -153,7 +253,7 @@ class TripHistoryScreen extends StatelessWidget {
                           children: [
                             Icon(Icons.location_on, size: 12.h),
                             CustomText(
-                                text: " Green Road, Dhanmondi, Dhaka.",
+                                text: " ${routeData["toAddress"]}",
                                 fontWeight: FontWeight.w500)
                           ],
                         ),
@@ -204,24 +304,24 @@ class TripHistoryScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                ListView.builder(
-                    itemCount: paymentDetails.length,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    // padding: EdgeInsets.only(bottom: 8.h),
-                    itemBuilder: (context, index) {
-                      final payment = paymentDetails[index];
-                      return Padding(
-                        padding: EdgeInsets.all(8.r),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            CustomText(text: payment['paymentTitle']),
-                            CustomText(text: payment['amount'])
-                          ],
-                        ),
-                      );
-                    }),
+                // ListView.builder(
+                //     itemCount: paymentDetails.length,
+                //     shrinkWrap: true,
+                //     physics: NeverScrollableScrollPhysics(),
+                //     // padding: EdgeInsets.only(bottom: 8.h),
+                //     itemBuilder: (context, index) {
+                //       final payment = paymentDetails[index];
+                //       return Padding(
+                //         padding: EdgeInsets.all(8.r),
+                //         child: Row(
+                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //           children: [
+                //             CustomText(text: payment['paymentTitle']),
+                //             CustomText(text: payment['amount'])
+                //           ],
+                //         ),
+                //       );
+                //     }),
                 SizedBox(height: 26.h),
                 CustomContainer(
                   width: double.infinity,

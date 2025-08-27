@@ -7,6 +7,7 @@ import 'package:towservice/utils/app_constant.dart';
 
 import '../../helpers/toast_message_helper.dart';
 import '../../model/job_details_model.dart';
+import '../../model/job_ongoing_model.dart';
 import '../../model/user_job_request_model.dart';
 import '../../routes/app_routes.dart';
 import '../../services/api_client.dart';
@@ -87,6 +88,24 @@ class TowTruckJobController extends GetxController{
 
 
 
+  RxList<JobOngoingModel> jobOngoing = <JobOngoingModel>[].obs;
+  RxBool ongoingLoading = false.obs;
+  getOngoingJob()async{
+    String role = await PrefsHelper.getString(AppConstants.role);
+    ongoingLoading(true);
+    var response = await ApiClient.getData("${ApiConstants.getJobOngoing(role)}");
+
+    if(response.statusCode == 200){
+
+      jobOngoing.value = List<JobOngoingModel>.from(response.body["data"].map((x) => JobOngoingModel.fromJson(x)));
+      ongoingLoading(false);
+    }else{
+      ongoingLoading(false);
+    }
+  }
+
+
+
   //
   // RxString providerId = "".obs;
   // Rx<JobDetailsModel> jobDetails = JobDetailsModel().obs;
@@ -108,9 +127,16 @@ class TowTruckJobController extends GetxController{
 
   RxBool acceptJobLoading = false.obs;
 
-  acceptJob({required String jobId}) async {
+  acceptJob({required String jobId, String? providerId, trxId}) async {
+    String role = await PrefsHelper.getString(AppConstants.role);
     acceptJobLoading(true);
-    var response = await ApiClient.postData("${ApiConstants.acceptJob}/$jobId", jsonEncode({}));
+
+    var body = role == "user" ? {
+      "providerId": "$providerId",
+      "transactionId": "$trxId"
+    } : {};
+
+    var response = await ApiClient.postData("${ApiConstants.acceptJob("$role")}/$jobId", jsonEncode(body));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // Get.back();

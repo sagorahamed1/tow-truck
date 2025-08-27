@@ -1,7 +1,9 @@
 
 
 class UserJobRequestModel {
+  final String? trId;
   final String? jobId;
+  final String? negBy;
   final String? userId;
   final String? userProfile;
   final String? userName;
@@ -17,7 +19,9 @@ class UserJobRequestModel {
   final String? status;
 
   UserJobRequestModel({
+    this.trId,
     this.jobId,
+    this.negBy,
     this.userId,
     this.userProfile,
     this.userName,
@@ -34,7 +38,9 @@ class UserJobRequestModel {
   });
 
   factory UserJobRequestModel.fromJson(Map<String, dynamic> json) => UserJobRequestModel(
+    trId: json["trId"],
     jobId: json["jobId"],
+    negBy: json["negBy"],
     userId: json["userId"],
     userProfile: json["userProfile"],
     userName: json["userName"],
@@ -51,7 +57,9 @@ class UserJobRequestModel {
   );
 
   Map<String, dynamic> toJson() => {
+    "trId": trId,
     "jobId": jobId,
+    "negBy": negBy,
     "userId": userId,
     "userProfile": userProfile,
     "userName": userName,

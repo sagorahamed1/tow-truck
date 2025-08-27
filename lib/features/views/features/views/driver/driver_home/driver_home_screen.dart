@@ -9,6 +9,7 @@ import 'package:towservice/widgets/custom_buttonTwo.dart';
 import 'package:towservice/widgets/custom_network_image.dart';
 import 'package:towservice/widgets/custom_text.dart';
 
+import '../../../../../../controller/profile_controller.dart';
 import '../../../../../../controller/tow_truck/tow_trcuk_job_controller.dart';
 import '../../../../../../widgets/customTripCard.dart';
 import '../../../../../../widgets/custom_loader.dart';
@@ -23,6 +24,7 @@ class DriverHomeScreen extends StatefulWidget {
 
 class _DriverHomeScreenState extends State<DriverHomeScreen> {
   bool isOnline = false;
+  ProfileController profileController = Get.find<ProfileController>();
 
   late GoogleMapController mapController;
 
@@ -44,6 +46,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         },
       );
     });
+    profileController.getUserLocalData();
     super.initState();
   }
 
@@ -78,11 +81,13 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         actions: [
           Stack(
             children: [
-              CustomNetworkImage(
-                  height: 41.h,
-                  width: 41.w,
-                  boxShape: BoxShape.circle,
-                  imageUrl: "https://randomuser.me/api/portraits/men/75.jpg"),
+              Obx(() =>
+                 CustomNetworkImage(
+                    height: 41.h,
+                    width: 41.w,
+                    boxShape: BoxShape.circle,
+                    imageUrl: "${ApiConstants.imageBaseUrl}/${profileController.image}"),
+              ),
               Positioned(
                 top: 0,
                 right: 0,
@@ -253,6 +258,7 @@ class _DraggableListSheetState extends State<DraggableListSheet> {
                                 var userJob =
                                 towTruckJobController.users[index];
                                 return Container(
+                                  margin: EdgeInsets.all(5.r),
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                       color: Colors.white,
@@ -415,6 +421,17 @@ class _DraggableListSheetState extends State<DraggableListSheet> {
                                         SizedBox(height: 10.h),
 
 
+
+                                        userJob.negBy == "provider" ?
+                                            Container(
+                                              height: 40.h,
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.primaryColor,
+                                                borderRadius: BorderRadius.circular(12.r),
+                                              ),
+                                              child: Center(child: CustomText(text: "You already request to user", color: Colors.white))
+                                            ) :
                                         Row(
                                           children: [
                                             CustomButtonTwo(
@@ -436,8 +453,11 @@ class _DraggableListSheetState extends State<DraggableListSheet> {
                                                   width: 160.w,
                                                   title: "Accept",
                                                   onpress: () {
-                                                    towTruckJobController.acceptJob(jobId: userJob.jobId.toString());
-                                                  }),
+
+                                                    towTruckJobController.acceptJob(jobId: userJob.jobId.toString(), providerId: userJob.userId, trxId: userJob.trId);
+
+
+                                                }),
                                             )
                                           ],
                                         ),
