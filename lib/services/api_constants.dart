@@ -4,6 +4,7 @@ class ApiConstants{
 
   static const String baseUrl = "https://roam-mamun.sarv.live/api/v1";
   static const String imageBaseUrl = "https://roam-mamun.sarv.live/uploads/";
+  static const String socketBaseUrl = "https://roam-mamun.sarv.live";
 
 
   static const String signUpEndPoint = "/auth/register";
@@ -31,6 +32,7 @@ class ApiConstants{
   static  String getJobOngoing(String role) => "/job/${role}/ongoing";
   static  String message(String id) => "/message/${id}";
   static const String chatUser = "/message/thread/";
+  static const String negotiate = "/job/neg";
 
 
 

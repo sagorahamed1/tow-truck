@@ -55,7 +55,7 @@ class OnboardingScreen extends StatelessWidget {
 
                 },label: 'Register'),
             ),
-            SizedBox(height: 44.h)
+            SizedBox(height: 90.h)
           ],
         ),
       ),

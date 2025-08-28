@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomScaffold extends StatelessWidget {
@@ -22,15 +23,15 @@ class CustomScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color(0xffFFFFFF),
-      appBar: appBar,
-      body: Padding(
+        appBar: appBar,
+        body: Padding(
               padding: EdgeInsets.only(left: paddingSide ?? 16.w,right: paddingSide ?? 16.w),
               child: body,
             ),
-      floatingActionButton: floatingActionButton,
-      bottomSheet: bottomSheet,
-      bottomNavigationBar: bottomNavigationBar,
-        resizeToAvoidBottomInset: resizeToAvoidBottomInset
+       // floatingActionButton: floatingActionButton,
+       bottomSheet: bottomSheet,
+       // bottomNavigationBar: bottomNavigationBar,
+       //  resizeToAvoidBottomInset: resizeToAvoidBottomInset
     );
   }
 }

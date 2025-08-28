@@ -42,7 +42,7 @@ class GetStartedScreen extends StatelessWidget {
               onPressed: (){
                 Get.toNamed(AppRoutes.onboardingScreen);
               },label: 'Get Started',),
-            SizedBox(height: 44.h)
+            SizedBox(height: 90.h)
           ],
         ),
       ),

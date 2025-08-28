@@ -145,6 +145,7 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
     chatController.fetchUser();
     return Scaffold(
       appBar: const CustomAppBar(title: "Message"),
+      backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.all(20.r),
         child: Column(

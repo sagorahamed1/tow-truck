@@ -45,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
         SocketServices socketServices = SocketServices();
-        socketServices.init(userId: userId.toString());
+        socketServices.init(userId: userId.toString(), fcmToken: "needfcm");
 
       }else{
         Get.offAllNamed(AppRoutes.roleScreen);
@@ -59,46 +59,53 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      paddingSide: 0,
-      body: Stack(
-        children: [
-          /// Background Image
-          Positioned.fill(
-            child: Assets.images.splashImage.image(
-              fit: BoxFit.cover,
-            ),
-          ),
-
-          /// Centered Icon & Text
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 54.h),
-              Assets.icons.splashIcon.svg(height: 380.h,width: 380.w),
-               SizedBox(height: 20.h),
-               CustomText(
-                text: 'Tow Services',
-                fontSize: 30.sp,
-                color: Colors.white,
+    return Scaffold(
+      // paddingSide: 0,
+      body: SafeArea(
+        top: false,
+        child: Stack(
+          children: [
+            /// Background Image
+            Positioned.fill(
+              child: Assets.images.splashImage.image(
+                fit: BoxFit.cover,
               ),
-               CustomText(
-                text: 'Where Drivers and Tow Services Meet',
-                fontSize: 13.sp,
-                color: Colors.white70,
-              ),
-            ],
-          ),
-
-          /// Bottom Loading
-          const Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 32),
-              child: SplashLoading(),
             ),
-          ),
-        ],
+        
+            /// Centered Icon & Text
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 54.h),
+                 Assets.icons.splashLogo.svg(height: 380.h,width: 380.w),
+                 SizedBox(height: 20.h),
+                 CustomText(
+                  text: 'Tow Services',
+                  fontSize: 30.sp,
+                  color: Colors.white,
+                ),
+                 CustomText(
+                  text: 'Where Drivers and Tow Services Meet',
+                  fontSize: 13.sp,
+                  color: Colors.white70,
+                ),
+              ],
+            ),
+        
+            /// Bottom Loading
+            const Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 80),
+                child: SplashLoading(),
+              ),
+            ),
+        
+        
+        
+        
+          ],
+        ),
       ),
     );
   }

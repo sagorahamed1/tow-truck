@@ -16,11 +16,12 @@ class RoleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      paddingSide: 0,
+    return Scaffold(
+      appBar: AppBar(),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
-          SizedBox(height: 40.h),
+          // SizedBox(height: 40.h),
           Padding(
             padding:  EdgeInsets.symmetric(horizontal: 24.w),
             child: const AuthTitleWidgets(
@@ -28,9 +29,14 @@ class RoleScreen extends StatelessWidget {
               subtitle: 'Choose your role to get started',
             ),
           ),
+
+
+
+
+
         ],
       ),
-      bottomSheet: CustomContainer(
+      bottomSheet:  CustomContainer(
         topLeftRadius: 40.r,
         topRightRadius: 40.r,
         color: AppColors.whiteShade400,
@@ -41,7 +47,7 @@ class RoleScreen extends StatelessWidget {
           children: [
             /// Background Image Positioned
             Positioned(
-              bottom: 0,
+              bottom: 40,
               left: 0,
               right: 0,
               child: Assets.images.onboardingImage.image(),
@@ -80,8 +86,8 @@ class RoleScreen extends StatelessWidget {
       alignment: Alignment.center,
       onTap: onTap,
       radiusAll: 8.r,
-      color: AppColors.whiteShade500,
-      elevationColor: const Color(0xffD46A6A1A).withOpacity(0.15),
+      color: Color(0xffFDF8EB),
+      elevationColor: const Color(0xff6a6a1a).withOpacity(0.15),
       elevation: true,
       width: 200.w,
       height: 160.h,

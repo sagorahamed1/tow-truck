@@ -151,4 +151,25 @@ class TowTruckJobController extends GetxController{
 
 
 
+  RxBool negotiateLoading = false.obs;
+
+  negotiateJob({required String jobId, price}) async {
+    negotiateLoading(true);
+    var body = {
+      "negAmount" : 745
+    };
+
+    var response = await ApiClient.postData("${ApiConstants.negotiate}/${jobId}", jsonEncode(body));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      ToastMessageHelper.showToastMessage("${response.body["message"]}");
+      Get.back();
+      negotiateLoading(false);
+    } else {
+      ToastMessageHelper.showToastMessage("${response.body["message"]}");
+      negotiateLoading(false);
+    }
+  }
+
+
+
 }

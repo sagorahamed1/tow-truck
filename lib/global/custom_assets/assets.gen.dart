@@ -124,6 +124,10 @@ class $AssetsIconsGen {
   SvgGenImage get splashIcon =>
       const SvgGenImage('assets/icons/splashIcon.svg');
 
+  /// File path: assets/icons/splash_logo.svg
+  SvgGenImage get splashLogo =>
+      const SvgGenImage('assets/icons/splash_logo.svg');
+
   /// File path: assets/icons/supportIcon.svg
   SvgGenImage get supportIcon =>
       const SvgGenImage('assets/icons/supportIcon.svg');
@@ -184,6 +188,7 @@ class $AssetsIconsGen {
         searhIcon,
         settingIcon,
         splashIcon,
+        splashLogo,
         supportIcon,
         termIcon,
         towDriver,

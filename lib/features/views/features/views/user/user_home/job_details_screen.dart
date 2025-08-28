@@ -140,26 +140,26 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                               ),
                             ),
                             SizedBox(width: 20.w),
-                            GestureDetector(
-                              onTap: () async {
-                                final Uri url =
-                                    Uri.parse('tel:(${job.phone ?? ""}');
-                                if (await launchUrl(url)) {
-                                  await launchUrl(url);
-                                } else {
-                                  debugPrint('Could not launch phone dialer');
-                                }
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.r),
-                                  child: Assets.icons.callIcon.svg(),
-                                ),
-                              ),
-                            )
+                            // GestureDetector(
+                            //   onTap: () async {
+                            //     final Uri url =
+                            //         Uri.parse('tel:(${job.phone ?? ""}');
+                            //     if (await launchUrl(url)) {
+                            //       await launchUrl(url);
+                            //     } else {
+                            //       debugPrint('Could not launch phone dialer');
+                            //     }
+                            //   },
+                            //   child: Container(
+                            //     decoration: BoxDecoration(
+                            //         color: Colors.white,
+                            //         shape: BoxShape.circle),
+                            //     child: Padding(
+                            //       padding: EdgeInsets.all(8.r),
+                            //       child: Assets.icons.callIcon.svg(),
+                            //     ),
+                            //   ),
+                            // )
                           ],
                         ),
                       ),

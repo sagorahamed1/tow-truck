@@ -24,6 +24,8 @@ class _TripScreenState extends State<TripScreen> {
   ProfileController profileController = Get.find<ProfileController>();
 
   int selectedBtnIndex = 0;
+  var selectedNegotiateIndex = (-1).obs;
+  var counter = 0.obs; // per negotiation counter
 
 
   @override
@@ -153,6 +155,7 @@ class _TripScreenState extends State<TripScreen> {
                   itemBuilder: (context, index) {
                     var userJob =
                     towTruckJobController.userRequest[index];
+                    counter.value = userJob.amount?.toInt() ?? 0;
                     return Container(
                       margin: EdgeInsets.all(5.r),
                       width: double.infinity,
@@ -317,43 +320,212 @@ class _TripScreenState extends State<TripScreen> {
                             SizedBox(height: 10.h),
 
 
-                            userJob.negBy == "${profileController.role}" ?
-                            Container(
-                                height: 40.h,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: AppColors.primaryColor,
-                                  borderRadius: BorderRadius.circular(12.r),
-                                ),
-                                child: Center(child: CustomText(text: "You already request to ${profileController.role == "user"? "Provider" : "User"}", color: Colors.white))
-                            )
-                                :
-                            Row(
-                              children: [
-                                CustomButtonTwo(
-                                    height: 40.h,
-                                    color: Color(0xff7B6846),
-                                    boderColor: Color(0xff7B6846),
-                                    loaderIgnore: true,
-                                    width: 140.w,
-                                    title: "Negotiate",
-                                    onpress: () {}),
 
-                                Spacer(),
 
-                                Obx(() =>
-                                    CustomButtonTwo(
-                                        loading: towTruckJobController.acceptJobLoading.value,
-                                        height: 40.h,
-                                        loaderIgnore: true,
-                                        width: 140.w,
-                                        title: "Accept",
-                                        onpress: () {
-                                          towTruckJobController.acceptJob(jobId: userJob.jobId.toString(), providerId: userJob.userId, trxId: userJob.trId);
-                                        }),
-                                )
-                              ],
-                            ),
+
+                             Column(
+                               children: [
+
+
+
+
+                                 Obx(() => selectedNegotiateIndex.value ==  index?
+
+                                 Row(
+                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                   children: [
+                                     // Counter Box
+
+
+                                     Container(
+                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                       decoration: BoxDecoration(
+                                         borderRadius: BorderRadius.circular(30),
+                                         border: Border.all(color: Colors.grey.shade400, width: 1),
+                                       ),
+                                       child: Row(
+                                         mainAxisSize: MainAxisSize.min,
+                                         children: [
+                                           // Minus Button
+                                           SizedBox(width: 10.w),
+                                           InkWell(
+                                             onTap: () {
+                                               if (counter.value > 0) counter.value--;
+                                             },
+                                             child: CircleAvatar(
+                                               radius: 14,
+                                               backgroundColor: AppColors.primaryColor,
+                                               child: const Icon(Icons.remove, size: 16, color: Colors.white),
+                                             ),
+                                           ),
+                                            SizedBox(width: 24.w),
+
+                                           // Counter Text
+
+                                           CustomText(text: "${counter.value}"),
+                                            SizedBox(width: 24.w),
+
+                                           // Plus Button
+                                           Obx(() {
+                                             counter.value;
+                                             return InkWell(
+                                               onTap: () {
+                                                 counter.value++;
+
+                                               } ,
+                                               child: CircleAvatar(
+                                                 radius: 14,
+                                                 backgroundColor: AppColors.primaryColor,
+                                                 child: const Icon(Icons.add, size: 16, color: Colors.white),
+                                               ),
+                                             );
+                                           }
+                                           ),
+
+
+                                           SizedBox(width: 10.w),
+                                         ],
+                                       ),
+                                     ),
+
+
+
+
+
+                                     CustomButtonTwo(
+                                       height: 40.h,
+                                         width: 130.w,
+                                         loaderIgnore: true,
+                                         title: "Send", onpress: (){
+                                         towTruckJobController.negotiateJob(jobId: userJob.jobId.toString(), price: counter.value);
+
+                                     })
+
+
+
+                                   ],
+                                 )
+
+                                     :
+
+
+                                 (userJob.negBy == "${profileController.role}" ?
+                                 Container(
+                                     height: 40.h,
+                                     width: double.infinity,
+                                     decoration: BoxDecoration(
+                                       color: AppColors.primaryColor,
+                                       borderRadius: BorderRadius.circular(12.r),
+                                     ),
+                                     child: Center(child: CustomText(text: "You already request to ${profileController.role == "user"? "Provider" : "User"}", color: Colors.white))
+                                 )
+                                     :
+                                 Row(
+                                   children: [
+                                     CustomButtonTwo(
+                                         height: 40.h,
+                                         color: Color(0xff7B6846),
+                                         boderColor: Color(0xff7B6846),
+                                         loaderIgnore: true,
+                                         width: 140.w,
+                                         title: "Negotiate",
+                                         onpress: () {
+
+
+                                           counter.value = userJob.amount ?? 0;
+                                           selectedNegotiateIndex.value = index;
+
+
+
+
+                                           //
+                                           // TextEditingController amount = TextEditingController();
+                                           //
+                                           // showDialog(
+                                           //   context: context,
+                                           //   builder: (context) {
+                                           //     return AlertDialog(
+                                           //       content: Column(
+                                           //         mainAxisSize: MainAxisSize.min,
+                                           //         children: [
+                                           //           CustomText(
+                                           //               text: "Negotiate Amount",
+                                           //               fontSize: 16.h,
+                                           //               fontWeight: FontWeight.w600,
+                                           //               top: 20.h,
+                                           //               bottom: 12.h),
+                                           //           Divider(),
+                                           //           SizedBox(height: 12.h),
+                                           //
+                                           //
+                                           //           CustomTextField(
+                                           //               controller: amount,
+                                           //             labelText: "Enter Amount",
+                                           //             keyboardType: TextInputType.number,
+                                           //             hintText: "Enter amount",
+                                           //           ),
+                                           //
+                                           //
+                                           //
+                                           //           SizedBox(height: 30.h),
+                                           //
+                                           //
+                                           //           Row(
+                                           //             children: [
+                                           //               Expanded(
+                                           //                 flex: 1,
+                                           //                 child: CustomButtonTwo(
+                                           //                     height: 50.h,
+                                           //                     title: "Send",
+                                           //                     onpress: () {
+                                           //                       towTruckJobController.negotiateJob(jobId: userJob.jobId.toString(), price: amount.text);
+                                           //                     },
+                                           //                     fontSize: 13.h,
+                                           //                     loaderIgnore: true),
+                                           //               ),
+                                           //
+                                           //             ],
+                                           //           )
+                                           //         ],
+                                           //       ),
+                                           //     );
+                                           //   },
+                                           // );
+                                           //
+
+
+
+
+
+
+
+
+                                         }),
+
+                                     Spacer(),
+
+                                     Obx(() =>
+                                         CustomButtonTwo(
+                                             loading: towTruckJobController.acceptJobLoading.value,
+                                             height: 40.h,
+                                             loaderIgnore: true,
+                                             width: 140.w,
+                                             title: "Accept",
+                                             onpress: () {
+                                               towTruckJobController.acceptJob(jobId: userJob.jobId.toString(), providerId: userJob.userId, trxId: userJob.trId);
+                                             }),
+                                     )
+                                   ],
+                                 )),
+
+
+                                 ),
+
+
+                               ],
+                             ),
+                             // selectedNegotiateIndex.value == index  ?
+
 
 
                             SizedBox(height: 10.h),
