@@ -338,7 +338,7 @@ class _TripScreenState extends State<TripScreen> {
 
 
                                      Container(
-                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                       padding:  EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
                                        decoration: BoxDecoration(
                                          borderRadius: BorderRadius.circular(30),
                                          border: Border.all(color: Colors.grey.shade400, width: 1),
@@ -355,7 +355,7 @@ class _TripScreenState extends State<TripScreen> {
                                              child: CircleAvatar(
                                                radius: 14,
                                                backgroundColor: AppColors.primaryColor,
-                                               child: const Icon(Icons.remove, size: 16, color: Colors.white),
+                                               child:  Icon(Icons.remove, size: 16.h, color: Colors.white),
                                              ),
                                            ),
                                             SizedBox(width: 24.w),
@@ -376,7 +376,7 @@ class _TripScreenState extends State<TripScreen> {
                                                child: CircleAvatar(
                                                  radius: 14,
                                                  backgroundColor: AppColors.primaryColor,
-                                                 child: const Icon(Icons.add, size: 16, color: Colors.white),
+                                                 child:  Icon(Icons.add, size: 16.h, color: Colors.white),
                                                ),
                                              );
                                            }
@@ -430,75 +430,8 @@ class _TripScreenState extends State<TripScreen> {
                                          width: 140.w,
                                          title: "Negotiate",
                                          onpress: () {
-
-
                                            counter.value = userJob.amount ?? 0;
                                            selectedNegotiateIndex.value = index;
-
-
-
-
-                                           //
-                                           // TextEditingController amount = TextEditingController();
-                                           //
-                                           // showDialog(
-                                           //   context: context,
-                                           //   builder: (context) {
-                                           //     return AlertDialog(
-                                           //       content: Column(
-                                           //         mainAxisSize: MainAxisSize.min,
-                                           //         children: [
-                                           //           CustomText(
-                                           //               text: "Negotiate Amount",
-                                           //               fontSize: 16.h,
-                                           //               fontWeight: FontWeight.w600,
-                                           //               top: 20.h,
-                                           //               bottom: 12.h),
-                                           //           Divider(),
-                                           //           SizedBox(height: 12.h),
-                                           //
-                                           //
-                                           //           CustomTextField(
-                                           //               controller: amount,
-                                           //             labelText: "Enter Amount",
-                                           //             keyboardType: TextInputType.number,
-                                           //             hintText: "Enter amount",
-                                           //           ),
-                                           //
-                                           //
-                                           //
-                                           //           SizedBox(height: 30.h),
-                                           //
-                                           //
-                                           //           Row(
-                                           //             children: [
-                                           //               Expanded(
-                                           //                 flex: 1,
-                                           //                 child: CustomButtonTwo(
-                                           //                     height: 50.h,
-                                           //                     title: "Send",
-                                           //                     onpress: () {
-                                           //                       towTruckJobController.negotiateJob(jobId: userJob.jobId.toString(), price: amount.text);
-                                           //                     },
-                                           //                     fontSize: 13.h,
-                                           //                     loaderIgnore: true),
-                                           //               ),
-                                           //
-                                           //             ],
-                                           //           )
-                                           //         ],
-                                           //       ),
-                                           //     );
-                                           //   },
-                                           // );
-                                           //
-
-
-
-
-
-
-
 
                                          }),
 
@@ -512,7 +445,7 @@ class _TripScreenState extends State<TripScreen> {
                                              width: 140.w,
                                              title: "Accept",
                                              onpress: () {
-                                               towTruckJobController.acceptJob(jobId: userJob.jobId.toString(), providerId: userJob.userId, trxId: userJob.trId);
+                                               towTruckJobController.acceptJob(jobId: userJob.jobId.toString(), providerId: userJob.userId, trxId: userJob.trId, context: context);
                                              }),
                                      )
                                    ],
