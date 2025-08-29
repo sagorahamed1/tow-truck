@@ -191,7 +191,7 @@ class _JobPostScreenState extends State<JobPostScreen> {
                             ),
                             CustomText(
                                 text:
-                                    "Total Distance: ${distance.toStringAsFixed(2)} KM",
+                                    "Total Distance: ${distance.toStringAsFixed(2)}km \n Time: ${(distance * 3).toStringAsFixed(0)} minutes",
                                 color: Colors.white,
                                 fontSize: 16.h,
                                 top: 20.h)

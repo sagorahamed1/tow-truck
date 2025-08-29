@@ -106,6 +106,7 @@ import 'package:towservice/routes/app_routes.dart';
 import 'package:towservice/widgets/custom_text.dart';
 
 import '../../../../../controller/chat_controller.dart';
+import '../../../../../global/custom_assets/assets.gen.dart';
 import '../../../../../helpers/time_format.dart';
 import '../../../../../services/api_constants.dart';
 import '../../../../../utils/app_colors.dart';
@@ -162,13 +163,16 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
                     chatController.fetchUser(name: searchCtrl.text);
                   });
                 },
+                validator: (value) {},
                 suffixIcon: const Icon(Icons.search)),
             Expanded(
               child: Obx(
                     () => chatController.fetchUserLoading.value
                     ? const ChatShimmerList()
                     : chatController.chatUsers.isEmpty
-                    ? const CustomText(text: "No Data found!")
+                    ? Center(
+                      child: Assets.images.noDataImage.image(),
+                    )
                     : ListView.builder(
                     itemCount: chatController.chatUsers.length,
                     shrinkWrap: true,
@@ -236,7 +240,7 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomText(
-                      text: name.toString(), fontSize: 16.h, color: Colors.black),
+                      text: name.toString(), fontSize: 16.h, color: Colors.black, textAlign: TextAlign.start),
                   CustomText(
                     textAlign: TextAlign.start,
                       text: message.toString(),
@@ -245,7 +249,7 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
                 ],
               ),
             ),
-            const Spacer(),
+            // const Spacer(),
             CustomText(text: time.toString(), right: 12.w),
             Container(
               height: 10.h,

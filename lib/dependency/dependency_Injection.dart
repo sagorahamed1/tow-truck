@@ -3,6 +3,8 @@ import 'package:towservice/helpers/privacy_and_terms_helper.dart';
 
 import '../controller/auth_controller.dart';
 import '../controller/chat_controller.dart';
+import '../controller/current_location_controller.dart';
+import '../controller/live_location_change_controller.dart';
 import '../controller/profile_controller.dart';
 
 class DependencyInjection implements Bindings {
@@ -12,6 +14,8 @@ class DependencyInjection implements Bindings {
     Get.lazyPut(() => AuthController(), fenix: true);
     Get.lazyPut(() => ProfileController(), fenix: true);
     Get.lazyPut(() => ChatController(), fenix: true);
+    Get.lazyPut(() => LiveLocationChangeController(), fenix: true);
+    Get.lazyPut(() => CurrentLocationController(), fenix: true);
   }
 
 }

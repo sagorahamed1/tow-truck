@@ -137,8 +137,8 @@ class AuthController extends GetxController {
 
       SocketServices socketService = SocketServices();
       socketService.disconnect(isManual: true);
-      await socketService.init();
-      SocketServices();
+      await socketService.init(userId: data["user"]["_id"]);
+
     } else if (response.statusCode == 1) {
       logInLoading(false);
       ToastMessageHelper.showToastMessage(
@@ -146,15 +146,6 @@ class AuthController extends GetxController {
     } else {
       ///******** When user do not able to verify their account thay have to verify there account then they can go to the app********
       if (response.body["message"] == "Please verify your account") {
-        // var userRole = await PrefsHelper.getString(AppConstants.role);
-        // if(userRole.toString() == AppString.asEmployee){
-        //   ///******** employee do not verify there e-mail go to the otp verify screen********///
-        //   isSelected(false);
-        //   Get.toNamed(AppRoutes.otpVerfyScreen, parameters: {'email': email});
-        // }else{
-        //   ///******** if normal user do not verify there e-mail go to the otp verify screen********///
-        //   Get.toNamed(AppRoutes.otpVerfyScreen, parameters: {'email': email});
-        // }
 
         ToastMessageHelper.showToastMessage(
             secound: 22,
@@ -163,11 +154,10 @@ class AuthController extends GetxController {
 
       ///******** if user as a employee go to the otp verify screen or more information screen************///
       else if (response.body["message"] == "Please complete your profile") {
-        // ToastMessageHelper.showToastMessage(secound:  22 , "your account create is successful but you don't verify your email. \n \n Please verify your account");
-        //  Get.toNamed(AppRoutes.moreInformationScreen);
+
       } else if (response.body["message"] ==
           "Your account is currently being verified by the admin. Thank you for your patience!") {
-        // Get.toNamed(AppRoutes.thankYouScreen, parameters: {'screenType': "moreInformation"});
+
       } else if (response.body["message"] == "Incorrect password") {
         ToastMessageHelper.showToastMessage(response.body["message"]);
       }

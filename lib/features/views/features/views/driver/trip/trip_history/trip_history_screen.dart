@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:towservice/global/custom_assets/assets.gen.dart';
 import 'package:towservice/helpers/time_format.dart';
+import 'package:towservice/services/api_constants.dart';
 import 'package:towservice/utils/app_colors.dart';
 import 'package:towservice/widgets/custom_app_bar.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
@@ -19,6 +20,8 @@ import '../../../../../../../controller/current_location_controller.dart';
 import '../../../../../../../controller/live_location_change_controller.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../../../../../controller/tow_truck/tow_trcuk_job_controller.dart';
+
 class TripHistoryScreen extends StatefulWidget {
   TripHistoryScreen({super.key});
 
@@ -27,13 +30,16 @@ class TripHistoryScreen extends StatefulWidget {
 }
 
 class _TripHistoryScreenState extends State<TripHistoryScreen> {
+  TowTruckJobController towTruckJobController =
+  Get.put(TowTruckJobController());
   TextEditingController supportNoteCtrl = TextEditingController();
   late GoogleMapController mapController;
-  LiveLocationChangeController liveLocationChangeController = Get.find<LiveLocationChangeController>();
-  CurrentLocationController currentLocationController = Get.find<CurrentLocationController>();
+  LiveLocationChangeController liveLocationChangeController =
+      Get.find<LiveLocationChangeController>();
+  CurrentLocationController currentLocationController =
+      Get.find<CurrentLocationController>();
 
   var routeData = Get.arguments;
-
 
   Set<Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
@@ -48,14 +54,9 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
     super.initState();
   }
 
-
-
-
   void loadRouteData() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
       if (routeData["fromLat"] != null) {
-
         if (currentLocationController.latitude.value != null) {
           userLatLng = LatLng(
             currentLocationController.latitude.value,
@@ -78,11 +79,10 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
     });
   }
 
-
-
   Future<void> getRoutePolyline(LatLng origin, LatLng destination) async {
     String apiKey = "AIzaSyA-Iri6x5mzNv45XO3a-Ew3z4nvF4CdYo0";
-    final String url = "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&key=$apiKey";
+    final String url =
+        "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&key=$apiKey";
 
     final response = await http.get(Uri.parse(url));
 
@@ -113,18 +113,11 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
     }
   }
 
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(title: "Trip History"),
+      appBar: CustomAppBar(title: "${routeData["type"]}"),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: SingleChildScrollView(
@@ -142,42 +135,40 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                       spreadRadius: 0)
                 ],
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16.r),
-                  child: GetBuilder<CurrentLocationController>(
-                    builder: (controller) {
-                      if (controller.isLoading.value || controller.initialCameraPosition == null) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      return  GoogleMap(
-                        myLocationEnabled: true,
-                        initialCameraPosition: controller.initialCameraPosition!,
-                        markers: {
-                          Marker(
-                              markerId: const MarkerId("mechanic"),
-                              position: mechanicLatLng,
-                              infoWindow: InfoWindow(title: "${routeData["name"]}"),
-                               icon: carIcon
-
-                          ),
-                          Marker(
-                            markerId: const MarkerId("user"),
-                            position: userLatLng,
-                            infoWindow: const InfoWindow(title: "Your Location"),
-                          ),
-                        },
-                        polylines: polylines,
-                        onMapCreated: (GoogleMapController mapCtrl) {
-                          controller.mapController = mapCtrl;
-                        },
-                      );
-                    },
-
-                  )
-
-
-                ),
+                    borderRadius: BorderRadius.circular(16.r),
+                    child: GetBuilder<CurrentLocationController>(
+                      builder: (controller) {
+                        if (controller.isLoading.value ||
+                            controller.initialCameraPosition == null) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        return GoogleMap(
+                          myLocationEnabled: true,
+                          initialCameraPosition:
+                              controller.initialCameraPosition!,
+                          markers: {
+                            Marker(
+                                markerId: const MarkerId("provider"),
+                                position: mechanicLatLng,
+                                infoWindow:
+                                    InfoWindow(title: "${routeData["name"]}"),
+                                icon: carIcon),
+                            Marker(
+                              markerId: const MarkerId("user"),
+                              position: userLatLng,
+                              infoWindow:
+                                  const InfoWindow(title: "Your Location"),
+                            ),
+                          },
+                          polylines: polylines,
+                          onMapCreated: (GoogleMapController mapCtrl) {
+                            controller.mapController = mapCtrl;
+                          },
+                        );
+                      },
+                    )),
               ),
-
               Container(
                 padding: EdgeInsets.symmetric(vertical: 8.h),
                 margin: EdgeInsets.symmetric(vertical: 8.h),
@@ -195,10 +186,12 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      SizedBox(width: 10.w),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CustomText(text: "${routeData["name"]}", fontSize: 16.h),
+                          CustomText(
+                              text: "${routeData["name"]}", fontSize: 16.h),
                           CustomText(
                               text: "${routeData["status"].toString()}",
                               fontSize: 13.h,
@@ -209,8 +202,14 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CustomText(text: "${TimeFormatHelper.formatDate(DateTime.parse("${routeData["dateTime"]}"))}", fontSize: 16.h),
-                          CustomText(text: "${TimeFormatHelper.timeWithAMPM(DateTime.parse("${routeData["dateTime"]}"))}", fontSize: 11.h),
+                          CustomText(
+                              text:
+                                  "${TimeFormatHelper.formatDate(DateTime.parse("${routeData["dateTime"]}"))}",
+                              fontSize: 16.h),
+                          CustomText(
+                              text:
+                                  "${TimeFormatHelper.timeWithAMPM(DateTime.parse("${routeData["dateTime"]}"))}",
+                              fontSize: 11.h),
                         ],
                       ),
                       SizedBox(width: 16.w)
@@ -246,8 +245,7 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                               fontWeight: FontWeight.w500)
                         ],
                       ),
-                      Container(
-                          height: 20.h, width: 1.5.w, color: Colors.grey),
+                      Container(height: 20.h, width: 1.5.w, color: Colors.grey),
                       Row(
                         children: [
                           Icon(Icons.location_on, size: 12.h),
@@ -261,7 +259,7 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CustomText(text: "Distance :"),
-                          CustomText(text: "5.9 KM", right: 20.w),
+                          CustomText(text: "${(double.parse(routeData["distance"])).toStringAsFixed(2)} km", right: 20.w),
                         ],
                       ),
                     ],
@@ -297,13 +295,12 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                       ],
                     ),
                     CustomText(
-                      text: '34.52 ₦',
+                      text: '${routeData["amount"]} ₦',
                       fontSize: 11.sp,
                     ),
                   ],
                 ),
               ),
-
               SizedBox(height: 26.h),
               CustomContainer(
                 width: double.infinity,
@@ -323,9 +320,9 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                         boxShape: BoxShape.circle,
                         width: 53.w,
                         imageUrl:
-                            "https://randomuser.me/api/portraits/men/75.jpg"),
+                            "${ApiConstants.imageBaseUrl}/${routeData["image"]}"),
                     SizedBox(width: 10.w),
-                    CustomText(text: "Sabbir Hossein"),
+                    CustomText(text: "${routeData["name"]}"),
                     Spacer(),
                     Container(
                       decoration: BoxDecoration(
@@ -339,21 +336,29 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle),
-                              child: Padding(
-                                padding: EdgeInsets.all(8.r),
-                                child: Assets.icons.messageIcon
-                                    .svg(color: AppColors.primaryColor),
+                            GestureDetector(
+                              onTap: () async {
+                                final Uri url = Uri.parse('tel:${routeData["email"]}');
+                                if (await launchUrl(url)) {
+                                  await launchUrl(url);
+                                } else {
+                                  debugPrint('Could not launch phone dialer');
+                                }
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white, shape: BoxShape.circle),
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.r),
+                                  child: Assets.icons.messageIcon
+                                      .svg(color: AppColors.primaryColor),
+                                ),
                               ),
                             ),
                             SizedBox(width: 30.w),
                             GestureDetector(
                               onTap: () async {
-                                final Uri url =
-                                    Uri.parse('tel:(609)327-7992');
+                                final Uri url = Uri.parse('tel:${routeData["phone"]}');
                                 if (await launchUrl(url)) {
                                   await launchUrl(url);
                                 } else {
@@ -377,70 +382,19 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                   ],
                 ),
               ),
+              SizedBox(height: 40.h),
+              routeData["type"] == "Trip Details" && routeData["role"] == "user" ?
+              Obx(() =>
+                 CustomButtonTwo(
+                     loading: towTruckJobController.acceptCompletedLoading.value,
+                     title: "Completed", onpress: () {
 
-              // Container(
-              //   padding: EdgeInsets.symmetric(vertical: 8.h),
-              //   margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-              //   decoration: BoxDecoration(
-              //       color: Colors.white,
-              //       borderRadius: BorderRadius.circular(12.r),
-              //       boxShadow: [
-              //         BoxShadow(
-              //             color: Colors.grey.shade300,
-              //             blurRadius: 5,
-              //             offset: Offset(2, 4))
-              //       ]),
-              //   child: Padding(
-              //     padding: EdgeInsets.symmetric(horizontal: 10.w),
-              //     child: Row(
-              //       children: [
-              //         Expanded(
-              //           flex: 3,
-              //           child: CustomNetworkImage(
-              //               border:
-              //               Border.all(color: AppColors.primaryColor, width: 2.5),
-              //               height: 48.h,
-              //               width: 48.w,
-              //               boxShape: BoxShape.circle,
-              //               imageUrl:
-              //               "https://randomuser.me/api/portraits/men/75.jpg"),
-              //         ),
-              //
-              //         SizedBox(width: 10.w),
-              //         Expanded(
-              //             flex: 16,
-              //             child: CustomTextField(
-              //               controller: supportNoteCtrl,
-              //               borderColor: Colors.grey,
-              //               borderRadio: 30.r,
-              //               hintText: "Support note for trip",
-              //               prefixIcon: Assets.icons.messageIcon.svg(),
-              //             )),
-              //
-              //
-              //         SizedBox(width: 10.w),
-              //         Expanded(
-              //           flex: 3,
-              //           child: Container(
-              //             height: 60,
-              //             decoration: BoxDecoration(
-              //                 border: Border.all(color: Colors.grey),
-              //                 shape: BoxShape.circle, color: Colors.white),
-              //             child: Padding(
-              //               padding: EdgeInsets.all(8.r),
-              //               child: Icon(
-              //                 Icons.phone,
-              //                 color: AppColors.primaryColor,
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   )
-              // ),
+                  towTruckJobController.completedRequest(jobId: routeData["jobId"]);
+
+                }),
+              ) : SizedBox() ,
               SizedBox(
-                height: 40.h,
+                height: 100.h,
               )
             ],
           ),

@@ -30,9 +30,14 @@ class ApiConstants{
   static const String getJobFromUser = "/job/provider/requested";
   static  String getUserRequest(String role) => "/job/${role}/requested";
   static  String getJobOngoing(String role) => "/job/${role}/ongoing";
+  static  String getJobCompleted(String role) => "/job/${role}/history";
   static  String message(String id) => "/message/${id}";
   static const String chatUser = "/message/thread/";
   static const String negotiate = "/job/neg";
+  static const String cancelJob = "/job/cancel";
+  static const String notification = "/notification";
+  static const String paymentSend = "/payment/transaction/send";
+  static const String completed = "/payment/transaction/transfer";
 
 
 

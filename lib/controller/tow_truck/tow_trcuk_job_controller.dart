@@ -109,24 +109,23 @@ class TowTruckJobController extends GetxController{
 
 
 
-  //
-  // RxString providerId = "".obs;
-  // Rx<JobDetailsModel> jobDetails = JobDetailsModel().obs;
-  // RxBool jobDetailsLoading = false.obs;
-  // getJobDetails()async{
-  //   var jobId = await PrefsHelper.getString(AppConstants.jobId);
-  //   jobDetailsLoading(true);
-  //   var response = await ApiClient.getData("${ApiConstants.jobDetails}/${jobId}/${providerId.value}");
-  //
-  //   if(response.statusCode == 200){
-  //     jobDetails.value = JobDetailsModel.fromJson(response.body["data"]);
-  //     jobDetailsLoading(false);
-  //   }else{
-  //     jobDetailsLoading(false);
-  //   }
-  // }
-  //
-  //
+  RxList<JobOngoingModel> jobCompleted = <JobOngoingModel>[].obs;
+  RxBool completedLoading = false.obs;
+  getCompletedJob()async{
+    String role = await PrefsHelper.getString(AppConstants.role);
+    completedLoading(true);
+    var response = await ApiClient.getData("${ApiConstants.getJobCompleted(role)}");
+
+    if(response.statusCode == 200){
+
+      jobCompleted.value = List<JobOngoingModel>.from(response.body["data"].map((x) => JobOngoingModel.fromJson(x)));
+      completedLoading(false);
+    }else{
+      completedLoading(false);
+    }
+  }
+
+
 
   RxBool acceptJobLoading = false.obs;
 
@@ -149,6 +148,14 @@ class TowTruckJobController extends GetxController{
         VibrationService.vibrateForDuration(2500);
         QuickAlertHelper.showSuccessAlert(context!, "Your has been successfully processed.");
 
+
+        var data = {
+          "jobId": "$jobId",
+          "promoCode": ""
+        };
+        await ApiClient.postData("${ApiConstants.paymentSend}", jsonEncode(data));
+
+
       }else{
         // Get.back();
         ToastMessageHelper.showToastMessage("${response.body["message"]}");
@@ -170,19 +177,64 @@ class TowTruckJobController extends GetxController{
   negotiateJob({required String jobId, price}) async {
     negotiateLoading(true);
     var body = {
-      "negAmount" : 745
+      "negAmount" : int.parse("$price")
     };
 
     var response = await ApiClient.postData("${ApiConstants.negotiate}/${jobId}", jsonEncode(body));
     if (response.statusCode == 200 || response.statusCode == 201) {
-      ToastMessageHelper.showToastMessage("${response.body["message"]}");
       Get.back();
+      ToastMessageHelper.showToastMessage("${response.body["message"]}");
       negotiateLoading(false);
     } else {
       ToastMessageHelper.showToastMessage("${response.body["message"]}");
       negotiateLoading(false);
     }
   }
+
+
+
+
+
+  RxBool cancelLoading = false.obs;
+
+  cancelJobs({required String jobId}) async {
+    cancelLoading(true);
+
+    var response = await ApiClient.postData("${ApiConstants.cancelJob}/${jobId}", jsonEncode({}));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      userRequest.removeWhere((x) => x.jobId == jobId);
+      update();
+      Get.back();
+      ToastMessageHelper.showToastMessage("${response.body["message"]}");
+      cancelLoading(false);
+    } else {
+      ToastMessageHelper.showToastMessage("${response.body["message"]}");
+      cancelLoading(false);
+    }
+  }
+
+
+
+
+  RxBool acceptCompletedLoading = false.obs;
+
+  completedRequest({required String jobId}) async {
+    acceptCompletedLoading(true);
+
+    var response = await ApiClient.postData("${ApiConstants.completed}/${jobId}", jsonEncode({}));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      jobOngoing.removeWhere((x) => x.jobId == jobId);
+      update();
+      Get.back();
+      ToastMessageHelper.showToastMessage("${response.body["message"]}");
+      acceptCompletedLoading(false);
+    } else {
+      ToastMessageHelper.showToastMessage("${response.body["message"]}");
+      acceptCompletedLoading(false);
+    }
+  }
+
+
 
 
 

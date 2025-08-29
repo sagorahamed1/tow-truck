@@ -42,6 +42,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(title: "Details"),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -139,7 +140,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(width: 20.w),
+                            // SizedBox(width: 20.w),
                             // GestureDetector(
                             //   onTap: () async {
                             //     final Uri url =
@@ -181,6 +182,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                 SizedBox(height: 20.h),
                 ListView.builder(
                   shrinkWrap: true,
+                  padding: EdgeInsets.zero,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: job.promos?.length,
                   itemBuilder: (context, index) {
@@ -216,7 +218,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                       color: Colors.white,
                                       fontSize: 12.h,
                                       text:
-                                          "“${promo?.code ?? ""}”    |   ${promo?.value ?? ""}${promo?.type == "percent" ? "%" : "Taka"} OFF!   |   ${TimeAgo.format(promo?.expireDate ?? DateTime.now(), allowFromNow: true)} left "),
+                                          "“${promo?.code ?? ""}”    |   ${promo?.value ?? ""}${promo?.type == "percent" ? "%" : "₦"} OFF!   |   ${TimeAgo.format(promo?.expireDate ?? DateTime.now(), allowFromNow: true)} left "),
                                 ),
                               ],
                             ),
@@ -325,9 +327,9 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                 CustomButtonTwo(
                     title: "Book Now",
                     onpress: () {
-                      // userJobPostController.requestJobPost(providerList: towTruckProviderList);
+                       userJobPostController.requestJobPost(providerList: [job.providerId]);
                     }),
-                SizedBox(height: 50.h)
+                SizedBox(height: 80.h)
               ],
             );
           }),

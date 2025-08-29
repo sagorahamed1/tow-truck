@@ -99,7 +99,7 @@ class UserJobPostController extends GetxController{
     var response = await ApiClient.postData("${ApiConstants.requestJob}/$jobId", jsonEncode(body));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Get.back();
+      Get.offAllNamed(AppRoutes.userBottomNavBar);
 
       requestProviderLoading(false);
     } else {

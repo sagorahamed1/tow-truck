@@ -36,16 +36,16 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        backgroundColor: Colors.transparent,
-        builder: (context) {
-          return DraggableListSheet();
-        },
-      );
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   showModalBottomSheet(
+    //     context: context,
+    //     isScrollControlled: true,
+    //     backgroundColor: Colors.transparent,
+    //     builder: (context) {
+    //       return DraggableListSheet();
+    //     },
+    //   );
+    // });
     profileController.getUserLocalData();
     super.initState();
   }

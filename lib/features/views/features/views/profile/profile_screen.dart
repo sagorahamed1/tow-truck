@@ -6,6 +6,7 @@ import 'package:towservice/controller/profile_controller.dart';
 import 'package:towservice/helpers/prefs_helper.dart';
 import 'package:towservice/routes/app_routes.dart';
 import 'package:towservice/services/api_constants.dart';
+import 'package:towservice/services/socket_services.dart';
 import 'package:towservice/utils/app_colors.dart';
 import 'package:towservice/utils/app_constant.dart';
 import 'package:towservice/widgets/custom_text.dart';
@@ -317,6 +318,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 AppConstants.userId);
                                             await PrefsHelper.remove(
                                                 AppConstants.dateOfBirth);
+
+
+                                            SocketServices socket = SocketServices();
+                                            socket.disconnect(
+                                              isManual: true
+                                            );
                                             Get.offAllNamed(
                                                 AppRoutes.loginScreen);
                                           },
