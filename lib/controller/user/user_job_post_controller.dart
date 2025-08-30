@@ -111,4 +111,30 @@ class UserJobPostController extends GetxController{
 
 
 
+
+  RxBool reportLoading = false.obs;
+
+  reportSubmit({required String providerId, jobId, re}) async {
+    reportLoading(true);
+    String jobId = await PrefsHelper.getString(AppConstants.jobId);
+    var body =
+    {
+      "providerId": "687090b5c77f6ec9066b34e1",
+      "jobId": "64f01e0d6b2f2c7b4c789012",
+      "reason": ""
+    };
+
+    var response = await ApiClient.postData("${ApiConstants.requestJob}/$jobId", jsonEncode(body));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Get.offAllNamed(AppRoutes.userBottomNavBar);
+
+      reportLoading(false);
+    } else {
+      ToastMessageHelper.showToastMessage("${response.body["message"]}");
+      reportLoading(false);
+    }
+  }
+
+
 }

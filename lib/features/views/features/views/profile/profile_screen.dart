@@ -163,6 +163,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
+
+            if(profileController.role.value == "provider")
             Container(
               padding: EdgeInsets.symmetric(vertical: 8.h),
               margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
@@ -178,13 +180,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 children: [
                   _customCart(
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(AppRoutes.userBottomNavBar);
+                    },
                     title: "Find Tow Services",
                     icon: Assets.icons.findTowServiceIcon.svg(),
                   ),
                 ],
               ),
             ),
+
+
+
+
             Container(
               padding: EdgeInsets.symmetric(vertical: 8.h),
               margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
@@ -325,7 +333,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               isManual: true
                                             );
                                             Get.offAllNamed(
-                                                AppRoutes.loginScreen);
+                                                AppRoutes.roleScreen);
                                           },
                                           fontSize: 11.h),
                                     ),

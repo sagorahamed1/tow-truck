@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:towservice/global/custom_assets/assets.gen.dart';
 import 'package:towservice/helpers/time_format.dart';
+import 'package:towservice/main.dart';
 import 'package:towservice/services/api_constants.dart';
 import 'package:towservice/utils/app_colors.dart';
 import 'package:towservice/widgets/custom_app_bar.dart';
@@ -35,9 +36,9 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
   TextEditingController supportNoteCtrl = TextEditingController();
   late GoogleMapController mapController;
   LiveLocationChangeController liveLocationChangeController =
-      Get.find<LiveLocationChangeController>();
+  Get.find<LiveLocationChangeController>();
   CurrentLocationController currentLocationController =
-      Get.find<CurrentLocationController>();
+  Get.find<CurrentLocationController>();
 
   var routeData = Get.arguments;
 
@@ -82,7 +83,9 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
   Future<void> getRoutePolyline(LatLng origin, LatLng destination) async {
     String apiKey = "AIzaSyA-Iri6x5mzNv45XO3a-Ew3z4nvF4CdYo0";
     final String url =
-        "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&key=$apiKey";
+        "https://maps.googleapis.com/maps/api/directions/json?origin=${origin
+        .latitude},${origin.longitude}&destination=${destination
+        .latitude},${destination.longitude}&key=$apiKey";
 
     final response = await http.get(Uri.parse(url));
 
@@ -146,19 +149,19 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                         return GoogleMap(
                           myLocationEnabled: true,
                           initialCameraPosition:
-                              controller.initialCameraPosition!,
+                          controller.initialCameraPosition!,
                           markers: {
                             Marker(
                                 markerId: const MarkerId("provider"),
                                 position: mechanicLatLng,
                                 infoWindow:
-                                    InfoWindow(title: "${routeData["name"]}"),
+                                InfoWindow(title: "${routeData["name"]}"),
                                 icon: carIcon),
                             Marker(
                               markerId: const MarkerId("user"),
                               position: userLatLng,
                               infoWindow:
-                                  const InfoWindow(title: "Your Location"),
+                              const InfoWindow(title: "Your Location"),
                             ),
                           },
                           polylines: polylines,
@@ -204,11 +207,13 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                         children: [
                           CustomText(
                               text:
-                                  "${TimeFormatHelper.formatDate(DateTime.parse("${routeData["dateTime"]}"))}",
+                              "${TimeFormatHelper.formatDate(
+                                  DateTime.parse("${routeData["dateTime"]}"))}",
                               fontSize: 16.h),
                           CustomText(
                               text:
-                                  "${TimeFormatHelper.timeWithAMPM(DateTime.parse("${routeData["dateTime"]}"))}",
+                              "${TimeFormatHelper.timeWithAMPM(
+                                  DateTime.parse("${routeData["dateTime"]}"))}",
                               fontSize: 11.h),
                         ],
                       ),
@@ -231,7 +236,7 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                     ]),
                 child: Padding(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 10.w, vertical: 22.h),
+                  EdgeInsets.symmetric(horizontal: 10.w, vertical: 22.h),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -259,7 +264,11 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CustomText(text: "Distance :"),
-                          CustomText(text: "${(double.parse(routeData["distance"])).toStringAsFixed(2)} km", right: 20.w),
+                          CustomText(
+                              text:
+                              "${(double.parse(routeData["distance"]))
+                                  .toStringAsFixed(2)} km",
+                              right: 20.w),
                         ],
                       ),
                     ],
@@ -320,7 +329,7 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                         boxShape: BoxShape.circle,
                         width: 53.w,
                         imageUrl:
-                            "${ApiConstants.imageBaseUrl}/${routeData["image"]}"),
+                        "${ApiConstants.imageBaseUrl}/${routeData["image"]}"),
                     SizedBox(width: 10.w),
                     CustomText(text: "${routeData["name"]}"),
                     Spacer(),
@@ -338,7 +347,8 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                           children: [
                             GestureDetector(
                               onTap: () async {
-                                final Uri url = Uri.parse('tel:${routeData["email"]}');
+                                final Uri url =
+                                Uri.parse('tel:${routeData["email"]}');
                                 if (await launchUrl(url)) {
                                   await launchUrl(url);
                                 } else {
@@ -347,7 +357,8 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: Colors.white, shape: BoxShape.circle),
+                                    color: Colors.white,
+                                    shape: BoxShape.circle),
                                 child: Padding(
                                   padding: EdgeInsets.all(8.r),
                                   child: Assets.icons.messageIcon
@@ -358,7 +369,8 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                             SizedBox(width: 30.w),
                             GestureDetector(
                               onTap: () async {
-                                final Uri url = Uri.parse('tel:${routeData["phone"]}');
+                                final Uri url =
+                                Uri.parse('tel:${routeData["phone"]}');
                                 if (await launchUrl(url)) {
                                   await launchUrl(url);
                                 } else {
@@ -383,16 +395,23 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                 ),
               ),
               SizedBox(height: 40.h),
-              routeData["type"] == "Trip Details" && routeData["role"] == "user" ?
-              Obx(() =>
-                 CustomButtonTwo(
-                     loading: towTruckJobController.acceptCompletedLoading.value,
-                     title: "Completed", onpress: () {
+              routeData["type"] == "Trip Details" && routeData["role"] == "user"
+                  ? Obx(
+                    () =>
+                    CustomButtonTwo(
+                        loading: towTruckJobController
+                            .acceptCompletedLoading.value,
+                        title: "Completed",
+                        onpress: () async {
+                          var response = await towTruckJobController
+                              .completedRequest(jobId: routeData["jobId"]);
 
-                  towTruckJobController.completedRequest(jobId: routeData["jobId"]);
-
-                }),
-              ) : SizedBox() ,
+                          if (response == true) {
+                            showPaymentRatingSheet(context, routeData["providerId"]);
+                          }
+                        }),
+              )
+                  : SizedBox(),
               SizedBox(
                 height: 100.h,
               )
@@ -402,4 +421,145 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
       ),
     );
   }
+}
+
+class PaymentRatingBottomSheet extends StatefulWidget {
+  final String? providerId;
+
+  const PaymentRatingBottomSheet({super.key, this.providerId});
+  @override
+  _PaymentRatingBottomSheetState createState() =>
+      _PaymentRatingBottomSheetState();
+}
+
+class _PaymentRatingBottomSheetState extends State<PaymentRatingBottomSheet> {
+  int selectedStars = 4; // default 4 stars
+  List<String> comments = [
+    "Driver was very polite",
+    "Riding was smooth and comfortable",
+    "Reached destination on time",
+    "Drive safely",
+    "Car was clean and well-maintained",
+    "Very friendly driver",
+    "Helped with luggage",
+    "Professional driving skills",
+    "Great communication",
+    "Overall excellent service"
+  ];
+
+  List<String> selectedComments = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 40.w,
+            height: 5.h,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+          ),
+          SizedBox(height: 15.h),
+          Text(
+            "Your payment has been made.",
+            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 5.h),
+          Text(
+            "Now, Give Stars to Driver.",
+            style: TextStyle(fontSize: 14.sp, color: Colors.grey[600]),
+          ),
+          SizedBox(height: 10.h),
+
+          // Stars
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(5, (index) {
+              return IconButton(
+                onPressed: () {
+                  setState(() {
+                    selectedStars = index + 1;
+                  });
+                },
+                icon: Icon(
+                  index < selectedStars ? Icons.star : Icons.star_border,
+                  color: Colors.amber,
+                  size: 30.sp,
+                ),
+              );
+            }),
+          ),
+          SizedBox(height: 10.h),
+
+          // Leave a comment
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Leave Us A Comment",
+              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
+            ),
+          ),
+          SizedBox(height: 10.h),
+
+          // Comment buttons
+          Wrap(
+            spacing: 10.w,
+            runSpacing: 10.h,
+            children: comments.map((comment) {
+              final isSelected = selectedComments.contains(comment);
+              return ChoiceChip(
+                label: Text(comment),
+                selected: isSelected,
+                onSelected: (selected) {
+                  setState(() {
+                    if (selected) {
+                      selectedComments.add(comment);
+                    } else {
+                      selectedComments.remove(comment);
+                    }
+                  });
+                },
+                selectedColor: Colors.blueAccent.withOpacity(0.2),
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+              );
+            }).toList(),
+          ),
+          SizedBox(height: 20.h),
+
+          CustomButtonTwo(title: "Thank You", onpress: () {
+            towTruckJobController.reviewSubmit(rating: selectedStars.toString(),
+                comment: selectedComments.toString(),
+                providerId: widget.providerId.toString());
+          }),
+
+          SizedBox(height: 50.h),
+        ],
+      ),
+    );
+  }
+}
+
+// Usage:
+void showPaymentRatingSheet(BuildContext context, String providerId) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+    ),
+    builder: (_) => PaymentRatingBottomSheet(),
+  );
 }

@@ -50,7 +50,10 @@ class _TripScreenState extends State<TripScreen> {
 
   @override
   Widget build(BuildContext context) {
-    getApiData();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getApiData();
+    });
     print("=======================role : ${profileController.role}");
 
     return Scaffold(
@@ -708,6 +711,7 @@ class _TripScreenState extends State<TripScreen> {
                                                     arguments: {
                                                       "jobId" : job.jobId,
                                                       "name" : job.name,
+                                                      "providerId": job.userId,
                                                       "dateTime" : job.date,
                                                       "fromAddress" : job.fromAddress,
                                                       "toAddress" : job.toAddress,
@@ -804,6 +808,7 @@ class _TripScreenState extends State<TripScreen> {
                                               AppRoutes.tripHistoryScreen,
                                               arguments: {
                                                 "name": job.name,
+                                                "providerId": job.userId,
                                                 "dateTime": job.date,
                                                 "fromAddress": job.fromAddress,
                                                 "toAddress": job.toAddress,
@@ -817,7 +822,7 @@ class _TripScreenState extends State<TripScreen> {
                                                 "fromLng": job.coordinate?[1],
                                                 "toLat": job.destCoordinate?[0],
                                                 "toLng": job.destCoordinate?[1],
-                                                "type": "Trip Details",
+                                                "type": "Trip History",
                                                 "role": profileController.role
                                               });
                                         },

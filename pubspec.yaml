@@ -34,7 +34,9 @@ dependencies:
   url_launcher:
   location:
   geocoding:
-  location_picker_text_field:
+#  location_picker_text_field:
+  location_picker_text_field: ^0.2.4
+  google_places_flutter: ^2.0.6
   dotted_border: ^2.1.0
   mime_type: ^1.0.1
   socket_io_client: ^3.1.2
@@ -44,6 +46,7 @@ dependencies:
   flutter_polyline_points: ^2.1.0
   file_picker: ^10.1.2
   quickalert: ^1.1.0
+  webview_flutter:
 
 dev_dependencies:
   flutter_test:

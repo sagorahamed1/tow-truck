@@ -193,6 +193,7 @@ import 'package:get/get.dart';
 
 import 'package:towservice/widgets/custom_text.dart';
 import '../../../../../controller/chat_controller.dart';
+import '../../../../../helpers/time_format.dart';
 import '../../../../../routes/app_routes.dart';
 import '../../../../../services/api_constants.dart';
 import '../../../../../utils/app_colors.dart';
@@ -277,7 +278,7 @@ class _ChatScreenState extends State<ChatScreen> {
             SizedBox(width: 8.w),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               CustomText(text: "${routeData["name"]}", fontSize: 15.h),
-              CustomText(text: "Active 2 hours ago", fontSize: 12.h),
+              CustomText(text: "${TimeFormatHelper.timeWithAMPM(DateTime.parse("${routeData["lastActive"] ?? DateTime.now()}"))}", fontSize: 12.h),
             ])
           ],
         ),
@@ -298,10 +299,10 @@ class _ChatScreenState extends State<ChatScreen> {
                 value: 'Report',
                 child: Text('Report'),
               ),
-              PopupMenuItem<String>(
-                value: 'Block',
-                child: Text('Block'),
-              ),
+              // PopupMenuItem<String>(
+              //   value: 'Block',
+              //   child: Text('Block'),
+              // ),
             ],
           ),
           SizedBox(width: 10.w),

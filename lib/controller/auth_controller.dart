@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../helpers/prefs_helper.dart';
 import '../helpers/toast_message_helper.dart';
+import '../model/tow_type_model.dart';
 import '../routes/app_routes.dart';
 import '../services/api_client.dart';
 import '../services/api_constants.dart';
@@ -317,5 +318,29 @@ class AuthController extends GetxController {
       fillProfileLoading(false);
     }
   }
+
+
+
+
+
+
+
+
+  RxList<TowTypeModel> towTypes = <TowTypeModel>[].obs;
+
+  RxBool towTypeLoading = false.obs;
+  getTowType()async{
+    towTypeLoading(true);
+    var response = await ApiClient.getData("${ApiConstants.getTowType}");
+
+    if(response.statusCode == 200){
+      towTypes.value = List<TowTypeModel>.from(response.body["data"].map((x) => TowTypeModel.fromJson(x)));
+      towTypeLoading(false);
+    }else{
+      towTypeLoading(false);
+    }
+  }
+
+
 
 }

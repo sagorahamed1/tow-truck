@@ -218,22 +218,54 @@ class TowTruckJobController extends GetxController{
 
   RxBool acceptCompletedLoading = false.obs;
 
-  completedRequest({required String jobId}) async {
+ Future<bool?> completedRequest({required String jobId}) async {
     acceptCompletedLoading(true);
 
     var response = await ApiClient.postData("${ApiConstants.completed}/${jobId}", jsonEncode({}));
     if (response.statusCode == 200 || response.statusCode == 201) {
       jobOngoing.removeWhere((x) => x.jobId == jobId);
       update();
-      Get.back();
+      // Get.back();
       ToastMessageHelper.showToastMessage("${response.body["message"]}");
       acceptCompletedLoading(false);
+      return true;
     } else {
       ToastMessageHelper.showToastMessage("${response.body["message"]}");
       acceptCompletedLoading(false);
+      return false;
     }
+
   }
 
+
+
+
+
+
+  RxBool reviewLoading = false.obs;
+
+  Future<bool?> reviewSubmit({required String rating, comment, providerId}) async {
+    reviewLoading(true);
+
+    var body = {
+      "rating": int.parse(rating),
+      "comment": "$comment"
+    };
+
+    var response = await ApiClient.postData("${ApiConstants.review}/${providerId}", jsonEncode(body));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+
+      Get.back();
+      ToastMessageHelper.showToastMessage("${response.body["message"]}");
+      reviewLoading(false);
+
+    } else {
+      ToastMessageHelper.showToastMessage("${response.body["message"]}");
+      reviewLoading(false);
+
+    }
+
+  }
 
 
 

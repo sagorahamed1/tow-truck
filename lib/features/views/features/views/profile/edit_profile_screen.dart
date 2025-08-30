@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:towservice/controller/auth_controller.dart';
 import 'package:towservice/controller/profile_controller.dart';
 import 'package:towservice/global/custom_assets/assets.gen.dart';
 import 'package:towservice/routes/app_routes.dart';
@@ -16,9 +17,11 @@ import 'package:towservice/widgets/custom_loader.dart';
 import 'package:towservice/widgets/custom_text.dart';
 
 import '../../../../../controller/upload_app_file.dart';
+import '../../../../../model/tow_truck_model.dart';
 import '../../../../../widgets/custom_app_bar.dart';
 import '../../../../../widgets/custom_network_image.dart';
 import '../../../../../widgets/custom_text_field.dart';
+import '../fill_profile/fill_profile_screen.dart';
 
 
 class EditProfileScreen extends StatefulWidget {
@@ -31,17 +34,24 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
 
   ProfileController profileController = Get.find<ProfileController>();
+  AuthController authController = Get.find<AuthController>();
   TextEditingController nameCtrl = TextEditingController();
   TextEditingController companyCtrl = TextEditingController();
   TextEditingController emailCtrl = TextEditingController();
   TextEditingController addressCtrl = TextEditingController();
   TextEditingController phoneCtrl = TextEditingController();
   TextEditingController typeOfTowTruckCtrl = TextEditingController();
+  TextEditingController towTypeIdCtrl = TextEditingController();
   TextEditingController dateCtrl = TextEditingController();
   TextEditingController genderCtrl = TextEditingController();
   TextEditingController descriptionCtrl = TextEditingController();
   TextEditingController role = TextEditingController();
   TextEditingController image = TextEditingController();
+
+  List genderList = ['male', 'female'];
+  List dropDownList = ['male', 'female'];
+
+  RxBool isDropDownGender = false.obs;
 
 
 
@@ -56,12 +66,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     dateCtrl.text = data?["dateOfBirth"]?.toString() ?? "";
     image.text = data?["image"]?.toString() ?? "";
     profileImagePath = data?["image"]?.toString() ?? "";
+    authController.getTowType();
     super.initState();
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(title: "Edit Profile"),
       body: Padding(
@@ -167,6 +182,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
               if(role.text != "user")
               CustomTextField(
+                readOnly: true,
+                onTap: () {
+                  openVehicleIssueOptions(context);
+                },
                 controller: typeOfTowTruckCtrl,
                 hintText: "Type of tow truck",
                 labelText: "Type of tow truck",
@@ -210,14 +229,57 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
 
               if(role.text != "user")
-              CustomTextField(
-                controller: genderCtrl,
-                hintText: "Gender",
-                labelText: "Gender",
-                borderColor: AppColors.primaryColor,
-                hintextColor: Colors.black,
-                contentPaddingVertical: 10.h,
-              ),
+              // ///=====================Gender ======================>
+                CustomTextField(
+                    borderColor: AppColors.primaryColor,
+                    onTap: () {
+                      if (isDropDownGender.value == true) {
+                        isDropDownGender(false);
+                      }
+                      isDropDownGender(true);
+                    },
+                    readOnly: true,
+                    controller: genderCtrl,
+                    hintText: "Select gender",
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please select your gender";
+                      }
+                      return null;
+                    },
+                    suffixIcon: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 18.w),
+                      child: Icon(Icons.keyboard_arrow_down_rounded),
+                    )),
+
+              Obx(() => isDropDownGender.value
+                  ? Container(
+                decoration: BoxDecoration(
+                    color: AppColors.whiteColor,
+                    border: Border.all(
+                        color: AppColors.primaryColor, width: 0.5),
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(8.r))),
+                height: 120.h,
+                child: ListView.builder(
+                  itemCount: dropDownList.length,
+                  itemBuilder: (context, index) {
+                    var dropDownItems = dropDownList[index];
+                    return ListTile(
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 20.w),
+                      title: CustomText(
+                          text: dropDownItems,
+                          textAlign: TextAlign.start),
+                      onTap: () {
+                        isDropDownGender(false);
+                        genderCtrl.text = dropDownItems;
+                      },
+                    );
+                  },
+                ),
+              )
+                  : const SizedBox()),
 
 
 
@@ -306,6 +368,38 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
+
+
+  void openVehicleIssueOptions(BuildContext context) async {
+    final result = await showModalBottomSheet<Map>(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Obx(() {
+          List<TowTruckModel> trucks = authController.towTypes.value
+              .map((type) => TowTruckModel(
+            id: type.id,    // map the fields properly
+            name: type.name,
+            // add other fields if needed
+          )).toList();
+          return HelpOptionsSheet2(
+              options: trucks
+          );
+        });
+      },
+    );
+
+    if (result != null) {
+      typeOfTowTruckCtrl.text = result["name"];
+      towTypeIdCtrl.text = result["id"];
+
+      setState(() {});
+      print("Selected option: ============================================= ${result["name"]}");
+    }
+  }
 
 
 

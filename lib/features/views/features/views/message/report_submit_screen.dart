@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:towservice/controller/profile_controller.dart';
+import 'package:towservice/helpers/toast_message_helper.dart';
+import 'package:towservice/routes/app_routes.dart';
 import 'package:towservice/widgets/custom_app_bar.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
 import 'package:towservice/widgets/custom_text.dart';
+import '../../../../../controller/user/user_job_post_controller.dart';
 import '../../../../../utils/app_colors.dart';
 import '../../../../../widgets/custom_text_field.dart';
 
@@ -15,6 +19,8 @@ class ReportSubmitScreen extends StatefulWidget {
 }
 
 class _ReportSubmitScreenState extends State<ReportSubmitScreen> {
+  ProfileController profileController = Get.find<ProfileController>();
+  UserJobPostController userJobPostController = Get.put(UserJobPostController());
 
   final TextEditingController otherController = TextEditingController();
 
@@ -22,6 +28,7 @@ class _ReportSubmitScreenState extends State<ReportSubmitScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: "Report",
@@ -113,7 +120,13 @@ class _ReportSubmitScreenState extends State<ReportSubmitScreen> {
             CustomButtonTwo(
               title: "Submit",
               onpress: () {
-                // your action
+                profileController.role == "user" ?
+                Get.offAllNamed(AppRoutes.userBottomNavBar)
+                :
+                Get.offAllNamed(AppRoutes.customNavBarScreen);
+
+
+                ToastMessageHelper.showToastMessage("Your report summited");
               },
             ),
 

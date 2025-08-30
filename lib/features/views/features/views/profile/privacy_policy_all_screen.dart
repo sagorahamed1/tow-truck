@@ -40,6 +40,7 @@ class _PrivacyPolicyAllScreenState extends State<PrivacyPolicyAllScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(title: "${Get.arguments["title"]}"),
 
       body: Padding(

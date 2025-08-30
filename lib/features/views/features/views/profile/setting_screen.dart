@@ -25,6 +25,7 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     String email = Get.arguments["email"];
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(title: "Settings"),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),

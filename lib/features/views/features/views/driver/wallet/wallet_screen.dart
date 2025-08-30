@@ -1,21 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:towservice/controller/payment_controller.dart';
 import 'package:towservice/global/custom_assets/assets.gen.dart';
+import 'package:towservice/helpers/time_format.dart';
 import 'package:towservice/routes/app_routes.dart';
 import 'package:towservice/utils/app_colors.dart';
 import 'package:towservice/widgets/custom_button.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
+import 'package:towservice/widgets/custom_loader.dart';
 import 'package:towservice/widgets/custom_text.dart';
 import 'package:towservice/widgets/custom_text_field.dart';
 
-class WalletScreen extends StatelessWidget {
+class WalletScreen extends StatefulWidget {
   WalletScreen({super.key});
 
-  int trans = 5;
+  @override
+  State<WalletScreen> createState() => _WalletScreenState();
+}
+
+class _WalletScreenState extends State<WalletScreen> {
+  
+  PaymentController paymentController = Get.put(PaymentController()) ;
+
 
   @override
+  void initState() {
+    paymentController.getPaymentHistory();
+    super.initState();
+  }
+  
+  
+  @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      paymentController.getPaymentHistory();
+    });
+
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -39,11 +60,13 @@ class WalletScreen extends StatelessWidget {
                         text: "Your Balance",
                         fontSize: 18.h,
                         color: Colors.black),
-                    CustomText(
-                        text: "₦ 1000",
-                        fontSize: 28.h,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700),
+                    Obx(()=>
+                       CustomText(
+                          text: "₦ ${paymentController.balance?.value}",
+                          fontSize: 28.h,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700),
+                    ),
                   ],
                 ),
               ),
@@ -81,55 +104,61 @@ class WalletScreen extends StatelessWidget {
                           CustomButtonTwo(
                             title: "Confirm",
                             onpress: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      content: Column(
-                                        // mainAxisAlignment: MainAxisAlignment.end,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          IconButton(
-                                            onPressed: () {
-                                              Get.back();
-                                            },
-                                            icon: Icon(Icons.close),
-                                          ),
-                                          Center(
-                                              child: Column(
-                                            children: [
-                                              Assets.icons.confirmationIcon.svg(
-                                                height: 124.h,
-                                                width: 124.w,
-                                              ),
-                                              CustomText(
-                                                text:
-                                                    'Withdraw Req. Successful',
-                                                fontSize: 22.sp,
-                                              ),
-                                              SizedBox(
-                                                height: 16.h,
-                                              ),
-                                              CustomText(
-                                                text:
-                                                    'Your Withdraw request has been sent successfully. You will get the money within 24 hours.',
-                                                fontSize: 13.sp,
-                                              ),
-                                              SizedBox(
-                                                height: 16.h,
-                                              ),
-                                              CustomButton(
-                                                onPressed: () {},
-                                                label: 'Go To My Wallet',
-                                              ),
-                                            ],
-                                          ))
-                                        ],
-                                      ),
-                                    );
-                                  });
+
+                              paymentController.requestToAddBalance(price: amountCtrl.text, context: context);
+
+
+
+
+                              // showDialog(
+                              //     context: context,
+                              //     builder: (context) {
+                              //       return AlertDialog(
+                              //         content: Column(
+                              //           // mainAxisAlignment: MainAxisAlignment.end,
+                              //           crossAxisAlignment:
+                              //               CrossAxisAlignment.end,
+                              //           mainAxisSize: MainAxisSize.min,
+                              //           children: [
+                              //             IconButton(
+                              //               onPressed: () {
+                              //                 Get.back();
+                              //               },
+                              //               icon: Icon(Icons.close),
+                              //             ),
+                              //             Center(
+                              //                 child: Column(
+                              //               children: [
+                              //                 Assets.icons.confirmationIcon.svg(
+                              //                   height: 124.h,
+                              //                   width: 124.w,
+                              //                 ),
+                              //                 CustomText(
+                              //                   text:
+                              //                       'Withdraw Req. Successful',
+                              //                   fontSize: 22.sp,
+                              //                 ),
+                              //                 SizedBox(
+                              //                   height: 16.h,
+                              //                 ),
+                              //                 CustomText(
+                              //                   text:
+                              //                       'Your Withdraw request has been sent successfully. You will get the money within 24 hours.',
+                              //                   fontSize: 13.sp,
+                              //                 ),
+                              //                 SizedBox(
+                              //                   height: 16.h,
+                              //                 ),
+                              //                 CustomButton(
+                              //                   onPressed: () {},
+                              //                   label: 'Go To My Wallet',
+                              //                 ),
+                              //               ],
+                              //             ))
+                              //           ],
+                              //         ),
+                              //       );
+                              //     });
                             },
                           )
                         ],
@@ -191,54 +220,60 @@ class WalletScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CustomText(text: "Payment History", fontSize: 18.h),
-                GestureDetector(
-                    onTap: () {
-                      Get.toNamed(AppRoutes.walletHistoryScreen);
-                    },
-                    child: CustomText(
-                        text: "See all", color: AppColors.primaryColor)),
+                // GestureDetector(
+                //     onTap: () {
+                //       Get.toNamed(AppRoutes.walletHistoryScreen);
+                //     },
+                //     child: CustomText(
+                //         text: "See all", color: AppColors.primaryColor)),
               ],
             ),
 
             SizedBox(height: 20.h),
             Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: trans,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(bottom: 12.h),
-                    decoration: BoxDecoration(
-                      color: Color(0xffF7F3EC),
-                      border: Border.all(color: Color(0xffE7DBC5)),
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(12.r),
-                      child: Row(
-                        children: [
-                          index.isOdd
-                              ? Assets.icons.rightTopIcon.svg()
-                              : Assets.icons.leftBottomIcon.svg(),
-                          SizedBox(width: 12.w),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomText(text: "#G68F78"),
-                              CustomText(
-                                  text: "today at 09:20 AM",
-                                  color: AppColors.primaryColor)
-                            ],
-                          ),
-                          Spacer(),
-                          CustomText(
-                              text: "-₦570.00",
-                              color: index.isOdd ? Colors.red : Colors.black)
-                        ],
+              child: Obx(() =>
+              paymentController.paymentHistoryLoading.value ? CustomLoader() :
+                  paymentController.paymentHistory.isEmpty ?
+                      Center(child: Assets.images.noDataImage.image()) :
+                 ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: paymentController.paymentHistory.length,
+                  itemBuilder: (context, index) {
+                    var history = paymentController.paymentHistory[index];
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 12.h),
+                      decoration: BoxDecoration(
+                        color: Color(0xffF7F3EC),
+                        border: Border.all(color: Color(0xffE7DBC5)),
+                        borderRadius: BorderRadius.circular(8.r),
                       ),
-                    ),
-                  );
-                },
+                      child: Padding(
+                        padding: EdgeInsets.all(12.r),
+                        child: Row(
+                          children: [
+                            history.status != "received"
+                                ? Assets.icons.rightTopIcon.svg()
+                                : Assets.icons.leftBottomIcon.svg(),
+                            SizedBox(width: 12.w),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomText(text: "${history.trId}"),
+                                CustomText(
+                                    text: "${TimeFormatHelper.formatDate(history.createdAt ?? DateTime.now())}",
+                                    color: AppColors.primaryColor)
+                              ],
+                            ),
+                            Spacer(),
+                            CustomText(
+                                text: "₦${history.amount}",
+                                color: index.isOdd ? Colors.red : Colors.black)
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
             )
           ],

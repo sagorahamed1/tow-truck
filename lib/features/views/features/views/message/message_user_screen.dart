@@ -195,7 +195,8 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
                               "receiverId" : "${user.receiver?.id}",
                               "name" : "${user.receiver?.name}",
                               "threadId" : "${user.id}",
-                              "image" : "${user.receiver?.profileImage}"
+                              "image" : "${user.receiver?.profileImage}",
+                              "lastActive" : user.lastMessage?.createdAt
                             })?.then((_){
                                 chatController.chatUsers.clear();
                                 chatController.fetchUser();

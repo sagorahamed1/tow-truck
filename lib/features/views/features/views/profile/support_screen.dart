@@ -35,6 +35,7 @@ class _SupportScreenState extends State<SupportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(title: "Customer Support",),
       body: SingleChildScrollView(
         child: Padding(

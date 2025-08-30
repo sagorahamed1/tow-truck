@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:towservice/controller/upload_app_file.dart';
 import 'package:towservice/helpers/toast_message_helper.dart';
+import 'package:towservice/model/tow_truck_model.dart';
 import 'package:towservice/widgets/custom_buttonTwo.dart';
 import 'package:towservice/widgets/custom_text_field.dart';
 
@@ -17,6 +18,7 @@ import '../../../../../utils/app_icons.dart';
 import '../../../../../utils/app_strings.dart';
 import '../../../../../widgets/custom_button.dart';
 import '../../../../../widgets/custom_text.dart';
+import '../user/user_home/job_post_screen.dart';
 
 class FillProfileScreen extends StatefulWidget {
   FillProfileScreen({super.key});
@@ -41,12 +43,21 @@ class _FillProfileScreenState extends State<FillProfileScreen> {
   TextEditingController nameCtrl = TextEditingController();
   TextEditingController addressCtrl = TextEditingController();
   TextEditingController typeOfTowTruckCtrl = TextEditingController();
+  TextEditingController towTypeIdCtrl = TextEditingController();
   TextEditingController dateOfBirthCtrl = TextEditingController();
   TextEditingController genderCtrl = TextEditingController();
   TextEditingController descriptionCtrl = TextEditingController();
 
+
+  @override
+  void initState() {
+    _authController.getTowType();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
@@ -136,6 +147,10 @@ class _FillProfileScreenState extends State<FillProfileScreen> {
                           color: AppColors.primaryColor)),
 
                   CustomTextField(
+                    onTap: () {
+                      openVehicleIssueOptions(context);
+                    },
+                      readOnly: true,
                       borderColor: AppColors.primaryColor,
                       controller: typeOfTowTruckCtrl,
                       labelText: "Type of tow truck",
@@ -245,7 +260,7 @@ class _FillProfileScreenState extends State<FillProfileScreen> {
                                   address: addressCtrl.text,
                                   dateOfBirth: dateOfBirthCtrl.text,
                                   gender: genderCtrl.text,
-                                  typeOfTowTruck: typeOfTowTruckCtrl.text,
+                                  typeOfTowTruck: towTypeIdCtrl.text,
                                   image: profileImagePath
                               );
                             }
@@ -264,6 +279,39 @@ class _FillProfileScreenState extends State<FillProfileScreen> {
         ),
       ),
     );
+  }
+
+
+
+
+  void openVehicleIssueOptions(BuildContext context) async {
+   final result = await showModalBottomSheet<Map>(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Obx(() {
+          List<TowTruckModel> trucks = _authController.towTypes.value
+              .map((type) => TowTruckModel(
+            id: type.id,    // map the fields properly
+            name: type.name,
+            // add other fields if needed
+          )).toList();
+          return HelpOptionsSheet2(
+            options: trucks
+          );
+        });
+      },
+    );
+
+    if (result != null) {
+      typeOfTowTruckCtrl.text = result["name"].toString();
+      towTypeIdCtrl.text = result["id"];
+      setState(() {});
+      print("Selected option: ${result["id"]}");
+    }
   }
 
   //==================================> ShowImagePickerOption Function <===============================
@@ -366,3 +414,75 @@ class _FillProfileScreenState extends State<FillProfileScreen> {
   }
 }
 
+
+
+class HelpOptionsSheet2 extends StatefulWidget {
+  final List<TowTruckModel> options;
+
+  const HelpOptionsSheet2({super.key, required this.options});
+
+  @override
+  State<HelpOptionsSheet2> createState() => _HelpOptionsSheetState();
+}
+
+class _HelpOptionsSheetState extends State<HelpOptionsSheet2> {
+  int? selectedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(16),
+      child: ListView.separated(
+        shrinkWrap: true,
+        itemCount: widget.options.length,
+        separatorBuilder: (_, __) => SizedBox(height: 12),
+        itemBuilder: (context, index) {
+          final item = widget.options[index];
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                selectedIndex = index;
+              });
+
+              // Pop safely after the current frame
+              // WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) {
+                  Navigator.pop(context, {"name" : "${item.name}", "id" : "${item.id}"});
+                }
+              // });
+            },
+            child: Row(
+              children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  margin: EdgeInsets.only(right: 12),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: selectedIndex == index
+                      ? Center(
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.black,
+                      ),
+                    ),
+                  )
+                      : null,
+                ),
+                Text(
+                  item.name ?? "",
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

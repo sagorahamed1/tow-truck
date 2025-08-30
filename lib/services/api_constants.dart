@@ -23,6 +23,7 @@ class ApiConstants{
   static const String postJob = "/job";
   static const String nidUpload = "/tow-truck/";
   static const String towTruck = "/tow-truck";
+  static const String getTowType = "/tow-type/provider";
   static const String jobDetails = "/job/details";
   static const String requestJob = "/job/req-providers";
   static  String acceptJob(String role) => "/job/${role}/accept";
@@ -38,6 +39,9 @@ class ApiConstants{
   static const String notification = "/notification";
   static const String paymentSend = "/payment/transaction/send";
   static const String completed = "/payment/transaction/transfer";
+  static const String review = "/job/review";
+  static const String addBalance = "/payment/add-balance";
+  static const String history = "/payment/history?limit=1000";
 
 
 

@@ -11,7 +11,7 @@ class UploadNidController extends GetxController {
   RxBool nidUploading = false.obs;
   uploadNID({String? nid, font, back, endPoint}) async {
     nidUploading(true);
-    var body = {"nidNo": "$nid", "nidFront": "$font", "nidBack": "$back"};
+    var body = {"no": "$nid", "front": "$font", "back": "$back"};
 
     var response = await ApiClient.patch("${ApiConstants.nidUpload}${endPoint??""}", jsonEncode(body));
 
@@ -35,12 +35,13 @@ class UploadNidController extends GetxController {
     var response = await ApiClient.getData("${ApiConstants.nidUpload}${endPoint??""}");
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      idController.text = response.body["data"]["nidNo"];
-      back?.value = response.body["data"]["nidBack"];
-      front?.value = response.body["data"]["nidFront"];
+
+      back?.value = response.body["data"]["back"];
+      front?.value = response.body["data"]["front"];
 
       update();
       getNIDLoading(false);
+      idController.text = response.body["data"]["no"];
     } else {
       getNIDLoading(false);
     }

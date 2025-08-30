@@ -34,7 +34,7 @@ class NotificationsController extends GetxController{
     if(response.statusCode == 200){
       totalPage = jsonDecode(response.body['pagination']['totalPages'].toString()) ?? 0;
       totalResult = jsonDecode(response.body['pagination']['totalCount'].toString()) ?? 0;
-     var data  = List<NotificationModel>.from(response.body["data"].map((x)=> NotificationModel.fromJson(x)));
+      var data  = List<NotificationModel>.from(response.body["data"].map((x)=> NotificationModel.fromJson(x)));
       notifications.addAll(data);
       update();
       notificationLoading(false);

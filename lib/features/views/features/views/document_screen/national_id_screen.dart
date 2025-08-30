@@ -24,6 +24,8 @@ class NationalIDScreen extends StatefulWidget {
 
 class _NationalIDScreenState extends State<NationalIDScreen> {
 
+  final arg = Get.arguments;
+
   UploadNidController uploadNidController = Get.put(UploadNidController());
   File? _frontImage;
   File? _backImage;
@@ -55,12 +57,12 @@ class _NationalIDScreenState extends State<NationalIDScreen> {
   void initState() {
 
     uploadNidController.getNID(
-      endPoint:  "${Get.arguments["appBarTitle"]}" ==
-          "National ID" ? "nid" : "${Get
+      endPoint:  "${arg["appBarTitle"]}" ==
+          "National ID" ? "file/nid" : "${Get
           .arguments["appBarTitle"]}" == "Driving License"
-          ? "license"
-          : "${Get.arguments["appBarTitle"]}" ==
-          "Car Registration" ? "reg" : "img",
+          ? "file/drivingLicense"
+          : "${arg["appBarTitle"]}" ==
+          "Car Registration" ? "file/carRegistration" : "file/img",
     );
 
     Future.delayed(Duration(seconds: 3));
@@ -89,30 +91,35 @@ class _NationalIDScreenState extends State<NationalIDScreen> {
 
   @override
   Widget build(BuildContext context) {
-    fetchDate();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fetchDate();
+    });
+
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(
-        title: "${Get.arguments["appBarTitle"]}",
+        title: "${arg["appBarTitle"]}",
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Get.arguments["textEditCtrlTitle"] == "N/A"
+            arg["textEditCtrlTitle"] == "N/A"
                 ? SizedBox()
                 : CustomTextField(
                 keyboardType: TextInputType.number,
                 controller: uploadNidController.idController,
-                hintText: "${Get.arguments["textEditCtrlTitle"]}",
-                labelText: "${Get.arguments["textEditCtrlTitle"]}"),
+                hintText: "${arg["textEditCtrlTitle"]}",
+                labelText: "${arg["textEditCtrlTitle"]}"),
 
             SizedBox(height: 20.h),
 
             // Upload front
             Obx(() =>
                _buildUploadBox(
-                label: "${Get.arguments["image1"]}",
+                label: "${arg["image1"]}",
                 image: uploadNidController.front?.value ?? frontPath,
                 onTap: () => _pickImage(true),
               ),
@@ -121,7 +128,7 @@ class _NationalIDScreenState extends State<NationalIDScreen> {
             // Upload back
             Obx(() =>
                _buildUploadBox(
-                label: "${Get.arguments["image2"]}",
+                label: "${arg["image2"]}",
                 image: uploadNidController.back?.value ?? backPath,
                 onTap: () => _pickImage(false),
               ),
@@ -135,11 +142,11 @@ class _NationalIDScreenState extends State<NationalIDScreen> {
                     title: "Save",
                     onpress: () {
                       uploadNidController.uploadNID(
-                          endPoint: "${Get.arguments["appBarTitle"]}" ==
+                          endPoint: "${arg["appBarTitle"]}" ==
                               "National ID" ? "nid" : "${Get
                               .arguments["appBarTitle"]}" == "Driving License"
                               ? "license"
-                              : "${Get.arguments["appBarTitle"]}" ==
+                              : "${arg["appBarTitle"]}" ==
                               "Car Registration" ? "reg" : "img",
                           nid: uploadNidController.idController.text,
                           back: backPath?.toString() ?? uploadNidController.back?.value,

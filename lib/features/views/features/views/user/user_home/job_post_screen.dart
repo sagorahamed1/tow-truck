@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_places_flutter/google_places_flutter.dart';
+import 'package:google_places_flutter/model/prediction.dart';
 import 'package:location_picker_text_field/open_street_location_picker.dart';
 import 'package:towservice/helpers/toast_message_helper.dart';
 import 'package:towservice/routes/app_routes.dart';
@@ -49,6 +51,8 @@ class _JobPostScreenState extends State<JobPostScreen> {
   double lat = 0;
   double log = 0;
 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,6 +86,9 @@ class _JobPostScreenState extends State<JobPostScreen> {
                             Expanded(
                               child: Column(
                                 children: [
+
+
+
                                   Container(
                                     decoration: BoxDecoration(
                                         borderRadius:
@@ -110,25 +117,90 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                     ),
                                   ),
                                   Icon(Icons.arrow_downward),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(10.r),
-                                        color: const Color(0xffE6E6FF)),
-                                    child: LocationPicker(
-                                      label: "",
-                                      controller: locationName,
-                                      onSelect: (data) {
-                                        locationName.text = data.displayname;
-                                        distance =
-                                            controller.calculateDistanceInMiles(
-                                                data.latitude, data.longitude);
-                                        log = data.longitude;
-                                        lat = data.latitude;
-                                        setState(() {});
-                                      },
+
+
+
+                                  // Container(
+                                  //   decoration: BoxDecoration(
+                                  //       borderRadius:
+                                  //           BorderRadius.circular(10.r),
+                                  //       color: const Color(0xffE6E6FF)),
+                                  //   child: LocationPicker(
+                                  //     label: "",
+                                  //     controller: locationName,
+                                  //     onSelect: (data) {
+                                  //       locationName.text = data.displayname;
+                                  //       distance =
+                                  //           controller.calculateDistanceInMiles(
+                                  //               data.latitude, data.longitude);
+                                  //       log = data.longitude;
+                                  //       lat = data.latitude;
+                                  //       setState(() {});
+                                  //     },
+                                  //   ),
+                                  // ),
+                                  //
+
+
+
+
+                                  // SizedBox(height: 20),
+
+
+                                  GooglePlaceAutoCompleteTextField(
+                                    textEditingController: locationName,
+                                    googleAPIKey: "AIzaSyA-Iri6x5mzNv45XO3a-Ew3z4nvF4CdYo0",
+                                    inputDecoration: InputDecoration(
+                                      labelText: "Search Place",
+                                      border: OutlineInputBorder(),
+                                      suffixIcon: isLoading
+                                          ? Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: SizedBox(
+                                          width: 18,
+                                          height: 18,
+                                          child: CircularProgressIndicator(strokeWidth: 2),
+                                        ),
+                                      )
+                                          : Icon(Icons.search),
                                     ),
-                                  ),
+                                    debounceTime: 800,
+                                    isLatLngRequired: true,
+
+                                    getPlaceDetailWithLatLng: (Prediction prediction) async {
+                                      setState(() => isLoading = true); // 👈 start loading
+
+                                      if (prediction.lat != null && prediction.lng != null) {
+                                        locationName.text = prediction.description ?? "";
+                                        distance = controller.calculateDistanceInMiles(
+                                          double.parse(prediction.lat!),
+                                          double.parse(prediction.lng!),
+                                        );
+                                        log = double.parse(prediction.lng!);
+                                        lat = double.parse(prediction.lat!);
+                                      }
+
+                                      setState(() => isLoading = false); // 👈 stop loading
+                                    },
+
+                                    itemClick: (Prediction prediction) async {
+                                      setState(() => isLoading = true); // 👈 start loading
+
+                                      locationName.text = prediction.description ?? "";
+                                      if (prediction.lat != null && prediction.lng != null) {
+                                        distance = controller.calculateDistanceInMiles(
+                                          double.parse(prediction.lat!),
+                                          double.parse(prediction.lng!),
+                                        );
+                                        log = double.parse(prediction.lng!);
+                                        lat = double.parse(prediction.lat!);
+                                      }
+
+                                      setState(() => isLoading = false); // 👈 stop loading
+                                    },
+                                  )
+
+
                                 ],
                               ),
                             ),
@@ -277,8 +349,6 @@ class _JobPostScreenState extends State<JobPostScreen> {
   }
 
   final List<String> vehicleIssueOption = [
-
-
     "Emergency",
     "Jump_Start",
     "Flat_Tire",
